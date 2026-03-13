@@ -8,6 +8,7 @@ The line does all the work:
 - it divides the face into light and shadow
 - one endpoint lands on the outer edge at the current hour position
 - the opposite endpoint marks the sun's position in the sky
+- the shaded region is the circular section bounded by that chord which contains the bottom 6:00 point
 - the effect should feel like a stylized sundial shadow rather than a conventional hand set
 
 ## Initial assumptions

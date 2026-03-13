@@ -169,10 +169,18 @@ function renderSundial(state) {
   const hourAngle = hourDegrees(date);
   const sun = getSunPosition(date, 37.7652, -122.2416);
   const sunAngle = sun.azimuth;
+  const radius = 198;
   const hourPoint = lineCircleIntersection(hourAngle, 182);
   const sunPoint = lineCircleIntersection(sunAngle, 182);
-  const lineAngle = (Math.atan2(sunPoint.y - hourPoint.y, sunPoint.x - hourPoint.x) * 180 / Math.PI + 90 + 360) % 360;
-  const shadowNormal = polarToCartesian(0, 0, 1, (lineAngle + 270) % 360);
+
+  const clockwiseDelta = (sunAngle - hourAngle + 360) % 360;
+  const ccwDelta = (hourAngle - sunAngle + 360) % 360;
+  const bottomAngle = 180;
+  const bottomInClockwise = ((bottomAngle - hourAngle + 360) % 360) <= clockwiseDelta;
+  const sweepFlag = bottomInClockwise ? 1 : 0;
+  const arcSpan = bottomInClockwise ? clockwiseDelta : ccwDelta;
+  const largeArcFlag = arcSpan > 180 ? 1 : 0;
+  const shadowPath = `M ${hourPoint.x} ${hourPoint.y} A ${radius} ${radius} 0 ${largeArcFlag} ${sweepFlag} ${sunPoint.x} ${sunPoint.y} L ${hourPoint.x} ${hourPoint.y} Z`;
 
   const hourMarkers = Array.from({ length: 12 }, (_, i) => {
     const angle = i * 30;
@@ -183,8 +191,6 @@ function renderSundial(state) {
     `;
   }).join('');
 
-  const shadowPolygon = `225,225 ${225 + shadowNormal.x * 620 + shadowNormal.y * 620},${225 + shadowNormal.y * 620 - shadowNormal.x * 620} ${225 + shadowNormal.x * 620 - shadowNormal.y * 620},${225 + shadowNormal.y * 620 + shadowNormal.x * 620}`;
-
   return `
     <svg viewBox="0 0 450 450" role="img" aria-label="Sundial prototype watch face">
       <defs>
@@ -193,12 +199,12 @@ function renderSundial(state) {
           <stop offset="100%" stop-color="#ead2a1" />
         </linearGradient>
         <linearGradient id="sundialShadowFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#755633" stop-opacity="0.55" />
+          <stop offset="0%" stop-color="#755633" stop-opacity="0.48" />
           <stop offset="100%" stop-color="#2f2317" stop-opacity="0.88" />
         </linearGradient>
         <linearGradient id="shadowEdge" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#fff7e7" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="#fff7e7" stop-opacity="0.05" />
+          <stop offset="0%" stop-color="#fff7e7" stop-opacity="0.46" />
+          <stop offset="100%" stop-color="#fff7e7" stop-opacity="0.08" />
         </linearGradient>
         <clipPath id="dialClip">
           <circle cx="225" cy="225" r="198" />
@@ -211,8 +217,8 @@ function renderSundial(state) {
       <circle cx="225" cy="225" r="198" fill="url(#sundialLight)" />
 
       <g clip-path="url(#dialClip)">
-        <polygon points="${shadowPolygon}" fill="url(#sundialShadowFill)" />
-        <polygon points="${shadowPolygon}" fill="rgba(24,18,12,0.18)" transform="translate(0 20)" />
+        <path d="${shadowPath}" fill="url(#sundialShadowFill)" />
+        <path d="${shadowPath}" fill="rgba(24,18,12,0.16)" transform="translate(0 12)" />
         <line x1="${hourPoint.x}" y1="${hourPoint.y}" x2="${sunPoint.x}" y2="${sunPoint.y}" stroke="url(#shadowEdge)" stroke-width="4.5" stroke-linecap="round" />
       </g>
 
