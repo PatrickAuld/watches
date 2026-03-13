@@ -25,3 +25,5 @@ Published via GitHub Pages from `main`.
 
 - `WATCHFACE_WORKFLOW_PLAN.md`
 - `docs/workflow.md`
+- `docs/wff-v4-reference.md`
+- `docs/wff-samples-notes.md`
