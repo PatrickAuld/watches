@@ -62,6 +62,23 @@ If the user wants a branch of an idea, create a variant with a clear stable slug
 
 Do not let temporary filenames become long-term canonical ids by accident.
 
+## Feedback handling rules
+
+For watch-face iteration, **the latest user-provided screenshot or mockup is the visual source of truth**.
+
+That means:
+- a later screenshot overrides earlier verbal descriptions when they conflict
+- update repo notes/spec references to capture what the latest image actually established
+- preserve important visual deltas in writing so future agents do not regress them
+
+When a user shares feedback imagery, update the relevant face notes with specifics such as:
+- bezel layout and numeral positions
+- marker geometry and placement
+- hand style and proportions
+- branding/text placement
+- mascot/logo placement and scale
+- anything intentionally asymmetric or off-axis
+
 ## Naming rules
 
 Use lowercase kebab-case slugs only.
