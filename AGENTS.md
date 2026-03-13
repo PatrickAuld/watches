@@ -64,20 +64,22 @@ Do not let temporary filenames become long-term canonical ids by accident.
 
 ## Feedback handling rules
 
-For watch-face iteration, **the latest user-provided screenshot or mockup is the visual source of truth**.
+For watch-face iteration, user-provided screenshots and mockups are important evidence, but they are **not automatically the target design**.
 
-That means:
-- a later screenshot overrides earlier verbal descriptions when they conflict
-- update repo notes/spec references to capture what the latest image actually established
-- preserve important visual deltas in writing so future agents do not regress them
+Interpret them based on the user's framing:
+- if the user presents an image as the desired direction, treat it as a target reference
+- if the user presents an image as broken, distorted, unorganized, or incorrect, treat it as a regression/example to avoid
+- when screenshot evidence and text conflict, prefer the user's latest explicit intent about whether the image is a goal or a problem
 
 When a user shares feedback imagery, update the relevant face notes with specifics such as:
+- what should be preserved
+- what should be corrected or removed
 - bezel layout and numeral positions
 - marker geometry and placement
 - hand style and proportions
 - branding/text placement
 - mascot/logo placement and scale
-- anything intentionally asymmetric or off-axis
+- anything intentionally asymmetric vs accidentally distorted
 
 ## Naming rules
 

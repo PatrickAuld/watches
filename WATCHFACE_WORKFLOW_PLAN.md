@@ -436,20 +436,22 @@ This workflow is optimized for many experiments with occasional graduation into 
 
 ## Feedback precedence rule
 
-For visual watch-face work, the latest user-provided screenshot, mockup, or render should be treated as the current visual source of truth.
+For visual watch-face work, user-provided screenshots, mockups, and renders are important evidence, but they are not automatically canonical.
 
-That means:
-- later imagery overrides earlier textual descriptions when they conflict
-- repo notes should be updated after meaningful visual feedback
-- important composition choices should be written down so future iterations do not drift
+Interpret feedback images using the user's intent:
+- if an image is presented as the desired direction, treat it as a target reference
+- if an image is presented as distorted, broken, unorganized, or otherwise wrong, treat it as a negative example that documents what to fix
 
-At minimum, capture updated decisions about:
+Repo notes should be updated after meaningful visual feedback so future iterations do not drift.
+
+At minimum, capture:
 - bezel structure
 - dial marker layout
 - hand geometry
 - text/logo placement
 - icon/mascot placement
-- any deliberate asymmetry or eccentricity
+- which aspects are intentional
+- which aspects were identified as mistakes or regressions
 
 ---
 
