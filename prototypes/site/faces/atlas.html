@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Atlas prototype</title>
+    <link rel="stylesheet" href="../assets/css/site.css" />
+  </head>
+  <body>
+    <main class="shell" id="prototype-root" data-face-id="atlas">
+      <nav class="site-nav">
+        <a href="../index.html">Prototype lab</a>
+        <span>/</span>
+        <span>Atlas</span>
+      </nav>
+
+      <section class="hero">
+        <h1>Atlas</h1>
+        <p>
+          Sample prototype watch face for Milestone 1. This page exercises shared time utilities,
+          Pixel Watch framing, baseline ambient/interactive states, and the base face metadata model.
+        </p>
+      </section>
+
+      <section class="preview-layout">
+        <article class="card">
+          <div id="watch-preview"></div>
+        </article>
+
+        <div class="grid">
+          <article class="card controls">
+            <h2>Preview controls</h2>
+
+            <label>
+              <span>Time mode</span>
+              <select id="time-mode">
+                <option value="fixed">Fixed</option>
+                <option value="live">Live</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Fixed time</span>
+              <input id="fixed-time" type="datetime-local" />
+            </label>
+
+            <label>
+              <span>Preview mode</span>
+              <select id="preview-mode">
+                <option value="interactive">Interactive</option>
+                <option value="ambient">Ambient</option>
+              </select>
+            </label>
+
+            <div>
+              <span style="display:block; margin-bottom:8px; color: var(--muted);">Quick test times</span>
+              <div class="button-row">
+                <button data-set-time="00:00">00:00</button>
+                <button data-set-time="10:10">10:10</button>
+                <button data-set-time="11:59">11:59</button>
+                <button data-set-time="23:59">23:59</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card meta">
+            <h2>Face metadata</h2>
+            <dl>
+              <div>
+                <dt>Name</dt>
+                <dd id="meta-face-name"></dd>
+              </div>
+              <div>
+                <dt>Slug</dt>
+                <dd id="meta-face-slug"></dd>
+              </div>
+              <div>
+                <dt>Target device</dt>
+                <dd id="meta-device"></dd>
+              </div>
+              <div>
+                <dt>Baseline resolution</dt>
+                <dd id="meta-resolution"></dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="../assets/js/site.js"></script>
+  </body>
+</html>

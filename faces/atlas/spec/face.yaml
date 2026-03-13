@@ -1,0 +1,20 @@
+id: atlas
+name: Atlas
+status: prototype
+platformTarget: pixel-watch
+prototype:
+  route: /prototypes/site/faces/atlas.html
+wff:
+  version: 4
+  xmlOnly: true
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+features:
+  ambient: true
+  complications: []
+style:
+  family: analog-hybrid
+  background: "#050608"
+  accent: "#7db0ff"
