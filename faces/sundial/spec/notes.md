@@ -15,13 +15,17 @@ The line does all the work:
 - location is fixed to Alameda, California
 - solar position is computed from date/time plus location
 - first prototype is intentionally sparse and diagrammatic
-- hour endpoint should be emphasized with a circle marker
-- the sun endpoint should remain visible even when the sun is low, but should read differently if it is below the horizon
+- the hour endpoint should be emphasized with a circle marker
+- the opposite endpoint should not be separately marked
 
 ## Design direction
 
 Keep it clean:
-- no unnecessary text clutter
+- no numbers
+- no words
+- no center dot
 - no decorative complications
+- subtle hour tick lines only
 - strong contrast between illuminated and shadowed halves
+- the lower region should read as a genuine shadowed area, not just a flat color block
 - the line should feel precise and inevitable

@@ -172,59 +172,55 @@ function renderSundial(state) {
   const hourPoint = lineCircleIntersection(hourAngle, 182);
   const sunPoint = lineCircleIntersection(sunAngle, 182);
   const lineAngle = (Math.atan2(sunPoint.y - hourPoint.y, sunPoint.x - hourPoint.x) * 180 / Math.PI + 90 + 360) % 360;
-  const lightNormal = polarToCartesian(0, 0, 1, (lineAngle + 90) % 360);
   const shadowNormal = polarToCartesian(0, 0, 1, (lineAngle + 270) % 360);
-  const sunVisible = sun.elevation > 0;
 
   const hourMarkers = Array.from({ length: 12 }, (_, i) => {
     const angle = i * 30;
-    const outer = polarToCartesian(225, 225, 190, angle);
-    const inner = polarToCartesian(225, 225, angle % 90 === 0 ? 168 : 175, angle);
-    const label = angle === 0 ? 12 : angle / 30;
-    const labelPos = polarToCartesian(225, 225, 148, angle);
+    const outer = polarToCartesian(225, 225, 188, angle);
+    const inner = polarToCartesian(225, 225, angle % 90 === 0 ? 174 : 179, angle);
     return `
-      <line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="rgba(40,36,26,0.58)" stroke-width="${angle % 90 === 0 ? 4 : 2.5}" stroke-linecap="round" />
-      <text x="${labelPos.x}" y="${labelPos.y + 7}" text-anchor="middle" fill="rgba(54,44,22,0.78)" font-size="22" font-family="Georgia, serif">${label}</text>
+      <line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="rgba(66,52,29,0.34)" stroke-width="${angle % 90 === 0 ? 2.6 : 1.6}" stroke-linecap="round" />
     `;
   }).join('');
+
+  const shadowPolygon = `225,225 ${225 + shadowNormal.x * 620 + shadowNormal.y * 620},${225 + shadowNormal.y * 620 - shadowNormal.x * 620} ${225 + shadowNormal.x * 620 - shadowNormal.y * 620},${225 + shadowNormal.y * 620 + shadowNormal.x * 620}`;
 
   return `
     <svg viewBox="0 0 450 450" role="img" aria-label="Sundial prototype watch face">
       <defs>
         <linearGradient id="sundialLight" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#f7edd0" />
-          <stop offset="100%" stop-color="#e9d3a1" />
+          <stop offset="0%" stop-color="#f8efd8" />
+          <stop offset="100%" stop-color="#ead2a1" />
         </linearGradient>
-        <linearGradient id="sundialShadow" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#95764b" />
-          <stop offset="100%" stop-color="#5e472b" />
+        <linearGradient id="sundialShadowFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#755633" stop-opacity="0.55" />
+          <stop offset="100%" stop-color="#2f2317" stop-opacity="0.88" />
+        </linearGradient>
+        <linearGradient id="shadowEdge" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fff7e7" stop-opacity="0.5" />
+          <stop offset="100%" stop-color="#fff7e7" stop-opacity="0.05" />
         </linearGradient>
         <clipPath id="dialClip">
           <circle cx="225" cy="225" r="198" />
         </clipPath>
       </defs>
 
-      <rect width="450" height="450" fill="#11100d" rx="225" />
-      <circle cx="225" cy="225" r="210" fill="#2b2217" />
-      <circle cx="225" cy="225" r="204" fill="#c5a16a" opacity="0.45" />
-      <circle cx="225" cy="225" r="198" fill="#cfb279" />
+      <rect width="450" height="450" fill="#110f0b" rx="225" />
+      <circle cx="225" cy="225" r="210" fill="#2e2418" />
+      <circle cx="225" cy="225" r="203" fill="#c79f61" opacity="0.36" />
+      <circle cx="225" cy="225" r="198" fill="url(#sundialLight)" />
 
       <g clip-path="url(#dialClip)">
-        <rect x="0" y="0" width="450" height="450" fill="url(#sundialLight)" />
-        <polygon points="225,225 ${225 + lightNormal.x * 520},${225 + lightNormal.y * 520} ${225 + lightNormal.x * 520 - shadowNormal.x * 520},${225 + lightNormal.y * 520 - shadowNormal.y * 520} ${225 - lightNormal.x * 520 - shadowNormal.x * 520},${225 - lightNormal.y * 520 - shadowNormal.y * 520} ${225 - lightNormal.x * 520},${225 - lightNormal.y * 520}" fill="url(#sundialShadow)" opacity="0.92" />
-        <line x1="${hourPoint.x}" y1="${hourPoint.y}" x2="${sunPoint.x}" y2="${sunPoint.y}" stroke="${ambient ? '#efe3c1' : '#fff8ea'}" stroke-width="5" stroke-linecap="round" />
+        <polygon points="${shadowPolygon}" fill="url(#sundialShadowFill)" />
+        <polygon points="${shadowPolygon}" fill="rgba(24,18,12,0.18)" transform="translate(0 20)" />
+        <line x1="${hourPoint.x}" y1="${hourPoint.y}" x2="${sunPoint.x}" y2="${sunPoint.y}" stroke="url(#shadowEdge)" stroke-width="4.5" stroke-linecap="round" />
       </g>
 
-      <circle cx="225" cy="225" r="198" fill="none" stroke="rgba(61,44,16,0.35)" stroke-width="2" />
-      <circle cx="225" cy="225" r="184" fill="none" stroke="rgba(255,245,220,0.2)" stroke-width="1" />
+      <circle cx="225" cy="225" r="198" fill="none" stroke="rgba(74,52,18,0.34)" stroke-width="2" />
+      <circle cx="225" cy="225" r="184" fill="none" stroke="rgba(255,248,232,0.16)" stroke-width="1" />
       ${hourMarkers}
 
-      <circle cx="${hourPoint.x}" cy="${hourPoint.y}" r="10" fill="#fbfaf4" stroke="#634a24" stroke-width="3" />
-      <circle cx="${sunPoint.x}" cy="${sunPoint.y}" r="${sunVisible ? 8 : 6}" fill="${sunVisible ? '#ffd46d' : '#d7c7a3'}" stroke="#6a5024" stroke-width="2" />
-      <circle cx="225" cy="225" r="5" fill="rgba(58,40,16,0.72)" />
-
-      <text x="225" y="80" text-anchor="middle" fill="rgba(70,50,24,0.9)" font-size="28" font-family="Georgia, serif">Sundial</text>
-      <text x="225" y="365" text-anchor="middle" fill="rgba(70,50,24,0.78)" font-size="13" font-family="Inter, sans-serif" letter-spacing="2">ALAMEDA · SUN ${Math.round(sun.azimuth)}° · ALT ${Math.round(sun.elevation)}°</text>
+      <circle cx="${hourPoint.x}" cy="${hourPoint.y}" r="10" fill="${ambient ? '#efe4cb' : '#fff8ea'}" stroke="#60461d" stroke-width="2.5" />
     </svg>
   `;
 }
