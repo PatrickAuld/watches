@@ -59,6 +59,74 @@ function buildTicks(count, r1, r2, stroke, strokeWidth) {
   }).join('');
 }
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function lineCircleIntersection(angleDegrees, radius) {
+  const radians = ((angleDegrees - 90) * Math.PI) / 180;
+  return {
+    x: 225 + radius * Math.cos(radians),
+    y: 225 + radius * Math.sin(radians),
+  };
+}
+
+function toJulianDate(date) {
+  return date.getTime() / 86400000 + 2440587.5;
+}
+
+function getSunPosition(date, latitude, longitude) {
+  const rad = Math.PI / 180;
+  const deg = 180 / Math.PI;
+  const jd = toJulianDate(date);
+  const t = (jd - 2451545.0) / 36525.0;
+
+  const l0 = (280.46646 + t * (36000.76983 + t * 0.0003032)) % 360;
+  const m = 357.52911 + t * (35999.05029 - 0.0001537 * t);
+  const e = 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
+
+  const c = Math.sin(m * rad) * (1.914602 - t * (0.004817 + 0.000014 * t))
+    + Math.sin(2 * m * rad) * (0.019993 - 0.000101 * t)
+    + Math.sin(3 * m * rad) * 0.000289;
+
+  const trueLong = l0 + c;
+  const omega = 125.04 - 1934.136 * t;
+  const lambda = trueLong - 0.00569 - 0.00478 * Math.sin(omega * rad);
+
+  const epsilon0 = 23 + (26 + ((21.448 - t * (46.815 + t * (0.00059 - t * 0.001813))) / 60)) / 60;
+  const epsilon = epsilon0 + 0.00256 * Math.cos(omega * rad);
+
+  const decl = Math.asin(Math.sin(epsilon * rad) * Math.sin(lambda * rad));
+
+  const y = Math.tan((epsilon * rad) / 2);
+  const y2 = y * y;
+  const eqTime = 4 * deg * (
+    y2 * Math.sin(2 * l0 * rad)
+    - 2 * e * Math.sin(m * rad)
+    + 4 * e * y2 * Math.sin(m * rad) * Math.cos(2 * l0 * rad)
+    - 0.5 * y2 * y2 * Math.sin(4 * l0 * rad)
+    - 1.25 * e * e * Math.sin(2 * m * rad)
+  );
+
+  const utcMinutes = date.getUTCHours() * 60 + date.getUTCMinutes() + date.getUTCSeconds() / 60;
+  const trueSolarTime = (utcMinutes + eqTime + 4 * longitude) % 1440;
+  const tst = trueSolarTime < 0 ? trueSolarTime + 1440 : trueSolarTime;
+
+  let hourAngle = tst / 4 - 180;
+  if (hourAngle < -180) hourAngle += 360;
+
+  const latRad = latitude * rad;
+  const haRad = hourAngle * rad;
+  const cosZenith = clamp(Math.sin(latRad) * Math.sin(decl) + Math.cos(latRad) * Math.cos(decl) * Math.cos(haRad), -1, 1);
+  const zenith = Math.acos(cosZenith);
+  const elevation = 90 - zenith * deg;
+
+  const azimuth = (Math.atan2(Math.sin(haRad), Math.cos(haRad) * Math.sin(latRad) - Math.tan(decl) * Math.cos(latRad)) * deg + 180) % 360;
+
+  return { azimuth, elevation };
+}
+
+
 function renderAtlas(state) {
   const date = getWatchTime(state);
   const h = hourDegrees(date);
@@ -91,6 +159,72 @@ function renderAtlas(state) {
       ${ambient ? '' : `<line x1="225" y1="238" x2="225" y2="70" stroke="#7db0ff" stroke-width="2.5" stroke-linecap="round" transform="rotate(${s} 225 225)" />`}
       <circle cx="225" cy="225" r="8" fill="#f4f6fb" />
       <circle cx="225" cy="225" r="4" fill="#6da2ff" />
+    </svg>
+  `;
+}
+
+function renderSundial(state) {
+  const date = getWatchTime(state);
+  const ambient = state.previewMode === 'ambient';
+  const hourAngle = hourDegrees(date);
+  const sun = getSunPosition(date, 37.7652, -122.2416);
+  const sunAngle = sun.azimuth;
+  const hourPoint = lineCircleIntersection(hourAngle, 182);
+  const sunPoint = lineCircleIntersection(sunAngle, 182);
+  const lineAngle = (Math.atan2(sunPoint.y - hourPoint.y, sunPoint.x - hourPoint.x) * 180 / Math.PI + 90 + 360) % 360;
+  const lightNormal = polarToCartesian(0, 0, 1, (lineAngle + 90) % 360);
+  const shadowNormal = polarToCartesian(0, 0, 1, (lineAngle + 270) % 360);
+  const sunVisible = sun.elevation > 0;
+
+  const hourMarkers = Array.from({ length: 12 }, (_, i) => {
+    const angle = i * 30;
+    const outer = polarToCartesian(225, 225, 190, angle);
+    const inner = polarToCartesian(225, 225, angle % 90 === 0 ? 168 : 175, angle);
+    const label = angle === 0 ? 12 : angle / 30;
+    const labelPos = polarToCartesian(225, 225, 148, angle);
+    return `
+      <line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="rgba(40,36,26,0.58)" stroke-width="${angle % 90 === 0 ? 4 : 2.5}" stroke-linecap="round" />
+      <text x="${labelPos.x}" y="${labelPos.y + 7}" text-anchor="middle" fill="rgba(54,44,22,0.78)" font-size="22" font-family="Georgia, serif">${label}</text>
+    `;
+  }).join('');
+
+  return `
+    <svg viewBox="0 0 450 450" role="img" aria-label="Sundial prototype watch face">
+      <defs>
+        <linearGradient id="sundialLight" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f7edd0" />
+          <stop offset="100%" stop-color="#e9d3a1" />
+        </linearGradient>
+        <linearGradient id="sundialShadow" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#95764b" />
+          <stop offset="100%" stop-color="#5e472b" />
+        </linearGradient>
+        <clipPath id="dialClip">
+          <circle cx="225" cy="225" r="198" />
+        </clipPath>
+      </defs>
+
+      <rect width="450" height="450" fill="#11100d" rx="225" />
+      <circle cx="225" cy="225" r="210" fill="#2b2217" />
+      <circle cx="225" cy="225" r="204" fill="#c5a16a" opacity="0.45" />
+      <circle cx="225" cy="225" r="198" fill="#cfb279" />
+
+      <g clip-path="url(#dialClip)">
+        <rect x="0" y="0" width="450" height="450" fill="url(#sundialLight)" />
+        <polygon points="225,225 ${225 + lightNormal.x * 520},${225 + lightNormal.y * 520} ${225 + lightNormal.x * 520 - shadowNormal.x * 520},${225 + lightNormal.y * 520 - shadowNormal.y * 520} ${225 - lightNormal.x * 520 - shadowNormal.x * 520},${225 - lightNormal.y * 520 - shadowNormal.y * 520} ${225 - lightNormal.x * 520},${225 - lightNormal.y * 520}" fill="url(#sundialShadow)" opacity="0.92" />
+        <line x1="${hourPoint.x}" y1="${hourPoint.y}" x2="${sunPoint.x}" y2="${sunPoint.y}" stroke="${ambient ? '#efe3c1' : '#fff8ea'}" stroke-width="5" stroke-linecap="round" />
+      </g>
+
+      <circle cx="225" cy="225" r="198" fill="none" stroke="rgba(61,44,16,0.35)" stroke-width="2" />
+      <circle cx="225" cy="225" r="184" fill="none" stroke="rgba(255,245,220,0.2)" stroke-width="1" />
+      ${hourMarkers}
+
+      <circle cx="${hourPoint.x}" cy="${hourPoint.y}" r="10" fill="#fbfaf4" stroke="#634a24" stroke-width="3" />
+      <circle cx="${sunPoint.x}" cy="${sunPoint.y}" r="${sunVisible ? 8 : 6}" fill="${sunVisible ? '#ffd46d' : '#d7c7a3'}" stroke="#6a5024" stroke-width="2" />
+      <circle cx="225" cy="225" r="5" fill="rgba(58,40,16,0.72)" />
+
+      <text x="225" y="80" text-anchor="middle" fill="rgba(70,50,24,0.9)" font-size="28" font-family="Georgia, serif">Sundial</text>
+      <text x="225" y="365" text-anchor="middle" fill="rgba(70,50,24,0.78)" font-size="13" font-family="Inter, sans-serif" letter-spacing="2">ALAMEDA · SUN ${Math.round(sun.azimuth)}° · ALT ${Math.round(sun.elevation)}°</text>
     </svg>
   `;
 }
@@ -215,6 +349,13 @@ const faceRegistry = {
     status: 'prototype',
     route: './faces/chrome-trex.html',
     render: renderChromeTRex,
+  },
+  sundial: {
+    id: 'sundial',
+    name: 'Sundial',
+    status: 'prototype',
+    route: './faces/sundial.html',
+    render: renderSundial,
   },
 };
 
