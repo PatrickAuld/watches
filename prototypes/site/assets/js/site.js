@@ -101,39 +101,48 @@ function renderChromeTRex(state) {
   const m = minuteDegrees(date);
   const s = secondDegrees(date);
   const ambient = state.previewMode === 'ambient';
-  const minutePip = ambient ? '#d7d8dc' : '#ffffff';
 
   const hourMarkers = [
     { angle: 0, type: 'rect', width: 16, height: 34 },
-    { angle: 30, type: 'triangle', size: 38 },
-    { angle: 60, type: 'rect', width: 16, height: 24 },
+    { angle: 30, type: 'triangle' },
+    { angle: 60, type: 'rect', width: 14, height: 24 },
     { angle: 90, type: 'rect', width: 18, height: 38 },
-    { angle: 120, type: 'rect', width: 18, height: 32 },
-    { angle: 150, type: 'rect', width: 18, height: 32 },
+    { angle: 120, type: 'rect', width: 14, height: 24 },
+    { angle: 150, type: 'rect', width: 14, height: 24 },
     { angle: 180, type: 'rect', width: 18, height: 38 },
-    { angle: 210, type: 'rect', width: 18, height: 32 },
-    { angle: 240, type: 'rect', width: 18, height: 26 },
-    { angle: 270, type: 'rect', width: 18, height: 26 },
-    { angle: 300, type: 'rect', width: 18, height: 34 },
-    { angle: 330, type: 'rect', width: 18, height: 26 },
+    { angle: 210, type: 'rect', width: 14, height: 24 },
+    { angle: 240, type: 'rect', width: 14, height: 24 },
+    { angle: 270, type: 'rect', width: 18, height: 38 },
+    { angle: 300, type: 'rect', width: 14, height: 24 },
+    { angle: 330, type: 'rect', width: 14, height: 24 },
   ];
 
+  const bezelNumerals = [
+    { value: '50', angle: 330 },
+    { value: '40', angle: 270 },
+    { value: '30', angle: 210 },
+    { value: '20', angle: 150 },
+  ].map(({ value, angle }) => {
+    const p = polarToCartesian(225, 225, 182, angle);
+    return `<text x="${p.x}" y="${p.y + 12}" text-anchor="middle" fill="#f1f2f4" font-size="32" font-family="Inter, sans-serif" font-weight="600" transform="rotate(${angle - 90} ${p.x} ${p.y})">${value}</text>`;
+  }).join('');
+
   const bezelTicks = Array.from({ length: 15 }, (_, i) => {
-    const angle = 60 + i * 6;
+    const angle = i * 6;
     const outer = polarToCartesian(225, 225, 214, angle);
-    const inner = polarToCartesian(225, 225, i % 3 === 0 ? 192 : 198, angle);
-    return `<line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="#eef0f3" stroke-width="${i % 3 === 0 ? 4 : 3}" stroke-linecap="round" opacity="0.95" />`;
+    const inner = polarToCartesian(225, 225, i % 3 === 0 ? 194 : 199, angle);
+    return `<line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="#f1f2f4" stroke-width="${i % 3 === 0 ? 4 : 2.5}" stroke-linecap="round" />`;
   }).join('');
 
   const markerSvg = hourMarkers.map((marker) => {
     const center = polarToCartesian(225, 225, 138, marker.angle);
     if (marker.type === 'triangle') {
       return `<g transform="rotate(${marker.angle} ${center.x} ${center.y}) translate(${center.x} ${center.y})">
-        <path d="M -20 16 L 0 -18 L 20 16 Z" fill="#f5f5f2" />
+        <path d="M -18 14 L 0 -18 L 18 14 Z" fill="#f4f5f2" />
       </g>`;
     }
     return `<g transform="rotate(${marker.angle} ${center.x} ${center.y}) translate(${center.x} ${center.y})">
-      <rect x="${-marker.width / 2}" y="${-marker.height / 2}" width="${marker.width}" height="${marker.height}" rx="2" fill="#f5f5f2" />
+      <rect x="${-marker.width / 2}" y="${-marker.height / 2}" width="${marker.width}" height="${marker.height}" rx="2" fill="#f4f5f2" />
     </g>`;
   }).join('');
 
@@ -141,67 +150,53 @@ function renderChromeTRex(state) {
     <svg viewBox="0 0 450 450" role="img" aria-label="ChromeTRex prototype watch face">
       <defs>
         <linearGradient id="chromeRing" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#6f737a" />
-          <stop offset="25%" stop-color="#adb2b8" />
-          <stop offset="50%" stop-color="#6b7077" />
-          <stop offset="75%" stop-color="#c4c9ce" />
-          <stop offset="100%" stop-color="#595e65" />
+          <stop offset="0%" stop-color="#5e6369" />
+          <stop offset="25%" stop-color="#cfd4d9" />
+          <stop offset="50%" stop-color="#7a7f87" />
+          <stop offset="75%" stop-color="#d7dbe0" />
+          <stop offset="100%" stop-color="#4d5258" />
         </linearGradient>
-        <radialGradient id="dialGlow" cx="50%" cy="45%" r="70%">
-          <stop offset="0%" stop-color="#17181b" />
+        <radialGradient id="dialGlow" cx="50%" cy="42%" r="72%">
+          <stop offset="0%" stop-color="#151619" />
           <stop offset="100%" stop-color="#020202" />
         </radialGradient>
       </defs>
 
       <rect width="450" height="450" fill="#000" rx="225" />
-      <circle cx="225" cy="225" r="223" fill="url(#chromeRing)" />
-      <circle cx="225" cy="225" r="206" fill="#060606" />
-      <circle cx="225" cy="225" r="204" fill="none" stroke="#8d9198" stroke-width="1.5" opacity="0.5" />
-      <circle cx="225" cy="225" r="196" fill="#050505" />
-
-      <text x="154" y="75" fill="#f3f4f6" font-size="38" font-family="Inter, sans-serif" font-weight="500">50</text>
-      <text x="50" y="238" fill="#f3f4f6" font-size="38" font-family="Inter, sans-serif" font-weight="500" transform="rotate(-90 50 238)">40</text>
-      <text x="120" y="406" fill="#f3f4f6" font-size="38" font-family="Inter, sans-serif" font-weight="500" transform="rotate(-30 120 406)">30</text>
-      <text x="305" y="406" fill="#f3f4f6" font-size="38" font-family="Inter, sans-serif" font-weight="500" transform="rotate(30 305 406)">20</text>
-      <rect x="217" y="22" width="16" height="48" rx="4" fill="#f2f3f5" />
-      <line x1="55" y1="122" x2="88" y2="104" stroke="#f2f3f5" stroke-width="8" stroke-linecap="round" />
-      <line x1="60" y1="317" x2="93" y2="335" stroke="#f2f3f5" stroke-width="8" stroke-linecap="round" />
-      <g transform="translate(349 74)">
-        <path d="M 0 12 Q 16 -2 34 0 Q 48 2 54 14 Q 36 26 0 30 Z" fill="#f2f3f5" />
-        <circle cx="22" cy="14" r="6" fill="#060606" />
-        <line x1="44" y1="32" x2="58" y2="42" stroke="#f2f3f5" stroke-width="7" stroke-linecap="round" />
-      </g>
+      <circle cx="225" cy="225" r="223" fill="#0b0b0c" />
+      <circle cx="225" cy="225" r="221" fill="url(#chromeRing)" />
+      <circle cx="225" cy="225" r="206" fill="#0a0a0b" />
+      <circle cx="225" cy="225" r="197" fill="#050505" stroke="#8b9098" stroke-width="1.2" opacity="0.55" />
+      ${bezelNumerals}
+      <rect x="217" y="19" width="16" height="44" rx="4" fill="#f2f3f5" />
+      <line x1="62" y1="132" x2="92" y2="115" stroke="#f2f3f5" stroke-width="7" stroke-linecap="round" />
+      <line x1="62" y1="318" x2="92" y2="335" stroke="#f2f3f5" stroke-width="7" stroke-linecap="round" />
       ${bezelTicks}
 
-      <circle cx="225" cy="225" r="164" fill="url(#dialGlow)" stroke="#202227" stroke-width="3" />
-      <circle cx="225" cy="225" r="151" fill="none" stroke="#464a52" stroke-width="2" />
-      ${buildTicks(60, 151, 157, '#cfd4dc', 2.1)}
+      <circle cx="225" cy="225" r="164" fill="url(#dialGlow)" stroke="#24272d" stroke-width="2.5" />
+      <circle cx="225" cy="225" r="151" fill="none" stroke="#4a4e56" stroke-width="1.5" />
+      ${buildTicks(60, 151, 157, '#d1d5dc', 1.7)}
       ${markerSvg}
 
-      <text x="252" y="149" fill="#f1f2f4" font-size="28" font-family="Georgia, serif" font-weight="700" transform="rotate(17 252 149)">Chrome</text>
-      <text x="250" y="175" fill="#f1f2f4" font-size="18" font-family="Georgia, serif" transform="rotate(17 250 175)">TRex</text>
+      <text x="225" y="126" text-anchor="middle" fill="#f3f4f6" font-size="24" font-family="Georgia, serif" font-weight="700">Chrome</text>
+      <text x="225" y="148" text-anchor="middle" fill="#f3f4f6" font-size="16" font-family="Georgia, serif">TRex</text>
 
-      <g transform="translate(214 304) scale(1.25)">
-        <path d="M -10 7 L -4 3 L -4 -4 L 4 -4 L 7 -10 L 12 -10 L 12 -6 L 15 -6 L 15 -2 L 12 -2 L 12 4 L 8 4 L 8 8 L 5 8 L 5 11 L 1 11 L 1 6 L -3 6 L -7 11 L -11 11 L -8 6 L -13 3 L -13 -1 L -10 -1 L -10 7 Z" fill="#f4f5f7" />
-        <circle cx="16" cy="-3" r="1.2" fill="#f4f5f7" />
-        <circle cx="19" cy="-8" r="1.1" fill="#f4f5f7" />
-        <circle cx="22" cy="-13" r="0.9" fill="#f4f5f7" />
+      <g transform="translate(225 304) scale(1.05)">
+        <path d="M -11 7 L -5 4 L -5 -4 L 3 -4 L 7 -11 L 12 -11 L 12 -7 L 15 -7 L 15 -3 L 12 -3 L 12 4 L 8 4 L 8 8 L 5 8 L 5 11 L 1 11 L 1 6 L -3 6 L -7 11 L -11 11 L -8 6 L -13 3 L -13 -1 L -11 -1 L -11 7 Z" fill="#f3f4f6" />
       </g>
-
-      <text x="132" y="365" fill="#f1f2f4" font-size="10" font-family="Inter, sans-serif" transform="rotate(-28 132 365)">PIXEL</text>
-      <text x="254" y="372" fill="#f1f2f4" font-size="10" font-family="Inter, sans-serif" transform="rotate(26 254 372)">MADE</text>
+      <text x="225" y="338" text-anchor="middle" fill="#d6d9de" font-size="10" font-family="Inter, sans-serif" letter-spacing="3">PIXEL MADE</text>
 
       <g transform="rotate(${h} 225 225)">
-        <path d="M 213 224 L 225 122 L 237 224 L 225 240 Z" fill="#f3f4f2" stroke="#cfcfca" stroke-width="1.5" />
+        <path d="M 213 225 L 225 121 L 237 225 L 225 240 Z" fill="#f3f4f2" stroke="#d1d2cf" stroke-width="1.3" />
         <rect x="218" y="118" width="14" height="18" rx="2" fill="#f3f4f2" />
       </g>
       <g transform="rotate(${m} 225 225)">
-        <path d="M 219 234 L 221 140 L 229 68 L 237 140 L 231 234 Z" fill="#f7f7f4" stroke="#d1d2cf" stroke-width="1" />
-        <rect x="219" y="66" width="12" height="14" rx="3" fill="#f7f7f4" />
+        <path d="M 219 236 L 221 152 L 225 78 L 229 152 L 231 236 Z" fill="#f7f7f4" stroke="#d1d2cf" stroke-width="1" />
+        <rect x="219" y="74" width="12" height="14" rx="2.5" fill="#f7f7f4" />
       </g>
-      ${ambient ? '' : `<g transform="rotate(${s} 225 225)"><line x1="225" y1="241" x2="225" y2="82" stroke="#f5f5f5" stroke-width="2.5" stroke-linecap="round" /><rect x="220" y="160" width="10" height="10" rx="1" fill="#f5f5f5" /></g>`}
+      ${ambient ? '' : `<g transform="rotate(${s} 225 225)"><line x1="225" y1="241" x2="225" y2="86" stroke="#f3f4f6" stroke-width="2" stroke-linecap="round" /><circle cx="225" cy="152" r="5" fill="#f3f4f6" /></g>`}
       <circle cx="225" cy="225" r="7" fill="#0f1011" stroke="#2d3138" stroke-width="2" />
-      <circle cx="225" cy="225" r="3" fill="${minutePip}" />
+      <circle cx="225" cy="225" r="3" fill="#ffffff" />
     </svg>
   `;
 }

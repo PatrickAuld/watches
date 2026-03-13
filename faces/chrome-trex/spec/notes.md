@@ -35,6 +35,8 @@ Capture the main visual language of the original desired direction:
 - make marker sizing and spacing more deliberate
 - keep the ChromeTRex identity, but integrate it with stronger restraint
 - preserve the homage energy without letting the dial become visually messy
+- keep branding centered and aligned unless a deliberate offset is requested
+- keep the dino motif small and centered above 6 unless a different placement is explicitly requested
 
 ## Notes
 
