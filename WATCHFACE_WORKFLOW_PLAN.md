@@ -394,16 +394,22 @@ Generates deterministic preview images for review and PRs.
 
 The prototype site should deploy automatically so feedback is fast.
 
-Recommended platforms:
-- Vercel
-- Netlify
-- Cloudflare Pages
-- GitHub Pages
+### Default deployment choice
 
-Preferred characteristics:
-- automatic deploy on push
-- preview deploys for branches/PRs
-- stable URLs for each watch page
+Use **GitHub Pages** first.
+
+Reasoning:
+- it is already attached to the repository
+- it is trivial to host a static site from the same repo
+- deployment on pushes to `main` is straightforward
+- it keeps the earliest iteration loop simple
+
+Initial deployment policy:
+- publish the prototype site with a GitHub Actions workflow
+- deploy automatically on pushes to `main`
+- keep the site URL stable so feedback can reference exact pages
+
+If later preview environments become important for branch-by-branch review, the deployment target can expand to Vercel, Netlify, or Cloudflare Pages. But the initial plan should assume **GitHub Pages on main-site push**.
 
 The site homepage should list available faces and their states, for example:
 - Atlas — prototype
