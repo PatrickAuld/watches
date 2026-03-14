@@ -155,6 +155,19 @@ When making structural changes, update the relevant docs:
 
 Keep docs aligned with the actual repo layout.
 
+## Build-before-push rule
+
+Always run the relevant build or validation step before pushing changes.
+
+This is mandatory.
+
+At minimum:
+- for prototype-site changes, run an appropriate sanity check for the changed files
+- for Wear OS / Gradle changes, run the relevant Gradle build task
+- do not push code that has not been locally checked in the most relevant available way
+
+If a build cannot be run, call that out explicitly before pushing.
+
 ## Preferred behavior for future agents
 
 - optimize for iteration speed
