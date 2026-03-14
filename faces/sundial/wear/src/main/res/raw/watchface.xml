@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:10:00" />
+
+  <Scene backgroundColor="#110f0b">
+    <!-- Outer case -->
+    <PartDraw x="15" y="15" width="420" height="420">
+      <Ellipse x="0" y="0" width="420" height="420">
+        <Fill color="#2e2418" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Inner dial base -->
+    <PartDraw x="27" y="27" width="396" height="396">
+      <Ellipse x="0" y="0" width="396" height="396">
+        <Fill color="#ead2a1" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Shadowed lower half starter scaffold.
+         This is intentionally static for the first scaffold pass.
+         The next implementation step is to replace this with a dynamic
+         circular segment defined by the hour/sun chord rule. -->
+    <PartDraw x="27" y="27" width="396" height="396">
+      <Arc direction="CLOCKWISE" startAngle="180" endAngle="360" centerX="198" centerY="198" width="396" height="396">
+        <Fill color="#6a4d2c" />
+      </Arc>
+    </PartDraw>
+
+    <!-- Subtle hour ticks -->
+    <PartDraw x="225" y="225" width="0" height="0">
+      <Transform rotate="0">
+        <Rectangle x="-1" y="-188" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="30">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="60">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="90">
+        <Rectangle x="-1" y="-188" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="120">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="150">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="180">
+        <Rectangle x="-1" y="-188" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="210">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="240">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="270">
+        <Rectangle x="-1" y="-188" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="300">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+      <Transform rotate="330">
+        <Rectangle x="-1" y="-188" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </Transform>
+    </PartDraw>
+
+    <!-- Boundary line placeholder: first production scaffold uses a static diagonal.
+         Next step is to replace this with expression-driven hour/sun geometry if WFF v4 permits a clean mapping. -->
+    <PartDraw x="0" y="0" width="450" height="450">
+      <Line x1="120" y1="125" x2="320" y2="305">
+        <Stroke color="#fff8ea" thickness="4" cap="ROUND" />
+      </Line>
+    </PartDraw>
+
+    <!-- Hour marker placeholder -->
+    <PartDraw x="110" y="115" width="20" height="20">
+      <Ellipse x="0" y="0" width="20" height="20">
+        <Fill color="#fff8ea" />
+        <Stroke color="#60461d" thickness="2" />
+      </Ellipse>
+    </PartDraw>
+
+    <PartDraw x="27" y="27" width="396" height="396">
+      <Ellipse x="0" y="0" width="396" height="396">
+        <Stroke color="#6b4c1f" thickness="2" />
+      </Ellipse>
+    </PartDraw>
+  </Scene>
+</WatchFace>

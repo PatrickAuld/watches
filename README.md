@@ -27,3 +27,4 @@ Published via GitHub Pages from `main`.
 - `docs/workflow.md`
 - `docs/wff-v4-reference.md`
 - `docs/wff-samples-notes.md`
+- `docs/android-stage-scaffold.md`
