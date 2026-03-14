@@ -4,113 +4,106 @@
   <Metadata key="PREVIEW_TIME" value="10:10:00" />
 
   <Scene backgroundColor="#110f0b">
-    <!-- Outer case -->
+    <!-- Case -->
     <PartDraw x="15" y="15" width="420" height="420">
       <Ellipse x="0" y="0" width="420" height="420">
         <Fill color="#2e2418" />
       </Ellipse>
     </PartDraw>
 
-    <!-- Inner dial base -->
+    <!-- Warm metal ring -->
+    <PartDraw x="22" y="22" width="406" height="406" alpha="96">
+      <Ellipse x="0" y="0" width="406" height="406">
+        <Fill color="#c79f61" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Main dial -->
     <PartDraw x="27" y="27" width="396" height="396">
       <Ellipse x="0" y="0" width="396" height="396">
         <Fill color="#ead2a1" />
       </Ellipse>
     </PartDraw>
 
-    <!-- Shadowed lower half starter scaffold.
-         This is intentionally static for the first scaffold pass.
-         The next implementation step is to replace this with a dynamic
-         circular segment defined by the hour/sun chord rule. -->
+    <!-- Lower shadow mass.
+         First real WFF implementation is intentionally static and preview-faithful.
+         This approximates the circular segment bounded by the sundial chord,
+         with the shadow occupying the region that contains the 6:00 point. -->
     <PartDraw x="27" y="27" width="396" height="396">
-      <Arc direction="CLOCKWISE" startAngle="180" endAngle="360" centerX="198" centerY="198" width="396" height="396">
+      <Arc direction="CLOCKWISE" startAngle="124" endAngle="336" centerX="198" centerY="198" width="396" height="396">
         <Fill color="#6a4d2c" />
       </Arc>
     </PartDraw>
-
-    <!-- Subtle hour ticks -->
-    <PartDraw x="225" y="225" width="0" height="0">
-      <Transform rotate="0">
-        <Rectangle x="-1" y="-188" width="2" height="14">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="30">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="60">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="90">
-        <Rectangle x="-1" y="-188" width="2" height="14">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="120">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="150">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="180">
-        <Rectangle x="-1" y="-188" width="2" height="14">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="210">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="240">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="270">
-        <Rectangle x="-1" y="-188" width="2" height="14">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="300">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
-      <Transform rotate="330">
-        <Rectangle x="-1" y="-188" width="2" height="9">
-          <Fill color="#6c5839" />
-        </Rectangle>
-      </Transform>
+    <PartDraw x="27" y="39" width="396" height="396" alpha="72">
+      <Arc direction="CLOCKWISE" startAngle="124" endAngle="336" centerX="198" centerY="198" width="396" height="396">
+        <Fill color="#261c12" />
+      </Arc>
     </PartDraw>
 
-    <!-- Boundary line placeholder: first production scaffold uses a static diagonal.
-         Next step is to replace this with expression-driven hour/sun geometry if WFF v4 permits a clean mapping. -->
+    <!-- Chord boundary for preview state -->
     <PartDraw x="0" y="0" width="450" height="450">
-      <Line x1="120" y1="125" x2="320" y2="305">
+      <Line x1="108" y1="142" x2="350" y2="248">
         <Stroke color="#fff8ea" thickness="4" cap="ROUND" />
       </Line>
     </PartDraw>
 
-    <!-- Hour marker placeholder -->
-    <PartDraw x="110" y="115" width="20" height="20">
+    <!-- Subtle hour ticks, no numbering -->
+    <PartDraw x="225" y="225" width="0" height="0">
+      <Transform rotate="0">
+        <Rectangle x="-1" y="-188" width="2" height="14"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="30">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="60">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="90">
+        <Rectangle x="-1" y="-188" width="2" height="14"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="120">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="150">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="180">
+        <Rectangle x="-1" y="-188" width="2" height="14"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="210">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="240">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="270">
+        <Rectangle x="-1" y="-188" width="2" height="14"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="300">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+      <Transform rotate="330">
+        <Rectangle x="-1" y="-188" width="2" height="9"><Fill color="#6c5839" /></Rectangle>
+      </Transform>
+    </PartDraw>
+
+    <!-- Hour marker only -->
+    <PartDraw x="98" y="132" width="20" height="20">
       <Ellipse x="0" y="0" width="20" height="20">
         <Fill color="#fff8ea" />
         <Stroke color="#60461d" thickness="2" />
       </Ellipse>
     </PartDraw>
 
+    <!-- Edge rings -->
     <PartDraw x="27" y="27" width="396" height="396">
       <Ellipse x="0" y="0" width="396" height="396">
         <Stroke color="#6b4c1f" thickness="2" />
+      </Ellipse>
+    </PartDraw>
+    <PartDraw x="41" y="41" width="368" height="368" alpha="48">
+      <Ellipse x="0" y="0" width="368" height="368">
+        <Stroke color="#fff8ea" thickness="1" />
       </Ellipse>
     </PartDraw>
   </Scene>

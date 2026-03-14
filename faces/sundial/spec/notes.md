@@ -30,3 +30,8 @@ Keep it clean:
 - strong contrast between illuminated and shadowed halves
 - the lower region should read as a genuine shadowed area, not just a flat color block
 - the line should feel precise and inevitable
+
+## Current WFF implementation note
+
+The first Android/WFF implementation is intentionally a static, preview-faithful composition.
+It captures the Sundial visual language, but does not yet reproduce the browser prototype's dynamic Alameda sun-position geometry in pure WFF XML.

@@ -28,14 +28,17 @@ It establishes:
 - resource-only watch face setup
 - starter watch face XML file
 
-## What is still placeholder
+## What is still limited
 
-For `sundial`, the current `watchface.xml` intentionally uses static placeholder geometry for:
-- the line/chord
-- the shadow segment
-- the hour marker position
+For `sundial`, the current `watchface.xml` is now a more faithful **static first implementation** of the visual design, but it still does not perform full dynamic solar geometry in WFF XML.
 
-Those need to be replaced by the actual final mapping from the prototype concept into WFF XML.
+Remaining gap:
+- the line/chord is still fixed to the preview composition
+- the shadow segment is still fixed to the preview composition
+- the hour marker is still fixed to the preview composition
+- the Alameda-specific sun calculation from the browser prototype has not yet been expressed in pure WFF XML
+
+Those pieces need a second pass once the exact WFF-v4 expression/transform strategy is chosen.
 
 ## Why scaffold first
 
