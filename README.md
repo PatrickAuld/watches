@@ -21,6 +21,11 @@ Local structure:
 
 Published via GitHub Pages from `main`.
 
+## Build artifacts
+
+Wear modules can be built in GitHub Actions and uploaded as downloadable artifacts.
+The initial workflow targets the existing `sundial` Wear module and is meant to be extended face-by-face as production modules are added.
+
 ## Docs
 
 - `WATCHFACE_WORKFLOW_PLAN.md`
@@ -28,3 +33,13 @@ Published via GitHub Pages from `main`.
 - `docs/wff-v4-reference.md`
 - `docs/wff-samples-notes.md`
 - `docs/android-stage-scaffold.md`
+- `docs/personal-watchface-delivery-plan.md`
+- `docs/personal-phone-app-plan.md`
+- `docs/artifact-publication-plan.md`
+- `docs/deployment-workflow-outline.md`
+
+## Planned next layer
+
+The repo now reserves `apps/phone/` for a future personal Android phone app that can act as the operator-facing surface for CI-built watch artifacts.
+
+That directory is intentionally documentation-first until the artifact publication contract is chosen.
