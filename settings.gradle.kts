@@ -18,3 +18,4 @@ rootProject.name = "watches"
 include(":faces:sundial:wear")
 include(":apps:shared")
 include(":apps:watch")
+include(":apps:phone")
