@@ -8,7 +8,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.patrickauld.watches.sundial"
+        applicationId = "com.patrickauld.watches.companion.watchfacepush.sundial"
         minSdk = 36
         targetSdk = 36
         versionCode = 1
@@ -17,10 +17,10 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             isShrinkResources = false
             signingConfig = signingConfigs.getByName("debug")
         }
