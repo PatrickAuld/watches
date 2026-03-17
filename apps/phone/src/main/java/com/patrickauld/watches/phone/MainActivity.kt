@@ -137,6 +137,22 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun requestActivate(build: AvailableBuild, transfer: WatchTransfer) {
+        viewModelScope.launch {
+            try {
+                val nodeId = transfer.findWatchCompanion()
+                if (nodeId == null) {
+                    errorMessage = "Watch companion not found"
+                    return@launch
+                }
+                val packageName = "com.patrickauld.watches.companion.watchfacepush.${build.slug}"
+                transfer.requestActivate(nodeId, packageName).getOrThrow()
+            } catch (e: Exception) {
+                errorMessage = e.message
+            }
+        }
+    }
+
     fun navigateBack() {
         screen = Screen.FaceList
     }
@@ -182,6 +198,9 @@ fun MainApp(context: android.content.Context, viewModel: MainViewModel = viewMod
                 faceName = currentScreen.build.name,
                 phase = viewModel.installPhase,
                 errorMessage = viewModel.errorMessage,
+                onSetActive = {
+                    viewModel.requestActivate(currentScreen.build, transfer)
+                },
                 onDone = {
                     viewModel.loadFaces(repo)
                     viewModel.navigateBack()

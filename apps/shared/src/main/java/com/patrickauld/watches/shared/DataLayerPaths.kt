@@ -16,6 +16,9 @@ object DataLayerPaths {
     /** MessageClient path for install requests from phone to watch. */
     const val MESSAGE_REQUEST_INSTALL = "/watchface/request-install"
 
+    /** MessageClient path for activation requests from phone to watch. */
+    const val MESSAGE_REQUEST_ACTIVATE = "/watchface/request-activate"
+
     /** Capability name advertised by the watch companion app. */
     const val CAPABILITY_WATCH_COMPANION = "watch_companion"
 }

@@ -62,4 +62,16 @@ class WatchTransfer(private val context: Context) {
             .sendMessage(nodeId, DataLayerPaths.MESSAGE_REQUEST_INSTALL, json.toString().toByteArray())
             .await()
     }
+
+    /**
+     * Sends an activation request to the watch companion.
+     */
+    suspend fun requestActivate(nodeId: String, packageName: String): Result<Unit> = runCatching {
+        val json = JSONObject().apply {
+            put("packageName", packageName)
+        }
+        Wearable.getMessageClient(context)
+            .sendMessage(nodeId, DataLayerPaths.MESSAGE_REQUEST_ACTIVATE, json.toString().toByteArray())
+            .await()
+    }
 }

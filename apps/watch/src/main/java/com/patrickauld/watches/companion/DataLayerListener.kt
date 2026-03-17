@@ -48,6 +48,7 @@ class DataLayerListener : WearableListenerService() {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         when (messageEvent.path) {
             DataLayerPaths.MESSAGE_REQUEST_INSTALL -> handleInstallRequest(messageEvent)
+            DataLayerPaths.MESSAGE_REQUEST_ACTIVATE -> handleActivateRequest(messageEvent)
         }
     }
 
@@ -83,6 +84,26 @@ class DataLayerListener : WearableListenerService() {
                 )
             } catch (e: Exception) {
                 sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Request failed")
+            }
+        }
+    }
+
+    private fun handleActivateRequest(messageEvent: MessageEvent) {
+        scope.launch {
+            try {
+                val json = JSONObject(String(messageEvent.data))
+                val packageName = json.getString("packageName")
+
+                installer.setActive(packageName).fold(
+                    onSuccess = {
+                        sendStatus(messageEvent.sourceNodeId, "success", "Face activated")
+                    },
+                    onFailure = { e ->
+                        sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Activation failed")
+                    }
+                )
+            } catch (e: Exception) {
+                sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Activate request failed")
             }
         }
     }
