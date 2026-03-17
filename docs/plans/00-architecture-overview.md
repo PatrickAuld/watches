@@ -107,13 +107,14 @@ The Watch Face Push API imposes a specific contract:
 | [04](04-watch-companion-app.md) | Watch Companion App | Wear OS app that receives faces and calls WatchFacePushManager |
 | [05](05-phone-app.md) | Phone App | Android app that fetches builds from GitHub and transfers to watch |
 | [06](06-end-to-end-integration.md) | End-to-End Integration | Validation tokens, CI for all apps, activation UX, update/rollback |
+| [07](07-release-signing-and-publication.md) | Release Signing and Publication | Durable signed releases, manifest contract, publication channels |
 
 ---
 
 ## Dependency order
 
 ```
-01 ──▶ 02 ──▶ 03 ──▶ 04 ──▶ 05 ──▶ 06
+01 ──▶ 02 ──▶ 03 ──▶ 04 ──▶ 05 ──▶ 06 ──▶ 07
                       ▲
                       │
                       └── 03 is a prerequisite for both 04 and 05

@@ -306,12 +306,15 @@ Implement artifact transfer and install/update flow.
 ## Step 7
 Refine activation and update UX.
 
+## Step 8
+Add signed durable publication and a release manifest for the phone app.
+
 ---
 
 ## Practical next step
 
-The next concrete repo milestone should be:
+The next concrete repo milestone after the current end-to-end scaffolding is:
 
-**Build artifacts in GitHub Actions for `faces/<slug>/wear/`, with stable metadata, while continuing to refine the first real watch-face module.**
+**define and implement the signed personal-release publication layer, starting with a single face (`sundial`).**
 
-That keeps the work grounded and avoids overbuilding the app side before the production watch-face modules are actually healthy.
+That closes the gap between transient CI artifacts and a stable install channel the phone app can rely on.
