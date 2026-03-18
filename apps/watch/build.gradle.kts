@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -32,6 +31,7 @@ dependencies {
     implementation(project(":apps:shared"))
     implementation(libs.watchface.push)
     implementation(libs.play.services.wearable)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
     implementation(libs.wear.compose.material)
     implementation(libs.wear.compose.foundation)
     implementation(libs.activity.compose)

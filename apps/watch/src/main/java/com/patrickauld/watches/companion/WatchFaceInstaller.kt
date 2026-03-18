@@ -1,51 +1,71 @@
 package com.patrickauld.watches.companion
 
 import android.content.Context
-import androidx.wear.watchface.push.WatchFacePushManager
+import android.os.ParcelFileDescriptor
+import androidx.wear.watchfacepush.WatchFacePushManager
+import androidx.wear.watchfacepush.WatchFacePushManagerFactory
 
 /**
- * Wrapper around [WatchFacePushManager] that isolates the alpha API surface.
- *
- * All Watch Face Push API calls go through this class so that API changes
- * only require updating one file.
+ * Wrapper around [WatchFacePushManager] that isolates the API surface.
  */
 class WatchFaceInstaller(private val context: Context) {
 
-    private suspend fun getManager(): WatchFacePushManager {
-        return WatchFacePushManager.createAsync(context)
+    private fun getManager(): WatchFacePushManager {
+        return WatchFacePushManagerFactory.createWatchFacePushManager(context)
     }
 
     suspend fun install(apkPath: String, validationToken: String?): Result<Unit> = runCatching {
+        val token = validationToken ?: error("validationToken is required for watch face install")
         val manager = getManager()
-        val apkFile = java.io.File(apkPath)
-        manager.addWatchFace(apkFile, validationToken)
+        openParcelFileDescriptor(apkPath).use { apkFd ->
+            manager.addWatchFace(apkFd, token)
+        }
     }
 
-    suspend fun update(packageName: String, apkPath: String): Result<Unit> = runCatching {
+    suspend fun update(packageName: String, apkPath: String, validationToken: String?): Result<Unit> = runCatching {
+        val token = validationToken ?: error("validationToken is required for watch face update")
         val manager = getManager()
-        val apkFile = java.io.File(apkPath)
-        manager.updateWatchFace(packageName, apkFile)
+        val existing = manager.listWatchFaces().installedWatchFaceDetails
+            .firstOrNull { it.packageName == packageName }
+            ?: error("No installed watch face found for package $packageName")
+
+        openParcelFileDescriptor(apkPath).use { apkFd ->
+            manager.updateWatchFace(existing.slotId, apkFd, token)
+        }
     }
 
     suspend fun remove(packageName: String): Result<Unit> = runCatching {
         val manager = getManager()
-        manager.removeWatchFace(packageName)
+        val existing = manager.listWatchFaces().installedWatchFaceDetails
+            .firstOrNull { it.packageName == packageName }
+            ?: error("No installed watch face found for package $packageName")
+        manager.removeWatchFace(existing.slotId)
     }
 
     suspend fun setActive(packageName: String): Result<Unit> = runCatching {
         val manager = getManager()
-        manager.setWatchFaceAsActive(packageName)
+        val existing = manager.listWatchFaces().installedWatchFaceDetails
+            .firstOrNull { it.packageName == packageName }
+            ?: error("No installed watch face found for package $packageName")
+        manager.setWatchFaceAsActive(existing.slotId)
     }
 
     suspend fun listInstalled(): Result<List<InstalledFace>> = runCatching {
         val manager = getManager()
-        manager.listWatchFaces().map { info ->
+        manager.listWatchFaces().installedWatchFaceDetails.map { info ->
             InstalledFace(
                 packageName = info.packageName,
                 versionCode = info.versionCode,
-                isActive = info.isActive
+                isActive = manager.isWatchFaceActive(info.packageName)
             )
         }
+    }
+
+    private fun openParcelFileDescriptor(apkPath: String): ParcelFileDescriptor {
+        return ParcelFileDescriptor.open(
+            java.io.File(apkPath),
+            ParcelFileDescriptor.MODE_READ_ONLY
+        )
     }
 }
 

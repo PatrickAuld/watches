@@ -59,6 +59,7 @@ class DataLayerListener : WearableListenerService() {
                 val slug = json.getString("slug")
                 val packageName = json.getString("packageName")
                 val isUpdate = json.optBoolean("isUpdate", false)
+                val validationToken = json.optString("validationToken").takeIf { it.isNotBlank() }
 
                 val watchfacesDir = File(filesDir, "watchfaces")
                 val apkFile = File(watchfacesDir, "incoming.apk")
@@ -69,9 +70,9 @@ class DataLayerListener : WearableListenerService() {
                 }
 
                 val result = if (isUpdate) {
-                    installer.update(packageName, targetFile.absolutePath)
+                    installer.update(packageName, targetFile.absolutePath, validationToken)
                 } else {
-                    installer.install(targetFile.absolutePath, null)
+                    installer.install(targetFile.absolutePath, validationToken)
                 }
 
                 result.fold(
