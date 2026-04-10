@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:08:00" />
+
+  <Scene backgroundColor="#000000">
+
+    <!-- Tick boundary marks — cardinal points -->
+    <!-- Top (12 o'clock) -->
+    <PartDraw x="224" y="30" width="2" height="12">
+      <Rectangle x="0" y="0" width="2" height="12">
+        <Fill color="#ff3333" />
+      </Rectangle>
+    </PartDraw>
+    <!-- Bottom (6 o'clock) -->
+    <PartDraw x="224" y="408" width="2" height="12">
+      <Rectangle x="0" y="0" width="2" height="12">
+        <Fill color="#ff3333" />
+      </Rectangle>
+    </PartDraw>
+    <!-- Left (9 o'clock) -->
+    <PartDraw x="30" y="224" width="12" height="2">
+      <Rectangle x="0" y="0" width="12" height="2">
+        <Fill color="#ff3333" />
+      </Rectangle>
+    </PartDraw>
+    <!-- Right (3 o'clock) -->
+    <PartDraw x="408" y="224" width="12" height="2">
+      <Rectangle x="0" y="0" width="12" height="2">
+        <Fill color="#ff3333" />
+      </Rectangle>
+    </PartDraw>
+
+    <!-- Tick boundary marks — intercardinal points (dimmer) -->
+    <!-- Top-right (1:30) -->
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" angle="45">
+      <PartDraw x="224" y="30" width="2" height="8" alpha="100">
+        <Rectangle x="0" y="0" width="2" height="8">
+          <Fill color="#ff3333" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- Bottom-right (4:30) -->
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" angle="135">
+      <PartDraw x="224" y="30" width="2" height="8" alpha="100">
+        <Rectangle x="0" y="0" width="2" height="8">
+          <Fill color="#ff3333" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- Bottom-left (7:30) -->
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" angle="225">
+      <PartDraw x="224" y="30" width="2" height="8" alpha="100">
+        <Rectangle x="0" y="0" width="2" height="8">
+          <Fill color="#ff3333" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- Top-left (10:30) -->
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" angle="315">
+      <PartDraw x="224" y="30" width="2" height="8" alpha="100">
+        <Rectangle x="0" y="0" width="2" height="8">
+          <Fill color="#ff3333" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+
+  </Scene>
+</WatchFace>
