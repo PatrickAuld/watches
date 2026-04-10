@@ -106,5 +106,16 @@
       </PartDraw>
     </Group>
 
+    <!-- Hour triangle — small red marker at the dial edge, pointing toward center -->
+    <Group x="0" y="0" width="450" height="450" name="hourTriangle" pivotX="0.5" pivotY="0.5">
+      <Transform target="angle"
+        value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
+      <PartDraw x="218" y="18" width="14" height="14">
+        <Rectangle x="0" y="0" width="14" height="14">
+          <Fill color="#ff3333" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+
   </Scene>
 </WatchFace>
