@@ -1,0 +1,42 @@
+id: pendulum
+name: Pendulum
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: false
+  complications: []
+
+style:
+  family: industrial-minimal
+  background: "#000000"
+  accent: "#ff3333"
+
+description: >
+  A vertical sway line oscillates sinusoidally across the dial on a
+  60-minute cycle. At :00 and :30 it crosses the center; at :15 and
+  :45 it reaches the edges. A dashed center line glows brighter as the
+  sway approaches. Small hour triangles mark the current hour from
+  beyond the tick boundary. Red on black, raw and industrial.
+
+designNotes: >
+  No numbers, no digital readout, no center dot. The only information
+  sources are the sway line position (half-hour proximity), the center
+  line glow (convergence feedback), and the hour triangle (hour). The
+  trailing indicator shows direction of travel. Tick marks at cardinal
+  and intercardinal points define the bezel boundary.
+
+implementationNotes: >
+  Sinusoidal motion approximated with a piecewise parabola
+  (4x(1-x) pattern). Trail direction switches at minutes 15 and 45.
+  Center line alpha computed from absolute sway displacement.
+  Uses MINUTE_SECOND for smooth per-second updates.
