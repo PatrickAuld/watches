@@ -65,6 +65,15 @@
       </PartDraw>
     </Group>
 
+    <!-- Static center line — opacity increases as sway line approaches -->
+    <PartDraw x="224" y="35" width="2" height="380">
+      <Transform target="alpha"
+        value="[MINUTE_SECOND] &lt; 30 ? round(136 - 0.569 * [MINUTE_SECOND] * (30 - [MINUTE_SECOND])) : round(136 - 0.569 * ([MINUTE_SECOND] - 30) * (60 - [MINUTE_SECOND]))"/>
+      <Rectangle x="0" y="0" width="2" height="380">
+        <Stroke color="#ff3333" thickness="1" dashIntervals="3,6" />
+      </Rectangle>
+    </PartDraw>
+
     <!-- Sway line group — translates horizontally with sinusoidal motion -->
     <Group x="0" y="0" width="450" height="450" name="swayGroup">
       <!-- Sinusoidal x-offset: parabolic approximation of sin(π·m/30)·180 -->
