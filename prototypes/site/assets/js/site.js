@@ -231,6 +231,132 @@ function renderSundial(state) {
   `;
 }
 
+function flapGlyphSegments(value) {
+  const glyphs = {
+    '0': ['a', 'b', 'c', 'd', 'e', 'f'],
+    '1': ['b', 'c'],
+    '2': ['a', 'b', 'g', 'e', 'd'],
+    '3': ['a', 'b', 'g', 'c', 'd'],
+    '4': ['f', 'g', 'b', 'c'],
+    '5': ['a', 'f', 'g', 'c', 'd'],
+    '6': ['a', 'f', 'g', 'e', 'c', 'd'],
+    '7': ['a', 'b', 'c'],
+    '8': ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+    '9': ['a', 'b', 'c', 'd', 'f', 'g'],
+    ':': ['dot-top', 'dot-bottom'],
+  };
+  return glyphs[value] || [];
+}
+
+function renderSplitFlap(state) {
+  const date = getWatchTime(state);
+  const ambient = state.previewMode === 'ambient';
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  const timeChars = [...hh, ':', ...mm];
+
+  const gridCols = 6;
+  const gridRows = 4;
+  const flapW = 54;
+  const flapH = 68;
+  const gapX = 8;
+  const gapY = 10;
+  const startX = 41;
+  const startY = 77;
+
+  const backgroundGrid = Array.from({ length: gridCols * gridRows }, (_, i) => {
+    const col = i % gridCols;
+    const row = Math.floor(i / gridCols);
+    const x = startX + col * (flapW + gapX);
+    const y = startY + row * (flapH + gapY);
+    const label = (col + row) % 3 === 0 ? '–' : '';
+    return `
+      <g transform="translate(${x} ${y})">
+        <rect width="${flapW}" height="${flapH}" rx="8" fill="${ambient ? '#161616' : '#191919'}" stroke="${ambient ? '#2a2a2a' : '#343434'}" stroke-width="1.5" />
+        <line x1="4" y1="${flapH / 2}" x2="${flapW - 4}" y2="${flapH / 2}" stroke="${ambient ? '#242424' : '#2b2b2b'}" stroke-width="2" />
+        <rect x="1.5" y="1.5" width="${flapW - 3}" height="${flapH / 2 - 2}" rx="7" fill="${ambient ? '#1a1a1a' : '#232323'}" />
+        <rect x="1.5" y="${flapH / 2}" width="${flapW - 3}" height="${flapH / 2 - 1.5}" rx="7" fill="${ambient ? '#121212' : '#141414'}" />
+        ${label ? `<text x="${flapW / 2}" y="${flapH / 2 + 8}" text-anchor="middle" fill="#2f2f2f" font-size="28" font-family="Inter, sans-serif">${label}</text>` : ''}
+      </g>
+    `;
+  }).join('');
+
+  const segmentRects = {
+    a: { x: 10, y: 8, w: 34, h: 8 },
+    b: { x: 40, y: 14, w: 8, h: 20 },
+    c: { x: 40, y: 38, w: 8, h: 20 },
+    d: { x: 10, y: 56, w: 34, h: 8 },
+    e: { x: 6, y: 38, w: 8, h: 20 },
+    f: { x: 6, y: 14, w: 8, h: 20 },
+    g: { x: 10, y: 30, w: 34, h: 8 },
+  };
+
+  const activeColor = ambient ? '#efe8d8' : '#f5f1e8';
+  const inactiveColor = ambient ? '#232323' : '#262626';
+
+  const flapDigits = timeChars.map((char, idx) => {
+    const x = startX + idx * (flapW + gapX);
+    const y = startY + flapH + gapY;
+    if (char === ':') {
+      return `
+        <g transform="translate(${x} ${y})">
+          <rect width="${flapW}" height="${flapH}" rx="8" fill="#181818" stroke="#353535" stroke-width="1.5" />
+          <line x1="4" y1="${flapH / 2}" x2="${flapW - 4}" y2="${flapH / 2}" stroke="#2a2a2a" stroke-width="2" />
+          <circle cx="${flapW / 2}" cy="24" r="4.5" fill="${activeColor}" />
+          <circle cx="${flapW / 2}" cy="44" r="4.5" fill="${activeColor}" />
+        </g>
+      `;
+    }
+
+    const segments = flapGlyphSegments(char);
+    const rects = Object.entries(segmentRects).map(([key, rect]) => `
+      <rect
+        x="${rect.x}"
+        y="${rect.y}"
+        width="${rect.w}"
+        height="${rect.h}"
+        rx="3"
+        fill="${segments.includes(key) ? activeColor : inactiveColor}"
+      />
+    `).join('');
+
+    return `
+      <g transform="translate(${x} ${y})">
+        <rect width="${flapW}" height="${flapH}" rx="8" fill="#181818" stroke="#3a3a3a" stroke-width="1.5" />
+        <line x1="4" y1="${flapH / 2}" x2="${flapW - 4}" y2="${flapH / 2}" stroke="#353535" stroke-width="2.4" />
+        <rect x="1.5" y="1.5" width="${flapW - 3}" height="${flapH / 2 - 2}" rx="7" fill="#242424" />
+        <rect x="1.5" y="${flapH / 2}" width="${flapW - 3}" height="${flapH / 2 - 1.5}" rx="7" fill="#111111" />
+        <rect x="0" y="0" width="${flapW}" height="${flapH / 2}" rx="8" fill="url(#splitFlapGloss)" opacity="0.25" />
+        ${rects}
+      </g>
+    `;
+  }).join('');
+
+  return `
+    <svg viewBox="0 0 450 450" role="img" aria-label="SplitFlap prototype watch face">
+      <defs>
+        <linearGradient id="splitFlapBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1b1b1b" />
+          <stop offset="100%" stop-color="#080808" />
+        </linearGradient>
+        <linearGradient id="splitFlapGloss" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+
+      <rect width="450" height="450" fill="url(#splitFlapBg)" rx="225" />
+      <circle cx="225" cy="225" r="196" fill="none" stroke="#2f2f2f" stroke-width="2" />
+      <circle cx="225" cy="225" r="182" fill="none" stroke="#181818" stroke-width="1" />
+
+      <text x="225" y="54" text-anchor="middle" fill="#8b8b8b" font-size="14" font-family="Inter, sans-serif" letter-spacing="4">SPLIT FLAP</text>
+      ${backgroundGrid}
+      ${flapDigits}
+      <text x="225" y="412" text-anchor="middle" fill="#6c6c6c" font-size="12" font-family="Inter, sans-serif" letter-spacing="3">MECHANICAL DIGITAL</text>
+    </svg>
+  `;
+}
+
 function renderChromeTRex(state) {
   const date = getWatchTime(state);
   const h = hourDegrees(date);
@@ -351,6 +477,13 @@ const faceRegistry = {
     status: 'prototype',
     route: './faces/chrome-trex.html',
     render: renderChromeTRex,
+  },
+  'split-flap': {
+    id: 'split-flap',
+    name: 'SplitFlap',
+    status: 'prototype',
+    route: './faces/split-flap.html',
+    render: renderSplitFlap,
   },
   sundial: {
     id: 'sundial',
