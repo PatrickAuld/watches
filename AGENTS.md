@@ -4,6 +4,8 @@ This repository is for designing and packaging experimental watch faces with a *
 
 ## Core workflow
 
+This repo does not use PRs or long-lived branches as the normal workflow. Default to working directly on `main` unless Patrick explicitly asks otherwise.
+
 Always think in two phases:
 
 1. **Prototype first** in the static site
