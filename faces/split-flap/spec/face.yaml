@@ -1,0 +1,20 @@
+id: split-flap
+name: SplitFlap
+status: prototype
+platformTarget: pixel-watch
+prototype:
+  route: /prototypes/site/faces/split-flap.html
+wff:
+  version: 4
+  xmlOnly: true
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+features:
+  ambient: true
+  complications: []
+style:
+  family: mechanical-digital
+  background: "#111111"
+  accent: "#f3efe6"
