@@ -3,6 +3,17 @@
   <Metadata key="CLOCK_TYPE" value="ANALOG" />
   <Metadata key="PREVIEW_TIME" value="10:08:00" />
 
+  <UserConfiguration>
+    <ColorConfiguration id="lineColor" displayName="Color"
+                         defaultValue="#E0E0E0">
+      <ColorOption color="#E0E0E0" displayName="White" />
+      <ColorOption color="#FF6B6B" displayName="Red" />
+      <ColorOption color="#6BB8FF" displayName="Blue" />
+      <ColorOption color="#FFD700" displayName="Gold" />
+      <ColorOption color="#6BFF8A" displayName="Green" />
+    </ColorConfiguration>
+  </UserConfiguration>
+
   <Scene backgroundColor="#000000">
 
     <!-- Main rotating group — rotates by hour angle -->
@@ -10,6 +21,7 @@
            pivotX="0.5" pivotY="0.5">
       <Transform target="angle"
         value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
+      <Variant mode="AMBIENT" target="alpha" value="100" />
 
       <!-- Pair A: vertical lines (hour-indicating pair) -->
       <!-- Line A1 (left of center) — moves LEFT from center -->
@@ -17,7 +29,7 @@
         <Transform target="x"
           value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="3" height="450">
-          <Fill color="#E0E0E0" />
+          <Fill color="[CONFIGURATION.lineColor]" />
         </Rectangle>
       </PartDraw>
 
@@ -26,7 +38,7 @@
         <Transform target="x"
           value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="3" height="450">
-          <Fill color="#E0E0E0" />
+          <Fill color="[CONFIGURATION.lineColor]" />
         </Rectangle>
       </PartDraw>
 
@@ -36,7 +48,7 @@
         <Transform target="y"
           value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="450" height="3">
-          <Fill color="#E0E0E0" />
+          <Fill color="[CONFIGURATION.lineColor]" />
         </Rectangle>
       </PartDraw>
 
@@ -45,7 +57,7 @@
         <Transform target="y"
           value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="450" height="3">
-          <Fill color="#E0E0E0" />
+          <Fill color="[CONFIGURATION.lineColor]" />
         </Rectangle>
       </PartDraw>
 
@@ -56,7 +68,7 @@
         <Transform target="width"
           value="6 + 2 * ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="450" height="2">
-          <Fill color="#E0E0E0" />
+          <Fill color="[CONFIGURATION.lineColor]" />
         </Rectangle>
       </PartDraw>
 
