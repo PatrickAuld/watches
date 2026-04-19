@@ -49,6 +49,17 @@
         </Rectangle>
       </PartDraw>
 
+      <!-- Hour arc connector — thin bar linking Pair A at the hour edge -->
+      <PartDraw x="0" y="0" width="450" height="2">
+        <Transform target="x"
+          value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Transform target="width"
+          value="6 + 2 * ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Rectangle x="0" y="0" width="450" height="2">
+          <Fill color="#E0E0E0" />
+        </Rectangle>
+      </PartDraw>
+
     </Group>
 
   </Scene>
