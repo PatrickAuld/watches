@@ -12,30 +12,38 @@
         value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
 
       <!-- Pair A: vertical lines (hour-indicating pair) -->
-      <!-- Line A1 (left of center) -->
-      <PartDraw x="222" y="0" width="3" height="450">
+      <!-- Line A1 (left of center) — moves LEFT from center -->
+      <PartDraw x="0" y="0" width="3" height="450">
+        <Transform target="x"
+          value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="3" height="450">
           <Fill color="#E0E0E0" />
         </Rectangle>
       </PartDraw>
 
-      <!-- Line A2 (right of center) -->
-      <PartDraw x="225" y="0" width="3" height="450">
+      <!-- Line A2 (right of center) — moves RIGHT from center -->
+      <PartDraw x="0" y="0" width="3" height="450">
+        <Transform target="x"
+          value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="3" height="450">
           <Fill color="#E0E0E0" />
         </Rectangle>
       </PartDraw>
 
       <!-- Pair B: horizontal lines (perpendicular pair) -->
-      <!-- Line B1 (above center) -->
-      <PartDraw x="0" y="222" width="450" height="3">
+      <!-- Line B1 (above center) — moves UP from center -->
+      <PartDraw x="0" y="0" width="450" height="3">
+        <Transform target="y"
+          value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="450" height="3">
           <Fill color="#E0E0E0" />
         </Rectangle>
       </PartDraw>
 
-      <!-- Line B2 (below center) -->
-      <PartDraw x="0" y="225" width="450" height="3">
+      <!-- Line B2 (below center) — moves DOWN from center -->
+      <PartDraw x="0" y="0" width="450" height="3">
+        <Transform target="y"
+          value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Rectangle x="0" y="0" width="450" height="3">
           <Fill color="#E0E0E0" />
         </Rectangle>
