@@ -1,0 +1,40 @@
+id: crosshatch
+name: Crosshatch
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: abstract-geometric
+  background: "#000000"
+  accent: "#E0E0E0"
+
+description: >
+  Two sets of parallel lines, always perpendicular to each other. The
+  assembly rotates smoothly to indicate the hour. Line spacing breathes
+  linearly with the minutes — adjacent at :00/:30, maximally spread at
+  :15/:45. A thin arc connects the hour-indicating pair at the watch edge.
+
+designNotes: >
+  No numbers, no digital readout, no center dot. Hour is read from rotation
+  angle, minutes from line spacing. The arc identifies which pair marks the
+  hour. Minimal, abstract, geometric.
+
+implementationNotes: >
+  Single rotating Group with hour-angle Transform. Four lines with
+  x/y offset Transforms driven by a triangle-wave minute expression.
+  Connector arc approximated as a thin rectangle at the top of the
+  rotating group (curvature is ~1.4px at max 50px spread — subpixel).
+  ColorConfiguration for user-selectable line color.
