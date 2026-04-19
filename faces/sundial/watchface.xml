@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:10:00" />
+
+  <Scene backgroundColor="#110f0b">
+    <!-- Case -->
+    <PartDraw x="15" y="15" width="420" height="420">
+      <Ellipse x="0" y="0" width="420" height="420">
+        <Fill color="#2e2418" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Warm metal ring -->
+    <PartDraw x="22" y="22" width="406" height="406" alpha="96">
+      <Ellipse x="0" y="0" width="406" height="406">
+        <Fill color="#c79f61" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Main dial -->
+    <PartDraw x="27" y="27" width="396" height="396">
+      <Ellipse x="0" y="0" width="396" height="396">
+        <Fill color="#ead2a1" />
+      </Ellipse>
+    </PartDraw>
+
+    <!-- Hour ticks drawn BEFORE shadow so the overlay darkens them.
+         Ticks are in normal (lit) color; the masked shadow overlay
+         on top will tint the ones on the shadow side darker. -->
+    <!-- 12 o'clock (0°) - major -->
+    <Group x="0" y="0" width="450" height="450" name="tick0" angle="0" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="14">
+        <Rectangle x="0" y="0" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 1 o'clock (30°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick30" angle="30" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 2 o'clock (60°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick60" angle="60" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 3 o'clock (90°) - major -->
+    <Group x="0" y="0" width="450" height="450" name="tick90" angle="90" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="14">
+        <Rectangle x="0" y="0" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 4 o'clock (120°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick120" angle="120" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 5 o'clock (150°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick150" angle="150" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 6 o'clock (180°) - major -->
+    <Group x="0" y="0" width="450" height="450" name="tick180" angle="180" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="14">
+        <Rectangle x="0" y="0" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 7 o'clock (210°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick210" angle="210" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 8 o'clock (240°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick240" angle="240" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 9 o'clock (270°) - major -->
+    <Group x="0" y="0" width="450" height="450" name="tick270" angle="270" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="14">
+        <Rectangle x="0" y="0" width="2" height="14">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 10 o'clock (300°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick300" angle="300" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+    <!-- 11 o'clock (330°) - minor -->
+    <Group x="0" y="0" width="450" height="450" name="tick330" angle="330" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="224" y="37" width="2" height="9">
+        <Rectangle x="0" y="0" width="2" height="9">
+          <Fill color="#6c5839" />
+        </Rectangle>
+      </PartDraw>
+    </Group>
+
+    <!-- Sundial shadow and gnomon.
+         hourGroup rotates to the current hour position on the dial.
+         Inside it, two tilt groups share the same pivot/angle:
+           1. shadowTilt: contains the mask + shadow overlay
+           2. gnomonTilt: contains the gnomon line (drawn on top, not masked)
+         The mask is a right-half-opaque PNG (shadow_mask.png) that flips
+         180° when the 6 o'clock mark is on the left side of the gnomon
+         in the tilt group's local frame. -->
+    <Group x="0" y="0" width="450" height="450" name="hourGroup" pivotX="0.5" pivotY="0.5">
+      <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
+
+      <!-- Shadow tilt group: mask + shadow overlay.
+           The mask clips the overlay to the shadow side of the gnomon.
+           Tilt = sundial angle for Alameda, CA (37.77°N):
+           PM: tilt = 1.5h²-24h  AM: tilt = -1.5h²+24h
+           where h = hours from solar noon, clamped [0,6]. -->
+      <Group x="0" y="0" width="450" height="450" name="shadowTilt" pivotX="0.5" pivotY="0.0667">
+        <Transform target="angle" value="[HOUR_0_23] >= 12 ? (1.5 * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6) * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6) - 24 * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6)) : (-1.5 * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6) * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6) + 24 * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6))" />
+
+        <!-- Half-plane mask: right half opaque at 0°, rotated 180° when
+             the 6 o'clock side is to the left of the gnomon.
+             Switch point: hourAngle = 180° (i.e. hour hand at 6). -->
+        <PartImage renderMode="MASK" x="0" y="0" width="450" height="450"
+            pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5 &lt; 180 ? 0 : 180" />
+          <Image resource="shadow_mask" />
+        </PartImage>
+
+        <!-- Shadow overlay: full-dial ellipse, clipped by mask to shadow half -->
+        <PartDraw x="27" y="27" width="396" height="396" alpha="96">
+          <Ellipse x="0" y="0" width="396" height="396">
+            <Fill color="#6a4d2c" />
+          </Ellipse>
+        </PartDraw>
+
+        <!-- Shadow depth overlay: offset slightly for visual depth -->
+        <PartDraw x="27" y="39" width="396" height="396" alpha="72">
+          <Ellipse x="0" y="0" width="396" height="396">
+            <Fill color="#261c12" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+
+      <!-- Gnomon tilt group: line only, not masked.
+           Same pivot and angle as shadowTilt so it aligns exactly. -->
+      <Group x="0" y="0" width="450" height="450" name="gnomonTilt" pivotX="0.5" pivotY="0.0667">
+        <Transform target="angle" value="[HOUR_0_23] >= 12 ? (1.5 * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6) * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6) - 24 * clamp([HOUR_0_23] + [MINUTE] / 60 - 12, 0, 6)) : (-1.5 * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6) * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6) + 24 * clamp(12 - [HOUR_0_23] - [MINUTE] / 60, 0, 6))" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Line startX="225" startY="30" endX="225" endY="420">
+            <Stroke color="#fff8ea" thickness="4" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+    </Group>
+
+    <!-- Minute indicator: dot at the current minute position on the dial rim -->
+    <Group x="0" y="0" width="450" height="450" name="minuteDot" pivotX="0.5" pivotY="0.5">
+      <PartDraw x="215" y="30" width="20" height="20">
+        <Ellipse x="0" y="0" width="20" height="20">
+          <Fill color="#fff8ea" />
+        </Ellipse>
+        <Ellipse x="0" y="0" width="20" height="20">
+          <Stroke color="#60461d" thickness="2" />
+        </Ellipse>
+      </PartDraw>
+      <Transform target="angle" value="[MINUTE_SECOND] * 6" />
+    </Group>
+
+    <!-- Edge rings: slightly offset from each other for visual depth -->
+    <PartDraw x="27" y="27" width="396" height="396">
+      <Ellipse x="0" y="0" width="396" height="396">
+        <Stroke color="#6b4c1f" thickness="2" />
+      </Ellipse>
+    </PartDraw>
+    <PartDraw x="44" y="38" width="368" height="368" alpha="48">
+      <Ellipse x="0" y="0" width="368" height="368">
+        <Stroke color="#fff8ea" thickness="1" />
+      </Ellipse>
+    </PartDraw>
+  </Scene>
+</WatchFace>

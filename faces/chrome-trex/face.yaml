@@ -1,0 +1,33 @@
+id: chrome-trex
+name: ChromeTRex
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: dive-watch-homage
+  background: "#020202"
+  accent: "#f4f5f7"
+
+description: >
+  Dive-watch homage with chrome T-Rex motif. Nearly black background
+  with light accent.
+
+designNotes: >
+  Minimal dive-watch aesthetic. High contrast for legibility.
+  T-Rex branding element as personality.
+
+implementationNotes: >
+  No WFF XML implementation yet. To be created from prototype design.

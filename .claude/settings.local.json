@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"watchface\\\\|wff\\\\|WFF\\\\|wear.*format\" /Users/patrick/code/patrickauld/watches/gradle --include=*.toml --include=*.kts)",
+      "Bash(grep -r \"element\\\\|attribute\\\\|schema\\\\|xsd\\\\|dtd\\\\|reference\" /Users/patrick/code/patrickauld/watches/docs/wff*.md)",
+      "Bash(curl -s -L \"https://developer.android.com/reference/wear-os/wff/group/part/draw/shape/ellipse\")",
+      "Bash(curl -s -L \"https://developer.android.com/reference/wear-os/wff/group/part/draw/shape/line\")",
+      "Bash(curl -s -L \"https://developer.android.com/reference/wear-os/wff/group/part/draw/shape/transform\")",
+      "Bash(curl -s -L \"https://developer.android.com/reference/wear-os/wff/group/part/draw/shape/rectangle\")",
+      "Bash(curl -s -L \"https://developer.android.com/reference/wear-os/wff/group/part/draw\")",
+      "WebFetch(domain:github.com)",
+      "Read(//private/tmp/wear-os-samples/WatchFaceFormat/SimpleAnalog/watchface/src/main/res/raw/**)",
+      "Read(//private/tmp/wear-os-samples/WatchFaceFormat/**)"
+    ]
+  }
+}

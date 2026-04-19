@@ -1,0 +1,40 @@
+id: sundial
+name: Sundial
+status: promoted
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: solar-geometric
+  background: "#e9d3a1"
+  accent: "#fff8ea"
+
+description: >
+  Geometric sundial face. A chord divides the dial into light and
+  shadow based on sun position for Alameda, California.
+
+designNotes: >
+  No numbers, no center dot. Strong contrast between illuminated
+  and shadowed halves. The line should feel precise and inevitable.
+
+implementationNotes: >
+  Shadow uses half-plane mask PNG (shadow_mask.png) with PartImage
+  renderMode=MASK. Gnomon tilt from polynomial approximation of
+  hours since solar noon. Hour endpoint marked with circle dot.
+
+location:
+  latitude: 37.7652
+  longitude: -122.2416
+  name: Alameda, California

@@ -5,3 +5,10 @@ build/
 *.apk
 .idea/
 *.iml
+
+# Superpowers brainstorming artifacts
+.superpowers/
+
+# WearOS resources copied from canonical face directories by Gradle
+faces/*/wear/src/main/res/raw/watchface.xml
+faces/*/wear/src/main/res/drawable/shadow_mask.png

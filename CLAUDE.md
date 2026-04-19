@@ -4,8 +4,6 @@ This repository designs and packages experimental watch faces. **WFF v4 XML is t
 
 ## Core workflow
 
-This repo does not use PRs or long-lived branches as the normal workflow. Default to working directly on `main` unless Patrick explicitly asks otherwise.
-
 1. **Edit WFF XML** at `faces/<slug>/watchface.xml`
 2. **Preview in browser** using the preview site (`preview/`) which renders XML via `wff-web`
 3. **Promote to WearOS** by adding a `wear/` Gradle module when the design is accepted

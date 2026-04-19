@@ -1,0 +1,32 @@
+id: atlas
+name: Atlas
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: analog-hybrid
+  background: "#050608"
+  accent: "#7db0ff"
+
+description: >
+  Analog-hybrid watch face with a dark background and blue accent.
+
+designNotes: >
+  Classic analog layout with hybrid digital elements.
+  Dark theme optimized for OLED displays.
+
+implementationNotes: >
+  No WFF XML implementation yet. To be created from prototype design.
