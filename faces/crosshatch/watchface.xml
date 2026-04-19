@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:08:00" />
+
+  <Scene backgroundColor="#000000">
+
+    <!-- Main rotating group — rotates by hour angle -->
+    <Group x="0" y="0" width="450" height="450" name="crossGroup"
+           pivotX="0.5" pivotY="0.5">
+      <Transform target="angle"
+        value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
+
+      <!-- Pair A: vertical lines (hour-indicating pair) -->
+      <!-- Line A1 (left of center) -->
+      <PartDraw x="222" y="0" width="3" height="450">
+        <Rectangle x="0" y="0" width="3" height="450">
+          <Fill color="#E0E0E0" />
+        </Rectangle>
+      </PartDraw>
+
+      <!-- Line A2 (right of center) -->
+      <PartDraw x="225" y="0" width="3" height="450">
+        <Rectangle x="0" y="0" width="3" height="450">
+          <Fill color="#E0E0E0" />
+        </Rectangle>
+      </PartDraw>
+
+      <!-- Pair B: horizontal lines (perpendicular pair) -->
+      <!-- Line B1 (above center) -->
+      <PartDraw x="0" y="222" width="450" height="3">
+        <Rectangle x="0" y="0" width="450" height="3">
+          <Fill color="#E0E0E0" />
+        </Rectangle>
+      </PartDraw>
+
+      <!-- Line B2 (below center) -->
+      <PartDraw x="0" y="225" width="450" height="3">
+        <Rectangle x="0" y="0" width="450" height="3">
+          <Fill color="#E0E0E0" />
+        </Rectangle>
+      </PartDraw>
+
+    </Group>
+
+  </Scene>
+</WatchFace>
