@@ -33,8 +33,10 @@ designNotes: >
   hour. Minimal, abstract, geometric.
 
 implementationNotes: >
-  Single rotating Group with hour-angle Transform. Four lines with
+  Single rotating Group with hour-angle Transform. Four Rectangles with
   x/y offset Transforms driven by a triangle-wave minute expression.
-  Connector arc approximated as a thin rectangle at the top of the
-  rotating group (curvature is ~1.4px at max 50px spread — subpixel).
-  ColorConfiguration for user-selectable line color.
+  Connector arc approximated as a thin rectangle near the top of the
+  rotating group at y=28 (inside the round safe area). Twelve static
+  6px hour-tick ellipses sit outside the rotating group on a radius-200
+  circle. ColorConfiguration in WFF v4 canonical format (ColorOption
+  id+colors) drives all Fill colors via [CONFIGURATION.lineColor.0].
