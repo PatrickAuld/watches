@@ -20,7 +20,7 @@ The breathing spacing encodes the minute within each half-hour cycle.
 - Hour-side identification by line brightness, not a separate marker:
   the hour-pointing end of Pair A stays solid to the bezel; the other
   three line-ends fade toward the bezel via black-alpha gradient
-  overlays (transparent at center → ~56% black at the bezel). The
+  overlays (transparent at center → 80% black at the bezel). The
   underlying lines stay in the user's chosen palette colour; only the
   overlay darkens them, so no extra palette entries are needed.
 - Each line is rendered as a single full-length Rectangle with a solid

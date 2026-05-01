@@ -36,7 +36,7 @@ implementationNotes: >
   Single rotating Group with hour-angle Transform. Four solid Rectangles
   with x/y offset Transforms driven by a triangle-wave minute expression.
   Six additional overlay Rectangles inside the group apply black-alpha
-  LinearGradients (#00000000 → #90000000) to fade the three non-hour
+  LinearGradients (#00000000 → #CC000000) to fade the three non-hour
   ends toward the bezel; the hour-side end of Pair A stays solid. Twelve
   static 6px hour-tick ellipses sit outside the rotating group on a
   radius-215 circle (close to the bezel). ColorConfiguration in WFF v4
