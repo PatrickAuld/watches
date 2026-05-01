@@ -17,13 +17,20 @@ The breathing spacing encodes the minute within each half-hour cycle.
 ## Decisions
 
 - Pair A (vertical in local space) is the hour-indicating pair
-- Arc is on the near side (closest to hour position on dial)
+- Hour-side identification by line brightness, not a separate marker:
+  the hour-pointing end of Pair A stays solid to the bezel; the other
+  three line-ends fade toward the bezel via black-alpha gradient
+  overlays (transparent at center → ~56% black at the bezel). The
+  underlying lines stay in the user's chosen palette colour; only the
+  overlay darkens them, so no extra palette entries are needed.
+- Each line is rendered as a single full-length Rectangle with a solid
+  Fill, with one or two narrow overlay Rectangles stacked on top for
+  the fading half/halves. Pair A: one overlay on the bottom half. Pair
+  B: two overlays per line, one on each half.
 - Line width: 3px (medium)
-- Arc approximated as straight connector (curvature < 2px at max spread)
-- Arc sits at y=28 in local space so it stays inside the round safe area
-  after rotation (any further from pivot and it clips on the bezel)
-- 12 static hour ticks (6px dots) on a radius-200 circle outside the
-  rotating group — helps read which tick the hour-end is pointing at
+- 12 static hour ticks (6px dots) on a radius-215 circle outside the
+  rotating group — sit ~10px from the bezel so the rotating cross
+  visibly aligns with the nearest tick
 - Color themes via WFF UserConfigurations / ColorConfiguration, using the
   canonical WFF v4 `<ColorOption id="..." colors="..."/>` format so
   `[CONFIGURATION.lineColor.0]` resolves in Fill attributes

@@ -15,19 +15,19 @@
 
   <Scene backgroundColor="#000000">
 
-    <!-- 12 hour ticks — static dots on bezel (r=200 from center) -->
-    <Ellipse x="222" y="22"  width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="322" y="49"  width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="395" y="122" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="422" y="222" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="395" y="322" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="322" y="395" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="222" y="422" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="122" y="395" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="49"  y="322" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="22"  y="222" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="49"  y="122" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
-    <Ellipse x="122" y="49"  width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <!-- 12 hour ticks — static 6px dots on a radius-215 circle (near bezel) -->
+    <Ellipse x="222" y="7"   width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="330" y="36"  width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="408" y="115" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="437" y="222" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="408" y="330" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="330" y="408" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="222" y="437" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="115" y="408" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="36"  y="330" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="7"   y="222" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="36"  y="115" width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
+    <Ellipse x="115" y="36"  width="6" height="6"> <Fill color="[CONFIGURATION.lineColor.0]" /> </Ellipse>
 
     <!-- Main rotating group — rotates by hour angle -->
     <Group x="0" y="0" width="450" height="450" name="crossGroup"
@@ -36,7 +36,7 @@
         value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
       <Variant mode="AMBIENT" target="alpha" value="100" />
 
-      <!-- Pair A: vertical lines (hour-indicating pair) -->
+      <!-- Pair A: vertical lines (hour-indicating pair). Top = hour side, solid. -->
       <!-- Line A1 (left of center) — moves LEFT from center -->
       <Rectangle x="222" y="0" width="3" height="450">
         <Transform target="x"
@@ -49,6 +49,24 @@
         <Transform target="x"
           value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
         <Fill color="[CONFIGURATION.lineColor.0]" />
+      </Rectangle>
+
+      <!-- Pair A fade overlays on bottom halves (y=225..450), dim toward bezel -->
+      <Rectangle x="222" y="225" width="3" height="225">
+        <Transform target="x"
+          value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Fill>
+          <LinearGradient startX="0" startY="225" endX="0" endY="450"
+                          colors="#00000000 #90000000" positions="0 1" />
+        </Fill>
+      </Rectangle>
+      <Rectangle x="225" y="225" width="3" height="225">
+        <Transform target="x"
+          value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Fill>
+          <LinearGradient startX="0" startY="225" endX="0" endY="450"
+                          colors="#00000000 #90000000" positions="0 1" />
+        </Fill>
       </Rectangle>
 
       <!-- Pair B: horizontal lines (perpendicular pair) -->
@@ -66,13 +84,38 @@
         <Fill color="[CONFIGURATION.lineColor.0]" />
       </Rectangle>
 
-      <!-- Hour-end connector — thin bar linking Pair A at the hour edge -->
-      <Rectangle x="222" y="28" width="6" height="2">
-        <Transform target="x"
+      <!-- Pair B fade overlays — left halves dim toward x=0, right halves dim toward x=450 -->
+      <Rectangle x="0" y="222" width="225" height="3">
+        <Transform target="y"
           value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
-        <Transform target="width"
-          value="6 + 2 * ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
-        <Fill color="[CONFIGURATION.lineColor.0]" />
+        <Fill>
+          <LinearGradient startX="0" startY="0" endX="225" endY="0"
+                          colors="#90000000 #00000000" positions="0 1" />
+        </Fill>
+      </Rectangle>
+      <Rectangle x="225" y="222" width="225" height="3">
+        <Transform target="y"
+          value="222 - ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Fill>
+          <LinearGradient startX="225" startY="0" endX="450" endY="0"
+                          colors="#00000000 #90000000" positions="0 1" />
+        </Fill>
+      </Rectangle>
+      <Rectangle x="0" y="225" width="225" height="3">
+        <Transform target="y"
+          value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Fill>
+          <LinearGradient startX="0" startY="0" endX="225" endY="0"
+                          colors="#90000000 #00000000" positions="0 1" />
+        </Fill>
+      </Rectangle>
+      <Rectangle x="225" y="225" width="225" height="3">
+        <Transform target="y"
+          value="225 + ([MINUTE] &lt; 15 ? [MINUTE] * 5 / 3 : ([MINUTE] &lt; 30 ? (30 - [MINUTE]) * 5 / 3 : ([MINUTE] &lt; 45 ? ([MINUTE] - 30) * 5 / 3 : (60 - [MINUTE]) * 5 / 3)))" />
+        <Fill>
+          <LinearGradient startX="225" startY="0" endX="450" endY="0"
+                          colors="#00000000 #90000000" positions="0 1" />
+        </Fill>
       </Rectangle>
 
     </Group>
