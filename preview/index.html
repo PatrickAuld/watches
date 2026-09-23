@@ -79,9 +79,9 @@
     </main>
 
     <script type="module">
-      import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.1.0/dist/index.js';
+      import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.1.1/dist/index.js';
       window.renderWatchFace = renderWatchFace;
+      await import('./preview.js');
     </script>
-    <script defer src="preview.js"></script>
   </body>
 </html>

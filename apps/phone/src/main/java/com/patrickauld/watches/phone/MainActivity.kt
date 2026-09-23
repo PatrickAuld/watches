@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +23,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patrickauld.watches.phone.data.AvailableBuild
 import com.patrickauld.watches.phone.data.FaceStatus
-import com.patrickauld.watches.phone.data.GitHubArtifactSource
+import com.patrickauld.watches.phone.data.InstalledState
 import com.patrickauld.watches.phone.data.WatchFaceRepository
 import com.patrickauld.watches.phone.sync.WatchTransfer
+import com.patrickauld.watches.phone.sync.AutoUpdates
 import com.patrickauld.watches.phone.ui.BuildListScreen
 import com.patrickauld.watches.phone.ui.FaceListScreen
 import com.patrickauld.watches.phone.ui.FaceSummary
@@ -63,14 +65,19 @@ class MainViewModel : ViewModel() {
         private set
     var isLoading by mutableStateOf(false)
         private set
+    var installed by mutableStateOf<Map<String, InstalledState>>(emptyMap())
+        private set
+    var isActive by mutableStateOf(false)
+        private set
 
     private var allBuilds: List<AvailableBuild> = emptyList()
 
-    fun loadFaces(repo: WatchFaceRepository) {
+    fun loadFaces(repo: WatchFaceRepository, transfer: WatchTransfer) {
         viewModelScope.launch {
             isLoading = true
             try {
-                allBuilds = repo.getAvailableBuilds(forceRefresh = true)
+                allBuilds = repo.getAvailableBuilds()
+                runCatching { refreshInstalled(transfer) }
                 faces = allBuilds
                     .groupBy { it.slug }
                     .map { (slug, slugBuilds) ->
@@ -79,7 +86,10 @@ class MainViewModel : ViewModel() {
                             slug = slug,
                             name = latest.name,
                             latestVersion = latest.versionName,
-                            status = repo.getFaceStatus(latest)
+                            status = when (val current = installed[latest.packageName]) {
+                                null -> FaceStatus.NOT_INSTALLED
+                                else -> if (current.versionCode < latest.versionCode) FaceStatus.UPDATE_AVAILABLE else FaceStatus.INSTALLED
+                            }
                         )
                     }
             } catch (e: Exception) {
@@ -90,6 +100,20 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private suspend fun refreshInstalled(transfer: WatchTransfer) {
+        val node = transfer.findWatchCompanion() ?: run {
+            installed = emptyMap()
+            return
+        }
+        val reply = transfer.installed(node)
+        val faces = reply.getJSONArray("faces")
+        installed = (0 until faces.length()).associate { index ->
+            val face = faces.getJSONObject(index)
+            val packageName = face.getString("packageName")
+            packageName to InstalledState(packageName, face.getInt("versionCode"), face.getBoolean("isActive"))
+        }
+    }
+
     fun navigateToBuilds(slug: String) {
         builds = allBuilds.filter { it.slug == slug }.sortedByDescending { it.versionCode }
         screen = Screen.BuildList(slug)
@@ -97,6 +121,7 @@ class MainViewModel : ViewModel() {
 
     fun navigateToInstall(build: AvailableBuild) {
         installPhase = InstallPhase.DOWNLOADING
+        isActive = false
         errorMessage = null
         screen = Screen.Install(build)
     }
@@ -106,8 +131,7 @@ class MainViewModel : ViewModel() {
             try {
                 // Download
                 installPhase = InstallPhase.DOWNLOADING
-                val source = GitHubArtifactSource()
-                val apkFile = source.downloadApk(build, cacheDir)
+                val apkFile = repo.downloadApk(build, cacheDir)
 
                 // Find watch
                 val nodeId = transfer.findWatchCompanion()
@@ -119,17 +143,14 @@ class MainViewModel : ViewModel() {
 
                 // Transfer
                 installPhase = InstallPhase.TRANSFERRING
-                transfer.transferApk(nodeId, apkFile).getOrThrow()
-
-                // Request install
-                installPhase = InstallPhase.INSTALLING
-                val isUpdate = repo.getInstalledVersion(build.slug) != null
-                val packageName = "com.patrickauld.watches.companion.watchfacepush.${build.slug}"
-                transfer.requestInstall(nodeId, build.slug, packageName, isUpdate).getOrThrow()
-
-                // Update local state
-                repo.updateInstalledState(build.slug, packageName, build.versionCode, build.versionName)
+                val result = transfer.install(nodeId, apkFile, build.packageName, build.sha256, build.validationToken) {
+                    installPhase = InstallPhase.INSTALLING
+                }
+                require(result.getInt("versionCode") == build.versionCode) { "Watch installed a different version" }
+                isActive = result.getBoolean("isActive")
+                installed = installed + (build.packageName to InstalledState(build.packageName, build.versionCode, isActive))
                 installPhase = InstallPhase.SUCCESS
+                runCatching { refreshInstalled(transfer) }
             } catch (e: Exception) {
                 installPhase = InstallPhase.ERROR
                 errorMessage = e.message
@@ -140,13 +161,15 @@ class MainViewModel : ViewModel() {
     fun requestActivate(build: AvailableBuild, transfer: WatchTransfer) {
         viewModelScope.launch {
             try {
+                errorMessage = null
                 val nodeId = transfer.findWatchCompanion()
                 if (nodeId == null) {
                     errorMessage = "Watch companion not found"
                     return@launch
                 }
-                val packageName = "com.patrickauld.watches.companion.watchfacepush.${build.slug}"
-                transfer.requestActivate(nodeId, packageName).getOrThrow()
+                transfer.activate(nodeId, build.packageName)
+                isActive = true
+                refreshInstalled(transfer)
             } catch (e: Exception) {
                 errorMessage = e.message
             }
@@ -160,11 +183,12 @@ class MainViewModel : ViewModel() {
 
 @Composable
 fun MainApp(context: android.content.Context, viewModel: MainViewModel = viewModel()) {
-    val repo = WatchFaceRepository(context)
-    val transfer = WatchTransfer(context)
+    val repo = remember { WatchFaceRepository() }
+    val transfer = remember { WatchTransfer(context) }
+    var autoUpdates by remember { mutableStateOf(AutoUpdates.enabled(context)) }
 
     LaunchedEffect(Unit) {
-        viewModel.loadFaces(repo)
+        viewModel.loadFaces(repo, transfer)
     }
 
     when (val currentScreen = viewModel.screen) {
@@ -176,12 +200,17 @@ fun MainApp(context: android.content.Context, viewModel: MainViewModel = viewMod
             } else {
                 FaceListScreen(
                     faces = viewModel.faces,
+                    autoUpdates = autoUpdates,
+                    onAutoUpdatesChange = { enabled ->
+                        AutoUpdates.setEnabled(context, enabled)
+                        autoUpdates = enabled
+                    },
                     onFaceClick = { slug -> viewModel.navigateToBuilds(slug) }
                 )
             }
         }
         is Screen.BuildList -> {
-            val installed = repo.getInstalledVersion(currentScreen.slug)
+            val installed = viewModel.builds.firstOrNull()?.let { viewModel.installed[it.packageName] }
             BuildListScreen(
                 faceName = viewModel.builds.firstOrNull()?.name ?: currentScreen.slug,
                 builds = viewModel.builds,
@@ -198,11 +227,12 @@ fun MainApp(context: android.content.Context, viewModel: MainViewModel = viewMod
                 faceName = currentScreen.build.name,
                 phase = viewModel.installPhase,
                 errorMessage = viewModel.errorMessage,
+                isActive = viewModel.isActive,
                 onSetActive = {
                     viewModel.requestActivate(currentScreen.build, transfer)
                 },
                 onDone = {
-                    viewModel.loadFaces(repo)
+                    viewModel.loadFaces(repo, transfer)
                     viewModel.navigateBack()
                 }
             )

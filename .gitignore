@@ -2,6 +2,9 @@
 .tools/
 local.properties
 build/
+_site/
+dist-release/
+__pycache__/
 *.apk
 .idea/
 *.iml

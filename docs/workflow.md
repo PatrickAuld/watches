@@ -1,32 +1,11 @@
-# Workflow
+# Watch face workflow
 
-## Milestone 1
+1. Create `faces/<slug>/watchface.xml` and `face.yaml`; add PNG/WebP/JPEG assets to `assets/` as needed. Android resource names use lowercase letters, digits, and underscores.
+2. Run `python3 scripts/build-site.py` and serve `_site/`. The generated face catalog, web XML, and assets come from those canonical files.
+3. Iterate with fixed times and ambient mode in the web preview. The browser is an approximation; confirm platform rendering on a real watch.
+4. Set `status: promoted` in `face.yaml`. CI builds the single `:watchface` module with `-PfaceSlug=<slug>`, runs Google's Watch Face Push validator, and publishes the resulting APK and validation token with its checksum.
+5. Install the signed phone and watch companion APKs. On the phone, choose a face build and wait for the watch's install acknowledgement. For first activation, grant the permission in the watch companion app; later replacements of the active Push slot are immediate.
 
-Milestone 1 establishes the browser-first prototype layer.
+The build stages XML/assets in `watchface/build/generated/wff/res`. It never writes an Android copy into a face's source directory. Draft XML remains visible on the site without a release. Face status is the only promotion switch.
 
-Implemented pieces:
-- monorepo skeleton for prototypes and faces
-- static prototype lab under `prototypes/site/`
-- shared Pixel Watch framing utilities
-- shared time control logic
-- sample prototype page for `atlas`
-- initial face metadata spec under `faces/atlas/spec/face.yaml`
-
-## Immediate usage
-
-- open the prototype lab at `/prototypes/site/index.html`
-- open the sample face at `/prototypes/site/faces/atlas.html`
-- review the watch with fixed or live time
-- use canonical time checkpoints for design feedback
-
-## Feedback loop rule
-
-When the user provides a rendered screenshot or annotated mockup, first determine whether the image is being shown as:
-- the intended direction, or
-- a broken / distorted / failed result
-
-After image-based feedback:
-- update the face notes/reference files
-- record what the image confirmed
-- record what the image revealed as wrong
-- align future prototype work to the user's latest explicit intent, not a naive assumption that every screenshot is canonical
+The legacy plans in `docs/archive/` and `docs/plans/` record earlier design choices; this file and the README describe the current workflow.

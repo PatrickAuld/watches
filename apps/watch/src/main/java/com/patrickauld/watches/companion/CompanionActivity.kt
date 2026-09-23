@@ -1,6 +1,5 @@
 package com.patrickauld.watches.companion
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.wear.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,22 +32,24 @@ class CompanionActivity : ComponentActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { /* permissions granted or denied */ }
+    private val activationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* user can retry installation from the phone */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPushPermissions()
         setContent {
             MaterialTheme {
-                CompanionScreen()
+                CompanionScreen(onEnableActivation = {
+                    activationPermissionLauncher.launch("com.google.wear.permission.SET_PUSHED_WATCH_FACE_AS_ACTIVE")
+                })
             }
         }
     }
 
     private fun requestPushPermissions() {
-        val permissions = arrayOf(
-            "com.google.wear.permission.PUSH_WATCH_FACES",
-            "com.google.wear.permission.SET_PUSHED_WATCH_FACE_AS_ACTIVE"
-        )
+        val permissions = arrayOf("com.google.wear.permission.PUSH_WATCH_FACES")
         val needed = permissions.filter {
             checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED
         }
@@ -63,8 +65,6 @@ class CompanionViewModel : ViewModel() {
     var statusMessage by mutableStateOf("Ready")
         private set
 
-    private val installer by lazy { WatchFaceInstaller(android.app.Application()) }
-
     fun loadInstalledFaces(context: android.content.Context) {
         val inst = WatchFaceInstaller(context)
         viewModelScope.launch {
@@ -77,7 +77,7 @@ class CompanionViewModel : ViewModel() {
 }
 
 @Composable
-fun CompanionScreen(viewModel: CompanionViewModel = viewModel()) {
+fun CompanionScreen(onEnableActivation: () -> Unit, viewModel: CompanionViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -100,6 +100,10 @@ fun CompanionScreen(viewModel: CompanionViewModel = viewModel()) {
                 .fillMaxWidth()
                 .padding(top = 8.dp)
         )
+
+        Button(onClick = onEnableActivation) {
+            Text("Allow face activation")
+        }
 
         if (viewModel.installedFaces.isNotEmpty()) {
             Text(

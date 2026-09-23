@@ -1,52 +1,25 @@
-# Artifact Metadata Contract
+# Validated release contract
 
-## Overview
-
-Each CI build of a watch face module produces a `metadata.json` file alongside the APK. This file is uploaded as a GitHub Release asset and consumed by the phone app to discover and display available builds.
-
-## Schema
-
-| Field | Type | Source | Description |
-|-------|------|--------|-------------|
-| `slug` | string | face directory name | Machine identifier, e.g. `sundial` |
-| `name` | string | face display name | Human-readable name |
-| `commitSha` | string | `github.sha` | Full git commit SHA |
-| `buildType` | string | build variant | `debug` or `release` |
-| `versionName` | string | `build.gradle.kts` | Semantic version |
-| `versionCode` | number | `build.gradle.kts` | Monotonic integer |
-| `timestamp` | string | build time | ISO 8601 UTC |
-| `runId` | string | `github.run_id` | GitHub Actions run ID |
-| `runNumber` | number | `github.run_number` | Monotonic build number |
-
-## Example
+Each signed GitHub Release contains `catalog.json`, `phone-debug.apk`, `watch-debug.apk`, and one APK per promoted face. The phone app finds face APKs by the exact filename in the catalog, not by scanning `*.apk`.
 
 ```json
 {
-  "slug": "sundial",
-  "name": "Sundial",
-  "commitSha": "abc123def456789...",
-  "buildType": "debug",
-  "versionName": "0.1.0",
-  "versionCode": 1,
-  "timestamp": "2026-03-17T14:30:00Z",
-  "runId": "12345678",
-  "runNumber": 42
+  "schemaVersion": 1,
+  "commitSha": "full Git SHA",
+  "timestamp": "ISO 8601 UTC",
+  "faces": [{
+    "slug": "sundial",
+    "name": "Sundial",
+    "apk": "sundial-42.apk",
+    "packageName": "com.patrickauld.watches.companion.watchfacepush.sundial",
+    "sha256": "hex digest of the exact APK bytes",
+    "validationToken": "token returned by Google's official validator",
+    "versionCode": 42,
+    "versionName": "0.1.42"
+  }]
 }
 ```
 
-## Versioning policy
+The validator runs on the finished signed APK. Publishing fails if validation fails or produces no token. The phone verifies the digest after download and the watch verifies it again after transfer. The watch reports the installed package and version; only that acknowledgement counts as success.
 
-- Fields may be added but not removed
-- Consumers should ignore unknown fields
-- The `slug` field is the primary key for identifying which face a build belongs to
-
-## Future extensions
-
-These fields will be added in later plans:
-
-- `validationToken` — Watch Face Push validation token path (Plan 06)
-- `signingKeyFingerprint` — for release builds (Plan 06)
-
-## Consumption
-
-The phone app fetches `metadata.json` from GitHub Release assets to build a catalog of available face builds. It uses the `slug` to group builds by face and `versionCode` to detect updates.
+Old releases without `catalog.json` are ignored. A future schema version must preserve existing fields or teach the phone app how to read the new contract.

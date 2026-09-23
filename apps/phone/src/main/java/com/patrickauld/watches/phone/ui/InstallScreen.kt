@@ -33,6 +33,7 @@ fun InstallScreen(
     faceName: String,
     phase: InstallPhase,
     errorMessage: String? = null,
+    isActive: Boolean = false,
     onSetActive: () -> Unit = {},
     onDone: () -> Unit = {}
 ) {
@@ -70,9 +71,17 @@ fun InstallScreen(
                         text = "Installed successfully",
                         style = MaterialTheme.typography.titleMedium
                     )
+                    if (errorMessage != null) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(errorMessage, color = MaterialTheme.colorScheme.error)
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = onSetActive) {
-                        Text("Set as active")
+                    if (isActive) {
+                        Text("Active on watch")
+                    } else {
+                        Button(onClick = onSetActive) {
+                            Text("Set as active")
+                        }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = onDone) {

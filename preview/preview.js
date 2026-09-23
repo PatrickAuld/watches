@@ -3,10 +3,7 @@ let currentFace = null;
 let renderResult = null;
 let animating = false;
 
-// When served locally (npx serve . from repo root), faces are at ../faces/.
-// When deployed to GitHub Pages, the build copies faces/ next to index.html.
-// Detect which works by trying to fetch faces.json from both locations.
-let facesBase = 'faces';  // default for deployed (flat) layout
+const facesBase = 'faces';
 
 const canvas = document.getElementById('watch-canvas');
 const facePicker = document.getElementById('face-picker');
@@ -20,12 +17,6 @@ const placeholder = document.getElementById('placeholder');
 const canvasEl = document.getElementById('watch-canvas');
 
 async function init() {
-  // Detect whether faces/ is a sibling (deployed) or up one level (local dev)
-  const localResp = await fetch('../faces/sundial/face.yaml').catch(() => null);
-  if (localResp && localResp.ok) {
-    facesBase = '../faces';
-  }
-
   const resp = await fetch('faces.json');
   faces = await resp.json();
 
@@ -77,17 +68,14 @@ async function loadFace(slug) {
 
   // Parse XML for image resource references and load them
   const assets = new Map();
-  const resourceMatches = xml.matchAll(/resource="([^"]+)"/g);
-  for (const match of resourceMatches) {
-    const name = match[1];
-    if (assets.has(name)) continue;
+  for (const [name, filename] of Object.entries(currentFace.assets)) {
     try {
-      const resp = await fetch(`${facesBase}/${slug}/assets/${name}.png`);
-      if (resp.ok) {
-        assets.set(name, await resp.arrayBuffer());
-      }
-    } catch {
-      // Asset not found, skip
+      const resp = await fetch(`${facesBase}/${slug}/assets/${filename}`);
+      if (!resp.ok) throw new Error(`${resp.status}`);
+      assets.set(name, await resp.arrayBuffer());
+    } catch (error) {
+      showPlaceholder(`Missing asset ${filename}: ${error.message}`);
+      return;
     }
   }
 

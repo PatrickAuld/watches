@@ -3,12 +3,26 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+val keystorePath = providers.environmentVariable("WATCHES_KEYSTORE").orNull
+val keystorePassword = providers.environmentVariable("WATCHES_KEYSTORE_PASSWORD").orNull
+val keyAlias = providers.environmentVariable("WATCHES_KEY_ALIAS").orNull
+val keyPassword = providers.environmentVariable("WATCHES_KEY_PASSWORD").orNull
+val personalSigning = listOf(keystorePath, keystorePassword, keyAlias, keyPassword).all { !it.isNullOrBlank() }
+
 android {
     namespace = "com.patrickauld.watches.phone"
     compileSdk = 36
+    if (personalSigning) {
+        signingConfigs.create("personal") {
+            storeFile = file(keystorePath!!)
+            storePassword = keystorePassword
+            this.keyAlias = keyAlias
+            this.keyPassword = keyPassword
+        }
+    }
 
     defaultConfig {
-        applicationId = "com.patrickauld.watches.phone"
+        applicationId = "com.patrickauld.watches.companion"
         minSdk = 30
         targetSdk = 36
         versionCode = 1
@@ -16,6 +30,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            if (personalSigning) signingConfig = signingConfigs.getByName("personal")
+        }
         release {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
@@ -39,4 +56,5 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.core.ktx)
+    implementation(libs.work.runtime)
 }

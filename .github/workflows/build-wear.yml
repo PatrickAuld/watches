@@ -1,154 +1,106 @@
-name: Build Wear Modules
+name: Build and publish watch faces
 
 on:
   push:
     branches: [main]
     paths:
-      - 'faces/**/watchface.xml'
-      - 'faces/**/assets/**'
-      - 'faces/**/wear/**'
+      - 'faces/**'
       - 'apps/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
+      - 'watchface/**'
+      - 'scripts/**'
       - 'gradle/**'
-      - 'gradle.properties'
-      - 'buildSrc/**'
+      - 'gradlew'
+      - '*.gradle.kts'
+      - '.github/workflows/build-wear.yml'
   pull_request:
-    paths:
-      - 'faces/**/watchface.xml'
-      - 'faces/**/assets/**'
-      - 'faces/**/wear/**'
-      - 'apps/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
-      - 'gradle/**'
-      - 'buildSrc/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build-sundial:
+  build:
     runs-on: ubuntu-latest
+    env:
+      WATCHES_KEYSTORE_B64: ${{ secrets.WATCHES_KEYSTORE_B64 }}
+      WATCHES_KEYSTORE_PASSWORD: ${{ secrets.WATCHES_KEYSTORE_PASSWORD }}
+      WATCHES_KEY_ALIAS: ${{ secrets.WATCHES_KEY_ALIAS }}
+      WATCHES_KEY_PASSWORD: ${{ secrets.WATCHES_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Build Sundial debug APK
-        run: ./gradlew :faces:sundial:wear:assembleDebug
-
-      - name: Generate build metadata
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Validate canonical XML and preview
+        run: python3 scripts/build-site.py --check
+      - name: Configure stable signing
+        if: env.WATCHES_KEYSTORE_B64 != ''
         run: |
-          APK_DIR=faces/sundial/wear/build/outputs/apk/debug
-          cat > "$APK_DIR/metadata.json" << EOF
-          {
-            "slug": "sundial",
-            "name": "Sundial",
-            "commitSha": "${{ github.sha }}",
-            "buildType": "debug",
-            "versionName": "0.1.0",
-            "versionCode": 1,
-            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "runId": "${{ github.run_id }}",
-            "runNumber": ${{ github.run_number }}
-          }
-          EOF
-
-      - name: Upload Sundial artifact
-        uses: actions/upload-artifact@v4
+          echo "$WATCHES_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/watches.jks"
+          echo "WATCHES_KEYSTORE=$RUNNER_TEMP/watches.jks" >> "$GITHUB_ENV"
+      - name: Determine publication
+        id: publication
+        run: |
+          if [[ "${{ github.event_name }}" != "pull_request" && -n "$WATCHES_KEYSTORE_B64" ]]; then
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'publish=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build paired apps
+        run: ./gradlew :apps:phone:assembleDebug :apps:watch:assembleDebug
+      - name: Download official Watch Face Push validator
+        run: |
+          curl --fail --location --retry 3 \
+            https://dl.google.com/dl/android/maven2/com/google/android/wearable/watchface/validator/validator-push-cli/1.0.0-alpha10/validator-push-cli-1.0.0-alpha10.jar \
+            --output "$RUNNER_TEMP/validator-push-cli.jar"
+      - name: Validate promoted face builds
+        run: |
+          for slug in $(python3 -c 'import pathlib,re; print(" ".join(p.parent.name for p in pathlib.Path("faces").glob("*/watchface.xml") if re.search(r"^status: promoted$", (p.parent/"face.yaml").read_text(), re.M)))'); do
+            ./gradlew :watchface:assembleDebug -PfaceSlug="$slug"
+            java -jar "$RUNNER_TEMP/validator-push-cli.jar" \
+              --apk_path=watchface/build/outputs/apk/debug/watchface-debug.apk \
+              --package_name=com.patrickauld.watches.companion
+          done
+      - name: Package signed validated release
+        if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''
+        run: python3 scripts/build-release.py --validator "$RUNNER_TEMP/validator-push-cli.jar"
+      - name: Include companion builds in release
+        if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''
+        run: |
+          cp apps/phone/build/outputs/apk/debug/*.apk dist-release/phone-debug.apk
+          cp apps/watch/build/outputs/apk/debug/*.apk dist-release/watch-debug.apk
+      - uses: actions/upload-artifact@v4
         with:
-          name: sundial-debug
+          name: paired-apps
           path: |
-            faces/sundial/wear/build/outputs/apk/debug/*.apk
-            faces/sundial/wear/build/outputs/apk/debug/metadata.json
-          retention-days: 90
-
-  build-watch-companion:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+            apps/phone/build/outputs/apk/debug/*.apk
+            apps/watch/build/outputs/apk/debug/*.apk
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          name: validated-release
+          path: dist-release/*
+    outputs:
+      publish: ${{ steps.publication.outputs.publish }}
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Build watch companion debug APK
-        run: ./gradlew :apps:watch:assembleDebug
-
-      - name: Upload watch companion artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: watch-companion-debug
-          path: apps/watch/build/outputs/apk/debug/*.apk
-          retention-days: 90
-
-  build-phone-app:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Build phone app debug APK
-        run: ./gradlew :apps:phone:assembleDebug
-
-      - name: Upload phone app artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: phone-app-debug
-          path: apps/phone/build/outputs/apk/debug/*.apk
-          retention-days: 90
-
-  publish-release:
-    needs: [build-sundial, build-watch-companion, build-phone-app]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  publish:
+    needs: build
+    if: needs.build.outputs.publish == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          path: artifacts
-
-      - name: Create release
+          name: validated-release
+          path: release
+      - name: Publish immutable release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="sundial-v0.1.0-build.${{ github.run_number }}"
-          gh release create "$TAG" \
-            --title "Build #${{ github.run_number }}" \
-            --notes "Automated build from commit ${{ github.sha }}" \
-            artifacts/sundial-debug/*.apk \
-            artifacts/sundial-debug/metadata.json \
-            artifacts/watch-companion-debug/*.apk \
-            artifacts/phone-app-debug/*.apk
+          gh release create "watches-build.${{ github.run_number }}" release/* \
+            --repo "${{ github.repository }}" \
+            --title "Watches build ${{ github.run_number }}" \
+            --notes "Validated faces from ${{ github.sha }}"

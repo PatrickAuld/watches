@@ -1,6 +1,7 @@
 package com.patrickauld.watches.companion
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.ParcelFileDescriptor
 import androidx.wear.watchfacepush.WatchFacePushManager
 import androidx.wear.watchfacepush.WatchFacePushManagerFactory
@@ -14,24 +15,19 @@ class WatchFaceInstaller(private val context: Context) {
         return WatchFacePushManagerFactory.createWatchFacePushManager(context)
     }
 
-    suspend fun install(apkPath: String, validationToken: String?): Result<Unit> = runCatching {
-        val token = validationToken ?: error("validationToken is required for watch face install")
+    suspend fun installOrUpdate(apkPath: String, validationToken: String): Result<InstallOutcome> = runCatching {
         val manager = getManager()
-        openParcelFileDescriptor(apkPath).use { apkFd ->
-            manager.addWatchFace(apkFd, token)
+        val installed = manager.listWatchFaces().installedWatchFaceDetails
+        val existing = installed.firstOrNull()
+        val wasActive = existing?.let { manager.isWatchFaceActive(it.packageName) } ?: false
+        val slot = openParcelFileDescriptor(apkPath).use { apkFd ->
+            if (existing == null) {
+                manager.addWatchFace(apkFd, validationToken)
+            } else {
+                manager.updateWatchFace(existing.slotId, apkFd, validationToken)
+            }
         }
-    }
-
-    suspend fun update(packageName: String, apkPath: String, validationToken: String?): Result<Unit> = runCatching {
-        val token = validationToken ?: error("validationToken is required for watch face update")
-        val manager = getManager()
-        val existing = manager.listWatchFaces().installedWatchFaceDetails
-            .firstOrNull { it.packageName == packageName }
-            ?: error("No installed watch face found for package $packageName")
-
-        openParcelFileDescriptor(apkPath).use { apkFd ->
-            manager.updateWatchFace(existing.slotId, apkFd, token)
-        }
+        InstallOutcome(slot.packageName, slot.versionCode, wasActive)
     }
 
     suspend fun remove(packageName: String): Result<Unit> = runCatching {
@@ -47,7 +43,16 @@ class WatchFaceInstaller(private val context: Context) {
         val existing = manager.listWatchFaces().installedWatchFaceDetails
             .firstOrNull { it.packageName == packageName }
             ?: error("No installed watch face found for package $packageName")
-        manager.setWatchFaceAsActive(existing.slotId)
+        if (!manager.isWatchFaceActive(packageName)) {
+            require(context.checkSelfPermission("com.google.wear.permission.SET_PUSHED_WATCH_FACE_AS_ACTIVE") ==
+                PackageManager.PERMISSION_GRANTED) { "Open the companion app on the watch and allow face activation" }
+            val prefs = context.getSharedPreferences("activation", Context.MODE_PRIVATE)
+            require(!prefs.getBoolean("used", false)) {
+                "Choose this face manually in the watch face picker; automatic activation can only be used once"
+            }
+            manager.setWatchFaceAsActive(existing.slotId)
+            prefs.edit().putBoolean("used", true).apply()
+        }
     }
 
     suspend fun listInstalled(): Result<List<InstalledFace>> = runCatching {
@@ -73,4 +78,10 @@ data class InstalledFace(
     val packageName: String,
     val versionCode: Long,
     val isActive: Boolean
+)
+
+data class InstallOutcome(
+    val packageName: String,
+    val versionCode: Long,
+    val wasActive: Boolean
 )

@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -34,6 +35,8 @@ data class FaceSummary(
 @Composable
 fun FaceListScreen(
     faces: List<FaceSummary>,
+    autoUpdates: Boolean,
+    onAutoUpdatesChange: (Boolean) -> Unit,
     onFaceClick: (String) -> Unit
 ) {
     Scaffold(
@@ -46,6 +49,18 @@ fun FaceListScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Automatic updates")
+                        Text("Keep the current watch face up to date", style = MaterialTheme.typography.bodySmall)
+                    }
+                    Switch(checked = autoUpdates, onCheckedChange = onAutoUpdatesChange)
+                }
+            }
             items(faces) { face ->
                 FaceCard(face = face, onClick = { onFaceClick(face.slug) })
             }

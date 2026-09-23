@@ -18,7 +18,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "watches"
-include(":faces:sundial:wear")
+include(":watchface")
 include(":apps:shared")
 include(":apps:watch")
 include(":apps:phone")

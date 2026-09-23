@@ -8,7 +8,7 @@ package com.patrickauld.watches.shared
  */
 object DataLayerPaths {
     /** ChannelClient path for transferring watch face APK bytes from phone to watch. */
-    const val CHANNEL_WATCHFACE_APK = "/watchface/apk"
+    const val CHANNEL_WATCHFACE_APK = "/watchface/apk/"
 
     /** MessageClient path for install/update status reports from watch to phone. */
     const val MESSAGE_INSTALL_STATUS = "/watchface/install-status"
@@ -18,6 +18,8 @@ object DataLayerPaths {
 
     /** MessageClient path for activation requests from phone to watch. */
     const val MESSAGE_REQUEST_ACTIVATE = "/watchface/request-activate"
+
+    const val MESSAGE_REQUEST_STATE = "/watchface/request-state"
 
     /** Capability name advertised by the watch companion app. */
     const val CAPABILITY_WATCH_COMPANION = "watch_companion"

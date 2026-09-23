@@ -1,126 +1,123 @@
 package com.patrickauld.watches.companion
 
 import com.google.android.gms.wearable.ChannelClient
+import android.os.BatteryManager
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import com.patrickauld.watches.shared.DataLayerPaths
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.security.MessageDigest
+import java.util.concurrent.ConcurrentHashMap
 
-/**
- * Background service that receives watch face APKs from the phone app
- * via the Wear Data Layer and installs them using [WatchFaceInstaller].
- */
 class DataLayerListener : WearableListenerService() {
-
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val installer by lazy { WatchFaceInstaller(applicationContext) }
+    private val transfers = ConcurrentHashMap<String, CompletableDeferred<File>>()
+
+    private fun transfer(id: String): CompletableDeferred<File> =
+        transfers.computeIfAbsent(id) { CompletableDeferred() }
 
     override fun onChannelOpened(channel: ChannelClient.Channel) {
-        if (channel.path != DataLayerPaths.CHANNEL_WATCHFACE_APK) return
-
+        if (!channel.path.startsWith(DataLayerPaths.CHANNEL_WATCHFACE_APK)) return
+        val id = channel.path.removePrefix(DataLayerPaths.CHANNEL_WATCHFACE_APK)
+        if (!Regex("[0-9a-f-]{36}").matches(id)) return
         scope.launch {
             try {
-                val inputStream = Wearable.getChannelClient(applicationContext)
-                    .getInputStream(channel).await()
-
-                val watchfacesDir = File(filesDir, "watchfaces").apply { mkdirs() }
-                val tempFile = File(watchfacesDir, "incoming.apk")
-
-                inputStream.use { input ->
-                    tempFile.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
+                val directory = File(filesDir, "watchfaces").apply { mkdirs() }
+                val file = File(directory, "$id.apk")
+                Wearable.getChannelClient(applicationContext).getInputStream(channel).await().use { input ->
+                    file.outputStream().use { output -> input.copyTo(output) }
                 }
-            } catch (e: Exception) {
-                sendStatus(channel.nodeId, "error", e.message ?: "Failed to receive APK")
+                transfer(id).complete(file)
+            } catch (error: Exception) {
+                transfer(id).completeExceptionally(error)
             }
         }
     }
 
-    override fun onMessageReceived(messageEvent: MessageEvent) {
-        when (messageEvent.path) {
-            DataLayerPaths.MESSAGE_REQUEST_INSTALL -> handleInstallRequest(messageEvent)
-            DataLayerPaths.MESSAGE_REQUEST_ACTIVATE -> handleActivateRequest(messageEvent)
+    override fun onMessageReceived(event: MessageEvent) {
+        when (event.path) {
+            DataLayerPaths.MESSAGE_REQUEST_INSTALL -> scope.launch { install(event) }
+            DataLayerPaths.MESSAGE_REQUEST_ACTIVATE -> scope.launch { activate(event) }
+            DataLayerPaths.MESSAGE_REQUEST_STATE -> scope.launch { state(event) }
         }
     }
 
-    private fun handleInstallRequest(messageEvent: MessageEvent) {
-        scope.launch {
-            try {
-                val json = JSONObject(String(messageEvent.data))
-                val slug = json.getString("slug")
-                val packageName = json.getString("packageName")
-                val isUpdate = json.optBoolean("isUpdate", false)
-                val validationToken = json.optString("validationToken").takeIf { it.isNotBlank() }
+    private suspend fun install(event: MessageEvent) {
+        val request = JSONObject(String(event.data))
+        val id = request.getString("id")
+        var file: File? = null
+        try {
+            val apkFile = withTimeout(120_000) { transfer(id).await() }
+            file = apkFile
+            val digest = MessageDigest.getInstance("SHA-256").digest(apkFile.readBytes())
+                .joinToString("") { "%02x".format(it) }
+            require(digest.equals(request.getString("sha256"), ignoreCase = true)) { "APK checksum mismatch" }
+            val outcome = installer.installOrUpdate(apkFile.absolutePath, request.getString("validationToken")).getOrThrow()
+            require(outcome.packageName == request.getString("packageName")) { "Installed package mismatch" }
+            respond(event.sourceNodeId, id, "install", "success", JSONObject().apply {
+                put("packageName", outcome.packageName)
+                put("versionCode", outcome.versionCode)
+                put("isActive", outcome.wasActive)
+            })
+        } catch (error: Exception) {
+            respond(event.sourceNodeId, id, "install", "error", JSONObject().put("message", error.message ?: "Install failed"))
+        } finally {
+            transfers.remove(id)
+            file?.delete()
+        }
+    }
 
-                val watchfacesDir = File(filesDir, "watchfaces")
-                val apkFile = File(watchfacesDir, "incoming.apk")
-                val targetFile = File(watchfacesDir, "$slug.apk")
+    private suspend fun activate(event: MessageEvent) {
+        val request = JSONObject(String(event.data))
+        val id = request.getString("id")
+        try {
+            val packageName = request.getString("packageName")
+            installer.setActive(packageName).getOrThrow()
+            respond(event.sourceNodeId, id, "activate", "success", JSONObject().put("packageName", packageName))
+        } catch (error: Exception) {
+            respond(event.sourceNodeId, id, "activate", "error", JSONObject().put("message", error.message ?: "Activation failed"))
+        }
+    }
 
-                if (apkFile.exists()) {
-                    apkFile.renameTo(targetFile)
-                }
-
-                val result = if (isUpdate) {
-                    installer.update(packageName, targetFile.absolutePath, validationToken)
-                } else {
-                    installer.install(targetFile.absolutePath, validationToken)
-                }
-
-                result.fold(
-                    onSuccess = {
-                        sendStatus(messageEvent.sourceNodeId, "success", "$slug installed")
-                    },
-                    onFailure = { e ->
-                        sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Install failed")
-                    }
-                )
-            } catch (e: Exception) {
-                sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Request failed")
+    private suspend fun state(event: MessageEvent) {
+        val request = JSONObject(String(event.data))
+        val id = request.getString("id")
+        try {
+            val faces = JSONArray()
+            installer.listInstalled().getOrThrow().forEach { face ->
+                faces.put(JSONObject().apply {
+                    put("packageName", face.packageName)
+                    put("versionCode", face.versionCode)
+                    put("isActive", face.isActive)
+                })
             }
+            val charging = (getSystemService(BATTERY_SERVICE) as BatteryManager).isCharging
+            respond(event.sourceNodeId, id, "state", "success", JSONObject().put("faces", faces).put("charging", charging))
+        } catch (error: Exception) {
+            respond(event.sourceNodeId, id, "state", "error", JSONObject().put("message", error.message ?: "State unavailable"))
         }
     }
 
-    private fun handleActivateRequest(messageEvent: MessageEvent) {
-        scope.launch {
-            try {
-                val json = JSONObject(String(messageEvent.data))
-                val packageName = json.getString("packageName")
-
-                installer.setActive(packageName).fold(
-                    onSuccess = {
-                        sendStatus(messageEvent.sourceNodeId, "success", "Face activated")
-                    },
-                    onFailure = { e ->
-                        sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Activation failed")
-                    }
-                )
-            } catch (e: Exception) {
-                sendStatus(messageEvent.sourceNodeId, "error", e.message ?: "Activate request failed")
-            }
-        }
-    }
-
-    private suspend fun sendStatus(nodeId: String, status: String, message: String) {
-        val json = JSONObject().apply {
-            put("status", status)
-            put("message", message)
-        }
+    private suspend fun respond(nodeId: String, id: String, action: String, status: String, data: JSONObject) {
+        val response = data.put("id", id).put("action", action).put("status", status)
         Wearable.getMessageClient(applicationContext)
-            .sendMessage(nodeId, DataLayerPaths.MESSAGE_INSTALL_STATUS, json.toString().toByteArray())
-            .await()
+            .sendMessage(nodeId, DataLayerPaths.MESSAGE_INSTALL_STATUS, response.toString().toByteArray()).await()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         scope.cancel()
+        super.onDestroy()
     }
 }

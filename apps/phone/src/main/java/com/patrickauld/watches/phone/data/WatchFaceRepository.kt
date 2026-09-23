@@ -1,63 +1,18 @@
 package com.patrickauld.watches.phone.data
 
-import android.content.Context
-import android.content.SharedPreferences
-import org.json.JSONObject
-
-/**
- * Manages local state across GitHub builds and watch install state.
- *
- * Merges available builds from [GitHubArtifactSource] with installed
- * face state reported by the watch companion.
- */
-class WatchFaceRepository(context: Context) {
-
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("watch_faces", Context.MODE_PRIVATE)
-
+class WatchFaceRepository {
     private val source = GitHubArtifactSource()
 
-    suspend fun getAvailableBuilds(forceRefresh: Boolean = false): List<AvailableBuild> {
-        return source.fetchAvailableBuilds(forceRefresh)
-    }
+    suspend fun getAvailableBuilds(): List<AvailableBuild> = source.fetchAvailableBuilds()
 
-    fun getInstalledVersion(slug: String): InstalledState? {
-        val json = prefs.getString("installed_$slug", null) ?: return null
-        return try {
-            val obj = JSONObject(json)
-            InstalledState(
-                packageName = obj.getString("packageName"),
-                versionCode = obj.getInt("versionCode"),
-                versionName = obj.getString("versionName")
-            )
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun updateInstalledState(slug: String, packageName: String, versionCode: Int, versionName: String) {
-        val json = JSONObject().apply {
-            put("packageName", packageName)
-            put("versionCode", versionCode)
-            put("versionName", versionName)
-        }
-        prefs.edit().putString("installed_$slug", json.toString()).apply()
-    }
-
-    fun getFaceStatus(build: AvailableBuild): FaceStatus {
-        val installed = getInstalledVersion(build.slug) ?: return FaceStatus.NOT_INSTALLED
-        return if (build.versionCode > installed.versionCode) {
-            FaceStatus.UPDATE_AVAILABLE
-        } else {
-            FaceStatus.INSTALLED
-        }
-    }
+    suspend fun downloadApk(build: AvailableBuild, directory: java.io.File): java.io.File =
+        source.downloadApk(build, directory)
 }
 
 data class InstalledState(
     val packageName: String,
     val versionCode: Int,
-    val versionName: String
+    val isActive: Boolean
 )
 
 enum class FaceStatus {
