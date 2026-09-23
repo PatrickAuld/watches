@@ -1,0 +1,35 @@
+id: radial-moire
+name: Radial Moiré
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 24
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: optical-engraving
+  background: "#050607"
+  accent: "#f9eac7"
+
+description: >
+  Analog hour and minute pointers emerge through the registered intersection
+  of nonlinear concentric slits and interleaved engravings. The curved plate
+  changes phase each second; the pointers rotate with the real time.
+
+implementationNotes: >
+  Two engraved PNG substrates contain four sliced hand positions each. Four
+  transparent slit masks expose one position per phase. WFF Group transforms
+  select masks and rotate the resulting interference by the current hour and
+  minute, compensating for the encoded position offset. A faint visual plate
+  shifts in the dial background. Assets can be regenerated with
+  generate_assets.py. Draft pending watch validation and wff-web rendering QA.
