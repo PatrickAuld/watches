@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "9.1.0"
+androidGradlePlugin = "9.2.1"
 kotlin = "2.2.10"
 composeBom = "2025.05.00"
 wearCompose = "1.5.0"
