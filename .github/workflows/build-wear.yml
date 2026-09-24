@@ -53,7 +53,7 @@ jobs:
       - name: Download official Watch Face Push validator
         run: |
           curl --fail --location --retry 3 \
-            https://dl.google.com/dl/android/maven2/com/google/android/wearable/watchface/validator/validator-push-cli/1.0.0-alpha10/validator-push-cli-1.0.0-alpha10.jar \
+            https://dl.google.com/dl/android/maven2/com/google/android/wearable/watchface/validator/validator-push-cli/1.1.0-alpha01/validator-push-cli-1.1.0-alpha01.jar \
             --output "$RUNNER_TEMP/validator-push-cli.jar"
       - name: Validate promoted face builds
         run: |
