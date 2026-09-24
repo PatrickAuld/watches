@@ -60,13 +60,13 @@ jobs:
           mkdir -p dist-debug
           for slug in $(python3 -c 'import pathlib,re; print(" ".join(p.parent.name for p in pathlib.Path("faces").glob("*/watchface.xml") if re.search(r"^status: promoted$", (p.parent/"face.yaml").read_text(), re.M)))'); do
             ./gradlew :watchface:assembleDebug -PfaceSlug="$slug"
-            unzip -Z1 watchface/build/outputs/apk/debug/watchface-debug.apk
+            python3 scripts/prepare-face-apk.py \
+              watchface/build/outputs/apk/debug/watchface-debug.apk "dist-debug/$slug-debug.apk"
             result=$(java -jar "$RUNNER_TEMP/validator-push-cli.jar" \
-              --apk_path=watchface/build/outputs/apk/debug/watchface-debug.apk \
+              --apk_path="dist-debug/$slug-debug.apk" \
               --package_name=com.patrickauld.watches.companion)
             echo "$result"
             grep -qi 'Validation token:' <<< "$result"
-            cp watchface/build/outputs/apk/debug/watchface-debug.apk "dist-debug/$slug-debug.apk"
           done
       - name: Package signed validated release
         if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''

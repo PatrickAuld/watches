@@ -57,7 +57,7 @@ def main():
         source = ROOT / "watchface/build/outputs/apk/debug/watchface-debug.apk"
         filename = f"{slug}-{version}.apk"
         target = output / filename
-        shutil.copy2(source, target)
+        run(sys.executable, "scripts/prepare-face-apk.py", source, target)
         package_name = f"com.patrickauld.watches.companion.watchfacepush.{slug.replace('-', '_')}"
         result = run("java", "-jar", str(validator), f"--apk_path={target}",
                      "--package_name=com.patrickauld.watches.companion")
