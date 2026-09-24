@@ -18,11 +18,13 @@
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_interference">
       <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
-      <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="hour_engraving" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slit_plate">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_plate_registration">
-          <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
-          <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="hour_fast_interference">
+        <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="hour_engraving" /></PartImage>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slit_plate">
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_plate_registration">
+            <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+          </Group>
         </Group>
       </Group>
       <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slow_veil">
@@ -35,11 +37,13 @@
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_interference">
       <Transform target="angle" value="[MINUTE_SECOND] * 6" />
-      <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="minute_engraving" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slit_plate">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_plate_registration">
-          <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - [MINUTE_SECOND] * 6" />
-          <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="minute_fast_interference">
+        <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="minute_engraving" /></PartImage>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slit_plate">
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_plate_registration">
+            <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - [MINUTE_SECOND] * 6" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+          </Group>
         </Group>
       </Group>
       <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slow_veil">
