@@ -68,7 +68,7 @@ private fun BuildCard(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "v${build.versionName} (${build.buildType})",
+                    text = "v${build.versionName}",
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
