@@ -61,7 +61,7 @@ def main():
         package_name = f"com.patrickauld.watches.companion.watchfacepush.{slug.replace('-', '_')}"
         result = run("java", "-jar", str(validator), f"--apk_path={target}",
                      "--package_name=com.patrickauld.watches.companion")
-        match = re.search(r"validation\s+token\s*:\s*(\S+)", result, re.IGNORECASE)
+        match = re.search(r"(?:validation|generated)\s+token\s*:\s*(\S+)", result, re.IGNORECASE)
         if not match:
             match = re.search(r'"validationToken"\s*:\s*"([^"]+)"', result)
         if not match:

@@ -66,7 +66,8 @@ jobs:
               --apk_path="dist-debug/$slug-debug.apk" \
               --package_name=com.patrickauld.watches.companion)
             echo "$result"
-            grep -qi 'Validation token:' <<< "$result"
+            grep -qi 'Validation is successful' <<< "$result"
+            grep -qi 'generated token:' <<< "$result"
           done
       - name: Package signed validated release
         if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''
