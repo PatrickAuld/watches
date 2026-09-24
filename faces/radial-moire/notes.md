@@ -17,7 +17,14 @@ translucency prevents a hand from vanishing at an interference trough.
 The field combines 80 angular cycles with a radial progression and two
 nonlinear ripples. Slightly different curvature in the moving plate produces
 traveling beats where its lines meet the ink. The whole plate interaction
-comes from two static PNG resources and WFF transforms.
+comes from static PNG resources and WFF transforms.
+
+A second plate has its own curvature and turns at 0.45 degrees per minute.
+The faint version crosses the static dial engraving while a transparent
+`slow_veil` multiplies into both hand masks. The 800-minute rotation spans
+exactly 360 degrees, so its reset is seamless. A glance a few minutes later
+shows another arrangement of broad beats while the fast four-second motion
+continues over it.
 
 Check the browser preview with **Animate** enabled and the Pixel Watch in
 interactive mode. Millisecond-driven rendering costs more battery than the

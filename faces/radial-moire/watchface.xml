@@ -10,6 +10,10 @@
         <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125" />
         <PartImage x="0" y="0" width="450" height="450"><Image resource="plate" /></PartImage>
       </Group>
+      <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="slow_moving_plate">
+        <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075" />
+        <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_plate" /></PartImage>
+      </Group>
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_interference">
@@ -21,6 +25,12 @@
           <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
         </Group>
       </Group>
+      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slow_veil">
+        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_slow_registration">
+          <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_veil" /></PartImage>
+        </Group>
+      </Group>
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_interference">
@@ -30,6 +40,12 @@
         <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_plate_registration">
           <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - [MINUTE_SECOND] * 6" />
           <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slow_veil">
+        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_slow_registration">
+          <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - [MINUTE_SECOND] * 6" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_veil" /></PartImage>
         </Group>
       </Group>
     </Group>

@@ -25,6 +25,9 @@ field = (
     + .075 * np.sin(2 * PITCH_COUNT * angle - r / 71)
 )
 plate_field = field + .14 * np.sin(3 * angle + r / 59)
+# This third plate drifts independently over hours. Its slight mismatch with
+# the static engraving produces a much slower changing interference envelope.
+slow_field = field + .19 * np.sin(5 * angle - r / 64)
 
 
 def smooth(lo, hi, value):
@@ -94,6 +97,10 @@ for label, length, width in (("hour", 111, 13), ("minute", 176, 10)):
 rgba("slit", 0, 0, 0, np.where(circle, 40 + 215 * slits, 0))
 plate_light = engraving(plate_field + .43, .065)
 rgba("plate", 122, 104, 77, np.where(circle & (r > 38), plate_light * 52, 0))
+slow_lines = engraving(slow_field + .26, .13)
+rgba("slow_plate", 155, 132, 97, np.where(circle & (r > 38), slow_lines * 45, 0))
+slow_openings = engraving(slow_field, .30)
+rgba("slow_veil", 0, 0, 0, np.where(circle, 105 + 150 * slow_openings, 0))
 
 for old in (*OUT.glob("plate_[0-9].png"), *OUT.glob("slit_[0-9].png")):
     old.unlink()
