@@ -15,6 +15,7 @@ dx, dy = x - cx, y - cy
 r = np.hypot(dx, dy)
 angle = np.arctan2(dx, -dy)  # Clockwise from twelve o'clock.
 circle = r <= 216
+paper = r <= 225
 
 # Curved radial lines repeat exactly every 4.5 degrees, so the rotating plate
 # has no seam when its four-second cycle restarts.
@@ -81,8 +82,9 @@ for index in range(12):
 etched = engraving(field, .08)
 rosette = np.maximum(0, np.cos(24 * angle + .095 * r + .25 * np.sin(3 * angle))) ** 34
 inner = np.maximum(0, np.cos(2 * np.pi * (r / 12 + .075 * np.sin(5 * angle)))) ** 28
-dial = 5 + 19 * etched + 12 * rosette + 11 * inner + 100 * ticks
-rgba("dial", dial * 1.14, dial * 1.03, dial * .81, np.where(circle, 255, 0))
+dial_ink = 56 * etched + 30 * rosette + 25 * inner + 164 * ticks
+rgba("dial", 252 - dial_ink, 250 - .95 * dial_ink, 245 - .78 * dial_ink,
+     np.where(paper, 255, 0))
 
 # The silhouette is stored as separate curved ink contours. Only the overlap
 # with the moving slit plate reveals the interference pointer.
@@ -91,14 +93,18 @@ slits = engraving(plate_field, .25)
 for label, length, width in (("hour", 111, 13), ("minute", 176, 10)):
     silhouette = hand(length, width)
     alpha = np.where(circle, silhouette * (23 + 222 * ink), 0)
-    rgba(f"{label}_engraving", 249, 234, 199, alpha)
+    rgba(f"{label}_engraving", 39, 34, 29, alpha)
+    # Ambient keeps only static interference contours. WFF rotates this
+    # resource with the minute/hour, without evaluating either moving plate.
+    ambient = np.where(circle, silhouette * (54 + 180 * ink * slits), 0)
+    rgba(f"{label}_ambient", 235, 226, 207, ambient)
 
 # Residual translucency preserves legibility at the trough of the cycle.
 rgba("slit", 0, 0, 0, np.where(circle, 40 + 215 * slits, 0))
 plate_light = engraving(plate_field + .43, .065)
-rgba("plate", 122, 104, 77, np.where(circle & (r > 38), plate_light * 52, 0))
+rgba("plate", 59, 49, 39, np.where(circle & (r > 38), plate_light * 78, 0))
 slow_lines = engraving(slow_field + .26, .13)
-rgba("slow_plate", 155, 132, 97, np.where(circle & (r > 38), slow_lines * 45, 0))
+rgba("slow_plate", 82, 68, 52, np.where(circle & (r > 38), slow_lines * 58, 0))
 slow_openings = engraving(slow_field, .30)
 rgba("slow_veil", 0, 0, 0, np.where(circle, 105 + 150 * slow_openings, 0))
 

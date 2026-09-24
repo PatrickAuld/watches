@@ -28,6 +28,9 @@ continues over it.
 
 Check the browser preview with **Animate** enabled and the Pixel Watch in
 interactive mode. Millisecond-driven rendering costs more battery than the
-old 1 Hz stepping; evaluate performance on the physical watch. Ambient mode
-hides the decorative moving plate. Regenerate assets with
+old 1 Hz stepping; evaluate performance on the physical watch. The interactive
+dial uses dark ink on white paper. Ambient mode hides the dial, both moving
+plates, and the interactive hand groups. Separate static, light-on-black
+interference hand assets rotate only with the hour and minute; the screen
+remains black and the plate textures do not move. Regenerate assets with
 `python3 faces/radial-moire/generate_assets.py` (NumPy and Pillow).

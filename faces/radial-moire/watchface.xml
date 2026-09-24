@@ -2,7 +2,7 @@
 <WatchFace width="450" height="450">
   <Metadata key="CLOCK_TYPE" value="ANALOG" />
   <Metadata key="PREVIEW_TIME" value="10:10:00" />
-  <Scene backgroundColor="#050607">
+  <Scene backgroundColor="#000000">
     <Group x="0" y="0" width="450" height="450" name="engraved_dial">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <PartImage x="0" y="0" width="450" height="450"><Image resource="dial" /></PartImage>
@@ -17,6 +17,7 @@
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_interference">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
       <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
       <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="hour_fast_interference">
         <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="hour_engraving" /></PartImage>
@@ -36,6 +37,7 @@
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_interference">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
       <Transform target="angle" value="[MINUTE_SECOND] * 6" />
       <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="minute_fast_interference">
         <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="minute_engraving" /></PartImage>
@@ -52,6 +54,17 @@
           <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_veil" /></PartImage>
         </Group>
       </Group>
+    </Group>
+
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" alpha="0" name="hour_ambient">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
+      <PartImage x="0" y="0" width="450" height="450"><Image resource="hour_ambient" /></PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" alpha="0" name="minute_ambient">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <Transform target="angle" value="[MINUTE] * 6" />
+      <PartImage x="0" y="0" width="450" height="450"><Image resource="minute_ambient" /></PartImage>
     </Group>
 
     <PartDraw x="0" y="0" width="450" height="450">
