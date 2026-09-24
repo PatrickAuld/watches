@@ -52,6 +52,14 @@ def main():
             keystore = str(Path.home() / ".android/debug.keystore")
             alias = "androiddebugkey"
             store_password = key_password = "pass:android"
+            if not Path(keystore).exists():
+                Path(keystore).parent.mkdir(parents=True, exist_ok=True)
+                subprocess.run([
+                    "keytool", "-genkeypair", "-keystore", keystore,
+                    "-alias", alias, "-storepass", "android", "-keypass", "android",
+                    "-keyalg", "RSA", "-keysize", "2048", "-validity", "10000",
+                    "-dname", "CN=Android Debug,O=Android,C=US", "-noprompt",
+                ], check=True)
         subprocess.run([
             tool("apksigner"), "sign", "--ks", keystore,
             "--ks-key-alias", alias, "--ks-pass", store_password,
