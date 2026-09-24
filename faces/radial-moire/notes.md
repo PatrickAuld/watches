@@ -1,9 +1,26 @@
 # Radial moiré
 
-The hour and minute pointers are not solid watch-hand graphics. Each engraving stores four small angular offsets, interlaced into curved radial bands. The transparent slit mask for the current phase exposes one set of slices. WFF rotates the entire interaction around the dial pivot to follow the current time, compensating for the small encoded angular offset. The visible plate advances on each second.
+Hour and minute pointers appear where a stationary ink engraving for each
+pointer meets a moving transparent slit plate. The engraving and plate share
+a curved radial grating. The source image contains only etched lines within
+each pointer's silhouette; WFF composes it with a separately rotated `MASK`
+group. No pre-rendered hand frames or opacity switching remain.
 
-The radial field uses `r + 5.7 sin(3θ + r/52) + 2.1 sin(7θ - r/79)` with a 22.5-unit pitch. These non-linear arcs preserve the printed-plate mechanism of barrier-grid animation. The hand segments appear only after two resources are composed by a WFF `MASK` group.
+The plate turns clockwise at 1.125 degrees per second, driven by
+`[SECOND_MILLISECOND]`. Its 80-fold angular symmetry makes one 4.5-degree
+registration cycle repeat every four seconds, including across the minute
+boundary. A faint engraving on the dial follows the same plate orientation.
+The hand substrates rotate to the actual time, while their slit masks
+counter-rotate to remain aligned with the globally moving plate. Residual
+translucency prevents a hand from vanishing at an interference trough.
 
-The phase change is deliberately stepped at 1 Hz. Evaluate legibility and aliasing at Pixel Watch resolution. Promotion enables the official WFF validator and installable APK pipeline; physical watch rendering remains to be checked.
+The field combines 80 angular cycles with a radial progression and two
+nonlinear ripples. Slightly different curvature in the moving plate produces
+traveling beats where its lines meet the ink. The whole plate interaction
+comes from two static PNG resources and WFF transforms.
 
-Regenerate the PNG assets with `python3 faces/radial-moire/generate_assets.py` (NumPy and Pillow).
+Check the browser preview with **Animate** enabled and the Pixel Watch in
+interactive mode. Millisecond-driven rendering costs more battery than the
+old 1 Hz stepping; evaluate performance on the physical watch. Ambient mode
+hides the decorative moving plate. Regenerate assets with
+`python3 faces/radial-moire/generate_assets.py` (NumPy and Pillow).

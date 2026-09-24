@@ -23,13 +23,12 @@ style:
 
 description: >
   Analog hour and minute pointers emerge through the registered intersection
-  of nonlinear concentric slits and interleaved engravings. The curved plate
-  changes phase each second; the pointers rotate with the real time.
+  of curved radial ink lines and a continuously rotating slit plate. The
+  interference flows through both pointers as they follow the real time.
 
 implementationNotes: >
-  Two engraved PNG substrates contain four sliced hand positions each. Four
-  transparent slit masks expose one position per phase. WFF Group transforms
-  select masks and rotate the resulting interference by the current hour and
-  minute, compensating for the encoded position offset. A faint visual plate
-  shifts in the dial background. Assets can be regenerated with
-  generate_assets.py. Draft pending watch validation and wff-web rendering QA.
+  The two hand engravings and the transparent slit plate share a curved
+  80-fold radial grating. WFF rotates the plate 1.125 degrees per second using
+  SECOND_MILLISECOND, yielding a seamless four-second optical cycle. The hour
+  and minute substrates follow time independently; their masks register to
+  the same global plate. Regenerate assets with generate_assets.py.

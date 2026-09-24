@@ -3,36 +3,34 @@
   <Metadata key="CLOCK_TYPE" value="ANALOG" />
   <Metadata key="PREVIEW_TIME" value="10:10:00" />
   <Scene backgroundColor="#050607">
-    <Group x="0" y="0" width="450" height="450" name="moire_group_01">
+    <Group x="0" y="0" width="450" height="450" name="engraved_dial">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <PartImage x="0" y="0" width="450" height="450"><Image resource="dial" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" name="moving_plate">
-        <Group x="0" y="0" width="450" height="450" name="moire_group_02"><Transform target="alpha" value="[SECOND] % 4 == 0 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="plate_0" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_03"><Transform target="alpha" value="[SECOND] % 4 == 1 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="plate_1" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_04"><Transform target="alpha" value="[SECOND] % 4 == 2 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="plate_2" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_05"><Transform target="alpha" value="[SECOND] % 4 == 3 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="plate_3" /></PartImage></Group>
+      <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="moving_plate">
+        <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125" />
+        <PartImage x="0" y="0" width="450" height="450"><Image resource="plate" /></PartImage>
       </Group>
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_interference">
-      <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5 - ([SECOND] % 4) * 0.15" />
+      <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
       <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="hour_engraving" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="moire_group_06">
-        <Group x="0" y="0" width="450" height="450" name="moire_group_07"><Transform target="alpha" value="[SECOND] % 4 == 0 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_0" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_08"><Transform target="alpha" value="[SECOND] % 4 == 1 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_1" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_09"><Transform target="alpha" value="[SECOND] % 4 == 2 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_2" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_10"><Transform target="alpha" value="[SECOND] % 4 == 3 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_3" /></PartImage></Group>
+      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slit_plate">
+        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_plate_registration">
+          <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+        </Group>
       </Group>
     </Group>
 
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_interference">
-      <Transform target="angle" value="[MINUTE_SECOND] * 6 - ([SECOND] % 4) * 1.5" />
+      <Transform target="angle" value="[MINUTE_SECOND] * 6" />
       <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="minute_engraving" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="moire_group_11">
-        <Group x="0" y="0" width="450" height="450" name="moire_group_12"><Transform target="alpha" value="[SECOND] % 4 == 0 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_0" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_13"><Transform target="alpha" value="[SECOND] % 4 == 1 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_1" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_14"><Transform target="alpha" value="[SECOND] % 4 == 2 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_2" /></PartImage></Group>
-        <Group x="0" y="0" width="450" height="450" name="moire_group_15"><Transform target="alpha" value="[SECOND] % 4 == 3 ? 255 : 0" /><PartImage x="0" y="0" width="450" height="450"><Image resource="slit_3" /></PartImage></Group>
+      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slit_plate">
+        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_plate_registration">
+          <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - [MINUTE_SECOND] * 6" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+        </Group>
       </Group>
     </Group>
 
