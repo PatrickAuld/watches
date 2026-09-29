@@ -22,18 +22,17 @@ style:
   accent: "#27221d"
 
 description: >
-  Analog hour and minute pointers emerge through the registered intersection
-  of curved radial ink lines and a continuously rotating slit plate. A second
-  plate drifts much more slowly, changing the interference over several minutes.
-  On wake the dial is white; in ambient only the hands remain on black.
+  Three selectable kinetic plate geometries: an eccentric rotating vertical
+  slit disc over a fixed ruled substrate, opening petals, and folding facets.
+  Their shapes emerge from interference between registered transparent plates.
+  On wake the dial is white; ambient shows only the hour and minute hands on black.
 
 implementationNotes: >
-  The two hand engravings and the transparent slit plate share a curved
-  80-fold radial grating. WFF rotates the plate 1.125 degrees per second using
-  SECOND_MILLISECOND, yielding a seamless four-second optical cycle. The hour
-  and minute substrates follow time independently; their masks register to
-  the same global plate. A second curved plate rotates 0.45 degrees per minute
-  using MINUTES_SINCE_EPOCH and SECOND_MILLISECOND and multiplies into both
-  hand masks. Ambient hides all moving plates and uses static light-on-black
-  engraved hands that follow HOUR_0_23 and MINUTE. Regenerate assets with
-  generate_assets.py.
+  Select Plate geometry in the watch face editor or web preview. The vertical
+  option moves only its off-center slit disc over stationary vertical rules.
+  The petal and facet options cross radial engravings with a second slow disc,
+  changing their apparent forms over minutes. Each moving plate rotates smoothly
+  using epoch seconds plus milliseconds, and its mask reveals the matching
+  stationary engraving inside both clock hands. Ambient hides all dial plates
+  and leaves static textured hands following the time. Generate assets with
+  generate_assets.py; strings.xml supplies watch editor option labels.

@@ -2,60 +2,153 @@
 <WatchFace width="450" height="450">
   <Metadata key="CLOCK_TYPE" value="ANALOG" />
   <Metadata key="PREVIEW_TIME" value="10:10:00" />
+  <UserConfigurations>
+    <ListConfiguration id="moire_style" displayName="moire_style" defaultValue="0">
+      <ListOption id="0" displayName="moire_vertical" />
+      <ListOption id="1" displayName="moire_petal" />
+      <ListOption id="2" displayName="moire_facet" />
+    </ListConfiguration>
+  </UserConfigurations>
   <Scene backgroundColor="#000000">
-    <Group x="0" y="0" width="450" height="450" name="engraved_dial">
-      <Variant mode="AMBIENT" target="alpha" value="0" />
-      <PartImage x="0" y="0" width="450" height="450"><Image resource="dial" /></PartImage>
-      <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="moving_plate">
-        <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125" />
-        <PartImage x="0" y="0" width="450" height="450"><Image resource="plate" /></PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="slow_moving_plate">
-        <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075" />
-        <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_plate" /></PartImage>
-      </Group>
-    </Group>
-
-    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_interference">
-      <Variant mode="AMBIENT" target="alpha" value="0" />
-      <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
-      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="hour_fast_interference">
-        <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="hour_engraving" /></PartImage>
-        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slit_plate">
-          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_plate_registration">
-            <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
-            <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+    <ListConfiguration id="moire_style">
+      <ListOption id="0">
+        <Group x="0" y="0" width="450" height="450" name="vertical_mechanism">
+          <Variant mode="AMBIENT" target="alpha" value="0" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="vertical_dial" /></PartImage>
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="vertical_substrate" /></PartImage>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="vertical_rotating_slit_plate">
+            <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="vertical_plate" /></PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="vertical_hour_pointer">
+            <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="vertical_hour_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="vertical_hour" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="vertical_hour_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="vertical_hour_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="vertical_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="vertical_minute_pointer">
+            <Transform target="angle" value="[MINUTE_SECOND] * 6" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="vertical_minute_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="vertical_minute" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="vertical_minute_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="vertical_minute_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - ([MINUTE_SECOND] * 6)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="vertical_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
           </Group>
         </Group>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hour_slow_veil">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="hour_slow_registration">
-          <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
-          <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_veil" /></PartImage>
-        </Group>
-      </Group>
-    </Group>
-
-    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_interference">
-      <Variant mode="AMBIENT" target="alpha" value="0" />
-      <Transform target="angle" value="[MINUTE_SECOND] * 6" />
-      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="minute_fast_interference">
-        <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="minute_engraving" /></PartImage>
-        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slit_plate">
-          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_plate_registration">
-            <Transform target="angle" value="[SECOND_MILLISECOND] * 1.125 - [MINUTE_SECOND] * 6" />
-            <PartImage x="0" y="0" width="450" height="450"><Image resource="slit" /></PartImage>
+      </ListOption>
+      <ListOption id="1">
+        <Group x="0" y="0" width="450" height="450" name="petal_mechanism">
+          <Variant mode="AMBIENT" target="alpha" value="0" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_dial" /></PartImage>
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_substrate" /></PartImage>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_rotating_slit_plate">
+            <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_plate" /></PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_slow_plate">
+            <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_slow_plate" /></PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_hour_pointer">
+            <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="petal_hour_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="petal_hour" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="petal_hour_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_hour_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="petal_hour_slow_veil">
+              <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_hour_slow_registration">
+                <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+                <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_veil" /></PartImage>
+              </Group>
+            </Group>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_minute_pointer">
+            <Transform target="angle" value="[MINUTE_SECOND] * 6" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="petal_minute_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="petal_minute" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="petal_minute_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_minute_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - ([MINUTE_SECOND] * 6)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="petal_minute_slow_veil">
+              <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="petal_minute_slow_registration">
+                <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - ([MINUTE_SECOND] * 6)" />
+                <PartImage x="0" y="0" width="450" height="450"><Image resource="petal_veil" /></PartImage>
+              </Group>
+            </Group>
           </Group>
         </Group>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_slow_veil">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_slow_registration">
-          <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - [MINUTE_SECOND] * 6" />
-          <PartImage x="0" y="0" width="450" height="450"><Image resource="slow_veil" /></PartImage>
+      </ListOption>
+      <ListOption id="2">
+        <Group x="0" y="0" width="450" height="450" name="facet_mechanism">
+          <Variant mode="AMBIENT" target="alpha" value="0" />
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_dial" /></PartImage>
+          <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_substrate" /></PartImage>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_rotating_slit_plate">
+            <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_plate" /></PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_slow_plate">
+            <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075" />
+            <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_slow_plate" /></PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_hour_pointer">
+            <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="facet_hour_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="facet_hour" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="facet_hour_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_hour_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="facet_hour_slow_veil">
+              <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_hour_slow_registration">
+                <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - (([HOUR_0_23] % 12) * 30 + [MINUTE_SECOND] * 0.5)" />
+                <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_veil" /></PartImage>
+              </Group>
+            </Group>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_minute_pointer">
+            <Transform target="angle" value="[MINUTE_SECOND] * 6" />
+            <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="facet_minute_engraving">
+              <PartImage x="0" y="0" width="450" height="450" renderMode="SOURCE"><Image resource="facet_minute" /></PartImage>
+              <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="facet_minute_slit">
+                <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_minute_registration">
+                  <Transform target="angle" value="([SECONDS_SINCE_EPOCH] % 240) * 1.5 + [MILLISECOND] * 0.0015 - ([MINUTE_SECOND] * 6)" />
+                  <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_slit" /></PartImage>
+                </Group>
+              </Group>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="facet_minute_slow_veil">
+              <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="facet_minute_slow_registration">
+                <Transform target="angle" value="([MINUTES_SINCE_EPOCH] % 800) * 0.45 + [SECOND_MILLISECOND] * 0.0075 - ([MINUTE_SECOND] * 6)" />
+                <PartImage x="0" y="0" width="450" height="450"><Image resource="facet_veil" /></PartImage>
+              </Group>
+            </Group>
+          </Group>
         </Group>
-      </Group>
-    </Group>
-
+      </ListOption>
+    </ListConfiguration>
     <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" alpha="0" name="hour_ambient">
       <Variant mode="AMBIENT" target="alpha" value="255" />
       <Transform target="angle" value="([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5" />
@@ -66,7 +159,6 @@
       <Transform target="angle" value="[MINUTE] * 6" />
       <PartImage x="0" y="0" width="450" height="450"><Image resource="minute_ambient" /></PartImage>
     </Group>
-
     <PartDraw x="0" y="0" width="450" height="450">
       <Ellipse x="220" y="220" width="10" height="10"><Fill color="#e6d1a9" /></Ellipse>
       <Ellipse x="223" y="223" width="4" height="4"><Fill color="#231d16" /></Ellipse>

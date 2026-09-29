@@ -16,6 +16,7 @@ plugins {
 abstract class StageWatchFace : DefaultTask() {
     @get:InputFile abstract val xml: RegularFileProperty
     @get:InputDirectory @get:Optional abstract val assets: DirectoryProperty
+    @get:InputFile @get:Optional abstract val strings: RegularFileProperty
     @get:Input abstract val faceSlug: Property<String>
     @get:OutputDirectory abstract val outputDir: DirectoryProperty
 
@@ -31,8 +32,12 @@ abstract class StageWatchFace : DefaultTask() {
         val displayName = faceSlug.get().split('-').joinToString(" ") {
             it.replaceFirstChar(Char::uppercaseChar)
         }
-        output.resolve("values").apply { mkdirs() }.resolve("strings.xml")
-            .writeText("<resources><string name=\"watch_face_name\">$displayName</string></resources>\n")
+        val stringsFile = output.resolve("values").apply { mkdirs() }.resolve("strings.xml")
+        if (strings.isPresent) {
+            strings.get().asFile.copyTo(stringsFile)
+        } else {
+            stringsFile.writeText("<resources><string name=\"watch_face_name\">$displayName</string></resources>\n")
+        }
     }
 }
 
@@ -82,6 +87,8 @@ androidComponents.onVariants { variant ->
         xml.set(faceXml)
         val assetDir = faceDir.resolve("assets")
         if (assetDir.isDirectory) assets.set(assetDir)
+        val stringsFile = faceDir.resolve("strings.xml")
+        if (stringsFile.isFile) strings.set(stringsFile)
         faceSlug.set(slug)
         outputDir.set(layout.buildDirectory.dir("generated/wff/${variant.name}/res"))
     }

@@ -1,5 +1,8 @@
-"""Generate registered engraving and curved slit plates for the moiré face."""
+"""Generate three registered kinetic engraving mechanisms for the moiré dial.
 
+Only transparent plates rotate at runtime. The paper, substrate and hour/minute
+engraving stay fixed in their respective coordinate systems.
+"""
 from pathlib import Path
 
 import numpy as np
@@ -8,107 +11,107 @@ from PIL import Image
 OUT = Path(__file__).parent / "assets"
 OUT.mkdir(exist_ok=True)
 SIZE = 450
-PITCH_COUNT = 80  # One 4.5-degree rotation returns to the same registration.
 y, x = np.mgrid[:SIZE, :SIZE].astype(np.float32)
-cx = cy = SIZE / 2
-dx, dy = x - cx, y - cy
+dx, dy = x - 225, y - 225
 r = np.hypot(dx, dy)
-angle = np.arctan2(dx, -dy)  # Clockwise from twelve o'clock.
-circle = r <= 216
-paper = r <= 225
-
-# Curved radial lines repeat exactly every 4.5 degrees, so the rotating plate
-# has no seam when its four-second cycle restarts.
-field = (
-    PITCH_COUNT * angle / (2 * np.pi)
-    + r / 23.5
-    + .17 * np.sin(PITCH_COUNT * angle + r / 48)
-    + .075 * np.sin(2 * PITCH_COUNT * angle - r / 71)
-)
-plate_field = field + .14 * np.sin(3 * angle + r / 59)
-# This third plate drifts independently over hours. Its slight mismatch with
-# the static engraving produces a much slower changing interference envelope.
-slow_field = field + .19 * np.sin(5 * angle - r / 64)
+a = np.arctan2(dx, -dy)
+paper = r <= 224
+circle = r <= 210
 
 
-def smooth(lo, hi, value):
-    t = np.clip((value - lo) / (hi - lo), 0, 1)
+def smooth(lo, hi, v):
+    t = np.clip((v - lo) / (hi - lo), 0, 1)
     return t * t * (3 - 2 * t)
 
 
-def engraving(value, width):
-    """Antialiased ink line around each integer contour of the field."""
-    distance = np.abs(np.mod(value + .5, 1) - .5)
-    return 1 - smooth(width - .025, width + .025, distance)
+def lines(field, width):
+    d = np.abs(np.mod(field + .5, 1) - .5)
+    return 1 - smooth(width - .035, width + .035, d)
+
+
+def save(name, rgb, alpha):
+    output = np.empty((SIZE, SIZE, 4), np.uint8)
+    output[:, :, :3] = rgb
+    output[:, :, 3] = np.clip(alpha, 0, 255).astype(np.uint8)
+    temp = OUT / f"{name}.tmp.png"
+    Image.fromarray(output, "RGBA").save(temp, optimize=True)
+    temp.replace(OUT / f"{name}.png")
 
 
 def hand(length, width):
     along = -dy
     across = np.abs(dx)
-    taper = width * (1 - .53 * np.maximum(0, along) / length)
-    return np.where(
-        (along >= -5) & (along <= length),
-        1 - smooth(taper - 1.6, taper + 1.6, across),
-        0,
-    )
-
-
-def rgba(name, red, green, blue, opacity):
-    image = np.empty((SIZE, SIZE, 4), dtype=np.uint8)
-    image[:, :, 0] = np.clip(red, 0, 255).astype(np.uint8)
-    image[:, :, 1] = np.clip(green, 0, 255).astype(np.uint8)
-    image[:, :, 2] = np.clip(blue, 0, 255).astype(np.uint8)
-    image[:, :, 3] = np.clip(opacity, 0, 255).astype(np.uint8)
-    Image.fromarray(image, "RGBA").save(OUT / f"{name}.png", optimize=True)
+    taper = width * (1 - .48 * np.maximum(0, along) / length)
+    return np.where((along >= -5) & (along <= length),
+                    1 - smooth(taper - 1.5, taper + 1.5, across), 0)
 
 
 ticks = np.zeros_like(r)
-for index in range(12):
-    a = index * np.pi / 6
-    px, py = np.sin(a), -np.cos(a)
-    radial = dx * px + dy * py
-    transverse = np.abs(dx * py - dy * px)
-    ticks = np.maximum(
-        ticks,
-        np.where(
-            (radial > 189)
-            & (radial < (206 if index % 3 == 0 else 200))
-            & (transverse < 1.4),
-            1.,
-            0.,
-        ),
-    )
+for i in range(12):
+    theta = i * np.pi / 6
+    radial = dx * np.sin(theta) - dy * np.cos(theta)
+    transverse = np.abs(dx * np.cos(theta) + dy * np.sin(theta))
+    ticks = np.maximum(ticks, ((radial > 192) & (radial < (207 if i % 3 == 0 else 200)) & (transverse < 1.4)).astype(float))
 
-etched = engraving(field, .08)
-rosette = np.maximum(0, np.cos(24 * angle + .095 * r + .25 * np.sin(3 * angle))) ** 34
-inner = np.maximum(0, np.cos(2 * np.pi * (r / 12 + .075 * np.sin(5 * angle)))) ** 28
-dial_ink = 56 * etched + 30 * rosette + 25 * inner + 164 * ticks
-rgba("dial", 252 - dial_ink, 250 - .95 * dial_ink, 245 - .78 * dial_ink,
-     np.where(paper, 255, 0))
+# Vertical: a stationary ruled substrate, viewed through an eccentric disc of
+# vertical slits. A single disc turns; the displaced axis changes stripe phase
+# and intersection angle at each point, making broad drifting wave envelopes.
+stationary_vertical = (dx / 7.2 + .10 * np.sin(dy / 34) + .0007 * dy**2)
+eccentric_x, eccentric_y = dx - 19, dy + 11
+moving_vertical = (eccentric_x / 7.25 + .08 * np.sin(eccentric_y / 30)
+                   + .00055 * eccentric_y**2)
+slow_vertical = (dx / 7.3 + .10 * np.sin(dy / 34 + dx / 100))
 
-# The silhouette is stored as separate curved ink contours. Only the overlap
-# with the moving slit plate reveals the interference pointer.
-ink = engraving(field, .24)
-slits = engraving(plate_field, .25)
-for label, length, width in (("hour", 111, 13), ("minute", 176, 10)):
-    silhouette = hand(length, width)
-    alpha = np.where(circle, silhouette * (23 + 222 * ink), 0)
-    rgba(f"{label}_engraving", 39, 34, 29, alpha)
-    # Ambient keeps only static interference contours. WFF rotates this
-    # resource with the minute/hour, without evaluating either moving plate.
-    ambient = np.where(circle, silhouette * (54 + 180 * ink * slits), 0)
-    rgba(f"{label}_ambient", 235, 226, 207, ambient)
+# Petal: two radial engravings, one in the fixed dial and one in a turning disc.
+# A 12-fold lobed modulation creates petals that alternately meet and part.
+stationary_petal = 22*a/(2*np.pi) + r/18 + .53*np.sin(12*a + r/77)
+moving_petal = 22*a/(2*np.pi) + r/18 + .53*np.sin(12*a - r/83 + .6)
+slow_petal = 22*a/(2*np.pi) + r/19 + .55*np.sin(12*a + r/84)
 
-# Residual translucency preserves legibility at the trough of the cycle.
-rgba("slit", 0, 0, 0, np.where(circle, 40 + 215 * slits, 0))
-plate_light = engraving(plate_field + .43, .065)
-rgba("plate", 59, 49, 39, np.where(circle & (r > 38), plate_light * 78, 0))
-slow_lines = engraving(slow_field + .26, .13)
-rgba("slow_plate", 82, 68, 52, np.where(circle & (r > 38), slow_lines * 58, 0))
-slow_openings = engraving(slow_field, .30)
-rgba("slow_veil", 0, 0, 0, np.where(circle, 105 + 150 * slow_openings, 0))
+# Facet: angular chevrons crossing a softly warped concentric lattice. As the
+# translucent aperture disc turns, apparent diamonds fold into curved stars.
+stationary_facet = (13*a/np.pi + r/15 + .34*np.cos(8*a - r/36))
+moving_facet = (13*a/np.pi + r/15 + .36*np.cos(8*a + r/33))
+slow_facet = (13*a/np.pi + r/15.4 + .34*np.cos(8*a - r/31))
 
-for old in (*OUT.glob("plate_[0-9].png"), *OUT.glob("slit_[0-9].png")):
-    old.unlink()
+for style, stationary, moving, slow in (
+    ("vertical", stationary_vertical, moving_vertical, slow_vertical),
+    ("petal", stationary_petal, moving_petal, slow_petal),
+    ("facet", stationary_facet, moving_facet, slow_facet),
+):
+    base = lines(stationary, .10)
+    slit = lines(moving, .25)
+    slow_lines = lines(slow, .16)
+    # The moving disc's transparent cuts reveal the static engraving. Its
+    # fine printed contour also appears on the paper as a second real plate.
+    dial_ink = 56*base + 25*lines(stationary + .4, .045) + 170*ticks
+    save(f"{style}_dial", (252, 250, 246), np.where(paper, 255, 0))
+    # Ink layer is separate so the white paper remains white in every style.
+    save(f"{style}_substrate", (68, 58, 47), np.where(circle, dial_ink, 0))
+    save(f"{style}_plate", (51, 44, 38), np.where(circle & (r > 33), 76*lines(moving+.35, .075), 0))
+    if style != "vertical":
+        save(f"{style}_slow_plate", (83, 69, 52), np.where(circle & (r > 33), 44*lines(slow+.23, .075), 0))
+    # A little transmission through the opaque regions keeps the pointers
+    # legible while narrow openings do the actual optical reveal.
+    save(f"{style}_slit", (0, 0, 0), np.where(circle, 38 + 217*slit, 0))
+    if style != "vertical":
+        save(f"{style}_veil", (0, 0, 0), np.where(circle, 112 + 143*slow_lines, 0))
+    for label, length, width in (("hour", 111, 13), ("minute", 176, 10)):
+        silhouette = hand(length, width)
+        save(f"{style}_{label}", (35, 31, 27), np.where(circle, silhouette * (34 + 220*lines(stationary, .24)), 0))
+        if style == "vertical":
+            # Ambient hands are shared by all three choices and never animate
+            # independently of the time they indicate.
+            save(f"{label}_ambient", (235, 226, 207),
+                 np.where(circle, silhouette*(65+169*base*slit), 0))
 
-print(f"Generated {len(list(OUT.glob('*.png')))} resources in {OUT}")
+# Remove resources from the previous mechanism so the APK stays lean.
+current = {f"{s}_{suffix}.png" for s in ("vertical", "petal", "facet")
+           for suffix in (("dial", "substrate", "plate", "slit", "hour", "minute")
+                          if s == "vertical" else
+                          ("dial", "substrate", "plate", "slow_plate", "slit", "veil", "hour", "minute"))}
+current |= {"hour_ambient.png", "minute_ambient.png"}
+for previous in OUT.glob("*.png"):
+    if previous.name not in current:
+        previous.unlink()
+print(f"Generated {len(current)} resources in {OUT}")
