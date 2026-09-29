@@ -19,9 +19,13 @@ val playUploadSigning = listOf(
     playUploadKeyPassword
 ).all { !it.isNullOrBlank() }
 val releaseTaskRequested = gradle.startParameter.taskNames.any { it.contains("Release") }
+val packageVerificationTaskRequested = gradle.startParameter.taskNames.any { it.contains("PlayVerification") }
 
 if (releaseTaskRequested && !playUploadSigning) {
     throw GradleException("Set PLAY_UPLOAD_KEYSTORE, PLAY_UPLOAD_KEYSTORE_PASSWORD, PLAY_UPLOAD_KEY_ALIAS, and PLAY_UPLOAD_KEY_PASSWORD to build a release bundle")
+}
+if (packageVerificationTaskRequested && !personalSigning) {
+    throw GradleException("Set WATCHES_KEYSTORE, WATCHES_KEYSTORE_PASSWORD, WATCHES_KEY_ALIAS, and WATCHES_KEY_PASSWORD to build a package ownership proof APK")
 }
 
 val playVersionCode = providers.gradleProperty("playVersionCode").orElse("1").get().toIntOrNull()
@@ -63,6 +67,12 @@ android {
         release {
             isMinifyEnabled = true
             if (playUploadSigning) signingConfig = signingConfigs.getByName("playUpload")
+        }
+        if (personalSigning) {
+            create("playVerification") {
+                initWith(getByName("release"))
+                signingConfig = signingConfigs.getByName("personal")
+            }
         }
     }
 
