@@ -38,6 +38,21 @@ abstract class StageWatchFace : DefaultTask() {
         } else {
             stringsFile.writeText("<resources><string name=\"watch_face_name\">$displayName</string></resources>\n")
         }
+        val faceXml = xml.get().asFile.readText()
+        val editable = faceXml.contains("<UserConfigurations>")
+        val hasFlavors = faceXml.contains("<Flavors ")
+        output.resolve("xml").apply { mkdirs() }.resolve("watch_face_info.xml")
+            .writeText(buildString {
+                appendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
+                appendLine("<WatchFaceInfo>")
+                appendLine("    <Preview value=\"@drawable/preview\" />")
+                appendLine("    <Editable value=\"$editable\" />")
+                if (hasFlavors) {
+                    appendLine("    <MultipleInstancesAllowed value=\"true\" />")
+                    appendLine("    <FlavorsSupported value=\"true\" />")
+                }
+                appendLine("</WatchFaceInfo>")
+            })
     }
 }
 

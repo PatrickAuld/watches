@@ -78,6 +78,8 @@ def main():
         target.mkdir(parents=True)
         shutil.copy2(directory / "watchface.xml", target / "watchface.xml")
         shutil.copy2(directory / "face.yaml", target / "face.yaml")
+        if (directory / "strings.xml").exists():
+            shutil.copy2(directory / "strings.xml", target / "strings.xml")
         for name, asset in assets.items():
             (target / "assets").mkdir(exist_ok=True)
             shutil.copy2(asset, target / "assets" / asset.name)

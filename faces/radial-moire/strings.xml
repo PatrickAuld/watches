@@ -4,4 +4,9 @@
   <string name="moire_vertical">Eccentric vertical slits</string>
   <string name="moire_petal">Opening petals</string>
   <string name="moire_facet">Folding facets</string>
+  <string name="moire_palette">Dial palette</string>
+  <string name="palette_graphite">Graphite</string>
+  <string name="palette_sepia">Sepia</string>
+  <string name="palette_atlantic">Atlantic</string>
+  <string name="palette_plum">Plum</string>
 </resources>

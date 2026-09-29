@@ -25,10 +25,12 @@ description: >
   Three selectable kinetic plate geometries: an eccentric rotating vertical
   slit disc over a fixed ruled substrate, opening petals, and folding facets.
   Their shapes emerge from interference between registered transparent plates.
-  On wake the dial is white; ambient shows only the hour and minute hands on black.
+  Four paper-and-ink palettes are independently selectable in the editor.
+  Ambient shows only the hour and minute hands on black.
 
 implementationNotes: >
-  Select Plate geometry in the watch face editor or web preview. The vertical
+  The face is editable, with three placement flavors and independent Plate
+  geometry and Dial palette settings in the editor and web preview. The vertical
   option moves only its off-center slit disc over stationary vertical rules.
   The petal and facet options cross radial engravings with a second slow disc,
   changing their apparent forms over minutes. Each moving plate rotates smoothly

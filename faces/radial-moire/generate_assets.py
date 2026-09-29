@@ -85,12 +85,11 @@ for style, stationary, moving, slow in (
     # The moving disc's transparent cuts reveal the static engraving. Its
     # fine printed contour also appears on the paper as a second real plate.
     dial_ink = 56*base + 25*lines(stationary + .4, .045) + 170*ticks
-    save(f"{style}_dial", (252, 250, 246), np.where(paper, 255, 0))
-    # Ink layer is separate so the white paper remains white in every style.
-    save(f"{style}_substrate", (68, 58, 47), np.where(circle, dial_ink, 0))
-    save(f"{style}_plate", (51, 44, 38), np.where(circle & (r > 33), 76*lines(moving+.35, .075), 0))
+    # Ink stays transparent so the WFF color setting supplies the paper and ink.
+    save(f"{style}_substrate", (255, 255, 255), np.where(circle, dial_ink, 0))
+    save(f"{style}_plate", (255, 255, 255), np.where(circle & (r > 33), 76*lines(moving+.35, .075), 0))
     if style != "vertical":
-        save(f"{style}_slow_plate", (83, 69, 52), np.where(circle & (r > 33), 44*lines(slow+.23, .075), 0))
+        save(f"{style}_slow_plate", (255, 255, 255), np.where(circle & (r > 33), 44*lines(slow+.23, .075), 0))
     # A little transmission through the opaque regions keeps the pointers
     # legible while narrow openings do the actual optical reveal.
     save(f"{style}_slit", (0, 0, 0), np.where(circle, 38 + 217*slit, 0))
@@ -98,7 +97,7 @@ for style, stationary, moving, slow in (
         save(f"{style}_veil", (0, 0, 0), np.where(circle, 112 + 143*slow_lines, 0))
     for label, length, width in (("hour", 111, 13), ("minute", 176, 10)):
         silhouette = hand(length, width)
-        save(f"{style}_{label}", (35, 31, 27), np.where(circle, silhouette * (34 + 220*lines(stationary, .24)), 0))
+        save(f"{style}_{label}", (255, 255, 255), np.where(circle, silhouette * (34 + 220*lines(stationary, .24)), 0))
         if style == "vertical":
             # Ambient hands are shared by all three choices and never animate
             # independently of the time they indicate.
@@ -107,9 +106,9 @@ for style, stationary, moving, slow in (
 
 # Remove resources from the previous mechanism so the APK stays lean.
 current = {f"{s}_{suffix}.png" for s in ("vertical", "petal", "facet")
-           for suffix in (("dial", "substrate", "plate", "slit", "hour", "minute")
+           for suffix in (("substrate", "plate", "slit", "hour", "minute")
                           if s == "vertical" else
-                          ("dial", "substrate", "plate", "slow_plate", "slit", "veil", "hour", "minute"))}
+                          ("substrate", "plate", "slow_plate", "slit", "veil", "hour", "minute"))}
 current |= {"hour_ambient.png", "minute_ambient.png"}
 for previous in OUT.glob("*.png"):
     if previous.name not in current:

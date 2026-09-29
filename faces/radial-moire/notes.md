@@ -1,7 +1,11 @@
 # Radial moiré: selectable kinetic plates
 
 The watch editor offers **Eccentric vertical slits**, **Opening petals**, and
-**Folding facets**. The web preview exposes the same Plate geometry picker.
+**Folding facets**, plus Graphite, Sepia, Atlantic, and Plum palettes. Three
+flavors select a plate mechanism when placing the face; the editor exposes
+plate and palette as independent settings. `watch_face_info.xml` must have
+`Editable=true`, `MultipleInstancesAllowed=true`, and `FlavorsSupported=true`.
+The web preview exposes the same two selectors.
 
 The first variant is a stationary vertically ruled substrate and one rotating,
 off-center slit disc. The displaced disc axis continually changes registration
@@ -14,6 +18,6 @@ and return after 800 minutes. Pointers are fixed line engravings in hand-shaped
 regions, intersected with the same global slit plates while the hand groups
 follow the actual hour and minute.
 
-Interactive mode is dark ink on white. Ambient hides every dial and moving plate
+Interactive mode uses selectable dark ink on a light paper color. Ambient hides every dial and moving plate
 and displays only static textured hands on black, changing with the time.
 Regenerate with `python3 faces/radial-moire/generate_assets.py`.
