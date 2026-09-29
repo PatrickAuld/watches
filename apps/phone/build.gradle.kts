@@ -8,6 +8,25 @@ val keystorePassword = providers.environmentVariable("WATCHES_KEYSTORE_PASSWORD"
 val keyAlias = providers.environmentVariable("WATCHES_KEY_ALIAS").orNull
 val keyPassword = providers.environmentVariable("WATCHES_KEY_PASSWORD").orNull
 val personalSigning = listOf(keystorePath, keystorePassword, keyAlias, keyPassword).all { !it.isNullOrBlank() }
+val playUploadKeystorePath = providers.environmentVariable("PLAY_UPLOAD_KEYSTORE").orNull
+val playUploadKeystorePassword = providers.environmentVariable("PLAY_UPLOAD_KEYSTORE_PASSWORD").orNull
+val playUploadKeyAlias = providers.environmentVariable("PLAY_UPLOAD_KEY_ALIAS").orNull
+val playUploadKeyPassword = providers.environmentVariable("PLAY_UPLOAD_KEY_PASSWORD").orNull
+val playUploadSigning = listOf(
+    playUploadKeystorePath,
+    playUploadKeystorePassword,
+    playUploadKeyAlias,
+    playUploadKeyPassword
+).all { !it.isNullOrBlank() }
+val releaseTaskRequested = gradle.startParameter.taskNames.any { it.contains("Release") }
+
+if (releaseTaskRequested && !playUploadSigning) {
+    throw GradleException("Set PLAY_UPLOAD_KEYSTORE, PLAY_UPLOAD_KEYSTORE_PASSWORD, PLAY_UPLOAD_KEY_ALIAS, and PLAY_UPLOAD_KEY_PASSWORD to build a release bundle")
+}
+
+val playVersionCode = providers.gradleProperty("playVersionCode").orElse("1").get().toIntOrNull()
+    ?: throw GradleException("playVersionCode must be an integer")
+val playVersionName = providers.gradleProperty("playVersionName").orElse("0.1.0").get()
 
 android {
     namespace = "com.patrickauld.watches.phone"
@@ -20,13 +39,21 @@ android {
             this.keyPassword = keyPassword
         }
     }
+    if (playUploadSigning) {
+        signingConfigs.create("playUpload") {
+            storeFile = file(playUploadKeystorePath!!)
+            storePassword = playUploadKeystorePassword
+            this.keyAlias = playUploadKeyAlias
+            this.keyPassword = playUploadKeyPassword
+        }
+    }
 
     defaultConfig {
         applicationId = "com.patrickauld.watches.companion"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = playVersionCode
+        versionName = playVersionName
     }
 
     buildTypes {
@@ -35,7 +62,7 @@ android {
         }
         release {
             isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("debug")
+            if (playUploadSigning) signingConfig = signingConfigs.getByName("playUpload")
         }
     }
 

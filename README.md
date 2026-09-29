@@ -42,3 +42,29 @@ CI builds the paired apps and validates promoted faces. An immutable GitHub Rele
 - `WATCHES_KEY_PASSWORD`
 
 Use a key you retain. Changing it breaks updates of existing installs. CI uses it to sign all three package types; without it, CI still builds and validates but does not publish. The [artifact contract](docs/artifact-metadata-contract.md) describes `catalog.json`. See [workflow details](docs/workflow.md).
+
+### Publish the phone app on Google Play
+
+The `Publish phone app to Google Play` workflow uploads a signed Android App Bundle through the Google Play Developer API. Pushing a tag such as `phone-v0.1.0` submits a production release. `workflow_dispatch` can upload to `internal`, `alpha`, `beta`, or `production`. Production tags use a 100% rollout unless the `PLAY_PRODUCTION_ROLLOUT` repository variable is set to `10`, `25`, `50`, or `100`.
+
+Complete these Play Console steps once before running the workflow:
+
+1. Create the Play app with package name `com.patrickauld.watches.companion`, complete identity verification and the store listing, and upload the initial app bundle from Play Console. The Publishing API requires an existing app with an uploaded artifact and cannot submit required legal consents.
+2. Enroll in Play App Signing and provide the stable `WATCHES_KEYSTORE` key as the app-signing key. The phone and watch builds share a package name; the installed builds need the same app signature for Wear Data Layer communication. The default Google-generated key will not match the current watch and face signer.
+3. Complete the Play policy forms, including the privacy policy at `https://patrickauld.github.io/watches/privacy.html`, Data safety, content rating, target audience, and ads declarations. The phone app links to the published policy from its face list.
+4. If the developer account is a personal account created after November 13, 2023, run a closed test with at least 12 testers opted in for 14 continuous days and apply for production access.
+
+Configure Google Play API access with a Google Cloud project, the Google Play Developer API, and a service account granted app-release permissions in Play Console. Set up GitHub Workload Identity Federation restricted to this repository and the release workflow. Add these repository variables:
+
+- `PLAY_WIF_PROVIDER`: full Workload Identity Provider resource name
+- `PLAY_SERVICE_ACCOUNT`: service-account email
+- `PLAY_PRODUCTION_ROLLOUT`: optional default rollout percentage for production tags
+
+Generate a separate upload keystore, register its certificate as the app's upload key in Play Console (App integrity), and add these repository secrets:
+
+- `PLAY_UPLOAD_KEYSTORE_B64`: base64-encoded Play upload keystore
+- `PLAY_UPLOAD_KEYSTORE_PASSWORD`
+- `PLAY_UPLOAD_KEY_ALIAS`
+- `PLAY_UPLOAD_KEY_PASSWORD`
+
+The secret `PLAY_UPLOAD_KEYSTORE_B64` is the base64 encoding of the keystore file. Keep the keystore and passwords backed up securely. The upload key signs the `.aab`; Google Play signs delivered APKs with the app-signing key. Keep the upload key separate from `WATCHES_KEYSTORE`. The workflow generates a monotonic `versionCode` from the GitHub Actions run number and attempt. It publishes release notes from the workflow input or the version name by default.

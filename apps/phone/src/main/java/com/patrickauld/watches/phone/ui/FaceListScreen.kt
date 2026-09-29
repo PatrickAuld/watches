@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import com.patrickauld.watches.phone.data.AvailableBuild
 import com.patrickauld.watches.phone.data.FaceStatus
@@ -39,6 +40,7 @@ fun FaceListScreen(
     onAutoUpdatesChange: (Boolean) -> Unit,
     onFaceClick: (String) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Watch Faces") })
@@ -63,6 +65,16 @@ fun FaceListScreen(
             }
             items(faces) { face ->
                 FaceCard(face = face, onClick = { onFaceClick(face.slug) })
+            }
+            item {
+                Text(
+                    text = "Privacy policy",
+                    modifier = Modifier
+                        .clickable { uriHandler.openUri("https://patrickauld.github.io/watches/privacy.html") }
+                        .padding(16.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
