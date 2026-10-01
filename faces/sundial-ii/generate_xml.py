@@ -63,6 +63,36 @@ def time_points():
             f'(225 + 175 * sin({minute}))', f'(225 - 175 * cos({minute}))')
 
 
+def wall_shadow(parent, points, dx, dy):
+    # R(theta) * diag(s1, s2) * R(phi) maps a unit square exactly onto the
+    # parallelogram [hour, minute, minute+shadow, hour+shadow]. WFF has no path
+    # or shear primitive, but nested rotation/scale transforms support this SVD.
+    a, c = f'({points[2]} - {points[0]})', f'({points[3]} - {points[1]})'
+    b, d = dx, dy
+    x1, y1 = f'({a} + {d})', f'({c} - {b})'
+    x2, y2 = f'({a} - {d})', f'({c} + {b})'
+    r1 = f'sqrt({x1} * {x1} + {y1} * {y1})'
+    r2 = f'sqrt({x2} * {x2} + {y2} * {y2})'
+
+    def angle(x, y, radius):
+        return f'(({y} >= 0 ? 1 : -1) * acos(clamp({x} / clamp({radius}, 0.000001, 1000000), -1, 1)))'
+
+    alpha, beta = angle(x1, y1, r1), angle(x2, y2, r2)
+    outer = element(parent, 'Group', x=0, y=0, width=1, height=1,
+                    pivotX=0, pivotY=0, name='wallShadow')
+    transform(outer, 'x', points[0])
+    transform(outer, 'y', points[1])
+    transform(outer, 'angle', f'deg(({alpha} + {beta}) / 2)')
+    transform(outer, 'scaleX', f'({r1} + {r2}) / 2')
+    transform(outer, 'scaleY', f'({r1} - {r2}) / 2')
+    inner = element(outer, 'Group', x=0, y=0, width=1, height=1,
+                    pivotX=0, pivotY=0, name='wallShadowBasis')
+    transform(inner, 'angle', f'deg(({alpha} - {beta}) / 2)')
+    part = element(inner, 'PartDraw', x=0, y=0, width=1, height=1)
+    rectangle = element(part, 'Rectangle', x=0, y=0, width=1, height=1)
+    element(rectangle, 'Fill', color='#81918b')
+
+
 def time_geometry(parent, color, core, points):
     line(draw(parent), points, color, 2.6)
     hour = ellipse(draw(parent), 0, 0, 16, fill=color)
@@ -113,14 +143,14 @@ def build():
     scale(day_scale, '#545f60')
 
     points = time_points()
-    # Eight design units above the dial. Cap grazing shadows at ~42 units.
-    dx = f'(-8 * {east} / clamp({up}, 0.19, 1))'
-    dy = f'(8 * {north} / clamp({up}, 0.19, 1))'
+    # A sixteen-unit wall. Cap grazing shadows at ~42 units.
+    dx = f'(-16 * {east} / clamp({up}, 0.38, 1))'
+    dy = f'(16 * {north} / clamp({up}, 0.38, 1))'
     shadow_points = tuple(f'{p} + {dx if i % 2 == 0 else dy}' for i, p in enumerate(points))
     shadow = element(active, 'Group', x=0, y=0, width=450, height=450, name='castShadow')
     transform(shadow, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
-    for width, alpha in ((12, 8), (7, 16), (3, 42)):
-        line(draw(shadow, alpha=alpha), shadow_points, '#243e44', width)
+    wall_shadow(shadow, points, dx, dy)
+    line(draw(shadow, alpha=180), shadow_points, '#536c68', 0.8)
 
     # A small sun bearing on its own outer orbit; north is always dial-up.
     solar = draw(active)

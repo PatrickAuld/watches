@@ -23,7 +23,7 @@ style:
 
 description: >
   A floating chord joins an inner hour bead to an outer minute ring.
-  Its shadow follows the Sun above Alameda, California. Ivory daylight
+  Its solid wall shadow follows the Sun above Alameda, California. Ivory daylight
   fades through twilight to a quiet blue night dial.
 
 designNotes: >
@@ -32,7 +32,8 @@ designNotes: >
 
 implementationNotes: >
   Resource-only WFF v4. USNO solar coordinates from UTC timestamp, projected
-  into the fixed Alameda east/north/up frame. Shadows fade at the horizon
+  into the fixed Alameda east/north/up frame. A filled parallelogram joins
+  the chord to its solar projection. Shadows fade at the horizon
   and vanish at night; grazing lengths are capped. North is dial-up, not
   compass-aligned. Black ambient mode preserves only time and cardinal ticks.
 

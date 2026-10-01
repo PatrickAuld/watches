@@ -15,8 +15,23 @@ def evaluate(expression, instant):
                'HOUR_0_23': local.hour, 'MINUTE': local.minute}
     for name, value in sources.items():
         expression = expression.replace(f'[{name}]', str(value))
+    while '?' in expression:
+        stack = []
+        for i, char in enumerate(expression):
+            if char == '(':
+                stack.append(i)
+            elif char == ')':
+                stack.pop()
+            elif char == '?':
+                start, question = stack[-1], i
+                break
+        colon = expression.index(':', question)
+        end = expression.index(')', colon)
+        condition = expression[start+1:question]
+        yes, no = expression[question+1:colon], expression[colon+1:end]
+        expression = expression[:start] + f'({yes} if {condition} else {no})' + expression[end+1:]
     return eval(expression, {'__builtins__': {}},
-                {**vars(math), 'rad': math.radians,
+                {**vars(math), 'rad': math.radians, 'deg': math.degrees,
                  'clamp': lambda x, lo, hi: max(lo, min(hi, x))})
 
 
@@ -43,6 +58,29 @@ def noaa_reference(instant):
 
 
 class SundialGeometry(unittest.TestCase):
+    def test_solid_wall_shadow_corners(self):
+        outer = ROOT.find(".//Group[@name='wallShadow']")
+        inner = ROOT.find(".//Group[@name='wallShadowBasis']")
+        chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
+        edge = ROOT.find(".//Group[@name='castShadow']/PartDraw/Line")
+        for date in ('2026-03-20', '2026-06-21', '2026-12-21'):
+            start = datetime.fromisoformat(date).replace(tzinfo=PACIFIC)
+            for i in range(0, 24*60, 7):
+                instant = start + timedelta(minutes=i)
+                o, b = transforms(outer, instant), transforms(inner, instant)
+                theta, phi = math.radians(o['angle']), math.radians(b['angle'])
+                c, s = transforms(chord, instant), transforms(edge, instant)
+                expected = ((c['startX'], c['startY']), (c['endX'], c['endY']),
+                            (s['endX'], s['endY']), (s['startX'], s['startY']))
+                for (x, y), (ex, ey) in zip(((0, 0), (1, 0), (1, 1), (0, 1)), expected):
+                    rx = (x*math.cos(phi)-y*math.sin(phi))*o['scaleX']
+                    ry = (x*math.sin(phi)+y*math.cos(phi))*o['scaleY']
+                    ax = o['x'] + rx*math.cos(theta)-ry*math.sin(theta)
+                    ay = o['y'] + rx*math.sin(theta)+ry*math.cos(theta)
+                    with self.subTest(instant=instant, corner=(x, y)):
+                        self.assertAlmostEqual(ax, ex, delta=0.00001)
+                        self.assertAlmostEqual(ay, ey, delta=0.00001)
+
     def test_shadow_agrees_with_independent_noaa_reference(self):
         chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
         shadow = ROOT.find(".//Group[@name='castShadow']/PartDraw/Line")
@@ -52,10 +90,10 @@ class SundialGeometry(unittest.TestCase):
                 instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
                 c, s = transforms(chord, instant), transforms(shadow, instant)
                 east, north, up = noaa_reference(instant)
-                denominator = max(0.19, up)
+                denominator = max(0.38, up)
                 with self.subTest(instant=instant):
-                    self.assertAlmostEqual(s['startX']-c['startX'], -8*east/denominator, delta=1.5)
-                    self.assertAlmostEqual(s['startY']-c['startY'], 8*north/denominator, delta=1.5)
+                    self.assertAlmostEqual(s['startX']-c['startX'], -16*east/denominator, delta=1.5)
+                    self.assertAlmostEqual(s['startY']-c['startY'], 16*north/denominator, delta=1.5)
                     self.assertAlmostEqual(s['endX']-c['endX'], s['startX']-c['startX'], places=7)
                     self.assertAlmostEqual(s['endY']-c['endY'], s['startY']-c['startY'], places=7)
 

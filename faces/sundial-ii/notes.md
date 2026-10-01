@@ -1,7 +1,7 @@
 # Sundial II
 
 The watch is a **solar-shadow chord clock**: the two places where conventional
-hour and minute hands would terminate are connected by one floating line.
+hour and minute hands would terminate are connected by the top of a raised wall.
 The line carries civil time; its cast shadow carries the day.
 
 Patrick's October 2026 direction replaces the original Sundial's disconnected
@@ -31,13 +31,20 @@ is rotated by local sidereal angle and latitude to get east, north, and up witho
 an `atan2` function or quadrant discontinuities. The sidereal expression uses
 280.46061837 + 360.98564736629 × days, plus the east-positive longitude.
 
-For an imagined line eight design units above the surface, the screen shadow
-translation is `(-8 × east / up, +8 × north / up)`. Elevation changes length;
-azimuth changes direction. The denominator is clamped to 0.19 so shadows remain
+For an imagined wall sixteen design units above the surface, the screen shadow
+translation is `(-16 × east / up, +16 × north / up)`. Elevation changes length;
+azimuth changes direction. The denominator is clamped to 0.38 so shadows remain
 inside the round screen near the horizon. Opacity fades between 0° and ~4° solar
-elevation. There is no moonlight or fictional nighttime Sun shadow. Three strokes
-give the projected line a restrained soft edge; this is an artistic penumbra.
+elevation. There is no moonlight or fictional nighttime Sun shadow. The solid
+shadow fills the parallelogram between the chord and its projected edge, with
+a crisp far boundary. It stays attached to the wall instead of floating apart.
 No terrain, weather, atmospheric refraction, or live location is modeled.
+
+Patrick's follow-up asked for more depth and a solid shadow as though the chord
+were a wall. The wall height is doubled from the first version. WFF has no polygon
+or shear primitive, so two nested rotations and a signed nonuniform scale map
+a filled unit rectangle exactly to the four shadow vertices. The decomposition
+also handles sunlight parallel to the wall, when the shadow naturally narrows.
 
 ## Canonical source and validation
 
@@ -50,10 +57,11 @@ Status remains `draft` pending official APK validation and physical Pixel Watch
 testing. Preview the canonical XML through the existing WFF Web site; package with
 `./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii`.
 
-The WFF v4 XSD passes. Four regression tests cover canonical regeneration,
+The WFF v4 XSD passes. Five regression tests cover canonical regeneration,
 every minute of a full day, endpoint/marker alignment, shadow bounds, nighttime
 visibility, and independent NOAA solar comparisons across seasons, leap day,
-year rollover, and both DST changes. CI builds and validates this draft APK
+year rollover, and both DST changes. Solid-shadow corner checks cover another
+618 positions across equinox, summer, and winter. CI builds and validates this draft APK
 without publishing it in the promoted installation catalog.
 
 Local Gradle compilation was blocked by unavailable network access to the Gradle
