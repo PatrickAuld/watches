@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450" clipShape="CIRCLE">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:10:00" />
+  <Scene backgroundColor="#000000">
+    <Group x="0" y="0" width="450" height="450" name="solarDial">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="0" y="0" width="450" height="450">
+          <Fill color="#18252b" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) + 0.105) / 0.22, 0, 1)" />
+        <Ellipse x="0" y="0" width="450" height="450">
+          <Fill color="#f2efe5" />
+        </Ellipse>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="nightScale">
+        <Transform target="alpha" value="((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) &gt;= 0 ? 0 : 255" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="225.0" startY="30.0" endX="225.0" endY="20.0">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="245.9057" startY="26.0956" endX="246.4283" endY="21.123">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="266.5823" startY="29.3705" endX="267.6219" endY="24.4797">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="286.8034" startY="34.7887" endX="288.3485" endY="30.0334">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="306.3473" startY="42.2909" endX="308.381" endY="37.7232">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="322.5" startY="56.125" endX="327.5" endY="47.4648">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="342.5571" startY="63.1966" endX="345.496" endY="59.1515">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="358.8261" startY="76.371" endX="362.1718" endY="72.6553">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="373.629" startY="91.1739" endX="377.3447" endY="87.8282">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="386.8034" startY="107.4429" endX="390.8485" endY="104.504">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="393.875" startY="127.5" endX="402.5352" endY="122.5">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="407.7091" startY="143.6527" endX="412.2768" endY="141.619">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="415.2113" startY="163.1966" endX="419.9666" endY="161.6515">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="420.6295" startY="183.4177" endX="425.5203" endY="182.3781">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="423.9044" startY="204.0943" endX="428.877" endY="203.5717">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="420.0" startY="225.0" endX="430.0" endY="225.0">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="423.9044" startY="245.9057" endX="428.877" endY="246.4283">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="420.6295" startY="266.5823" endX="425.5203" endY="267.6219">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="415.2113" startY="286.8034" endX="419.9666" endY="288.3485">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="407.7091" startY="306.3473" endX="412.2768" endY="308.381">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="393.875" startY="322.5" endX="402.5352" endY="327.5">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="386.8034" startY="342.5571" endX="390.8485" endY="345.496">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="373.629" startY="358.8261" endX="377.3447" endY="362.1718">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="358.8261" startY="373.629" endX="362.1718" endY="377.3447">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="342.5571" startY="386.8034" endX="345.496" endY="390.8485">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="322.5" startY="393.875" endX="327.5" endY="402.5352">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="306.3473" startY="407.7091" endX="308.381" endY="412.2768">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="286.8034" startY="415.2113" endX="288.3485" endY="419.9666">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="266.5823" startY="420.6295" endX="267.6219" endY="425.5203">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="245.9057" startY="423.9044" endX="246.4283" endY="428.877">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="225.0" startY="420.0" endX="225.0" endY="430.0">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="204.0943" startY="423.9044" endX="203.5717" endY="428.877">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="183.4177" startY="420.6295" endX="182.3781" endY="425.5203">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="163.1966" startY="415.2113" endX="161.6515" endY="419.9666">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="143.6527" startY="407.7091" endX="141.619" endY="412.2768">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="127.5" startY="393.875" endX="122.5" endY="402.5352">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="107.4429" startY="386.8034" endX="104.504" endY="390.8485">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="91.1739" startY="373.629" endX="87.8282" endY="377.3447">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="76.371" startY="358.8261" endX="72.6553" endY="362.1718">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="63.1966" startY="342.5571" endX="59.1515" endY="345.496">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="56.125" startY="322.5" endX="47.4648" endY="327.5">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="42.2909" startY="306.3473" endX="37.7232" endY="308.381">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="34.7887" startY="286.8034" endX="30.0334" endY="288.3485">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="29.3705" startY="266.5823" endX="24.4797" endY="267.6219">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="26.0956" startY="245.9057" endX="21.123" endY="246.4283">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="30.0" startY="225.0" endX="20.0" endY="225.0">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="26.0956" startY="204.0943" endX="21.123" endY="203.5717">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="29.3705" startY="183.4177" endX="24.4797" endY="182.3781">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="34.7887" startY="163.1966" endX="30.0334" endY="161.6515">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="42.2909" startY="143.6527" endX="37.7232" endY="141.619">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="56.125" startY="127.5" endX="47.4648" endY="122.5">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="63.1966" startY="107.4429" endX="59.1515" endY="104.504">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="76.371" startY="91.1739" endX="72.6553" endY="87.8282">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="91.1739" startY="76.371" endX="87.8282" endY="72.6553">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="107.4429" startY="63.1966" endX="104.504" endY="59.1515">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="127.5" startY="56.125" endX="122.5" endY="47.4648">
+            <Stroke color="#afbfbe" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="143.6527" startY="42.2909" endX="141.619" endY="37.7232">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="163.1966" startY="34.7887" endX="161.6515" endY="30.0334">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="183.4177" startY="29.3705" endX="182.3781" endY="24.4797">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="204.0943" startY="26.0956" endX="203.5717" endY="21.123">
+            <Stroke color="#afbfbe" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="22">
+          <Ellipse x="74" y="74" width="302" height="302">
+            <Stroke color="#afbfbe" thickness="0.8" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="22">
+          <Ellipse x="50" y="50" width="350" height="350">
+            <Stroke color="#afbfbe" thickness="0.8" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="dayScale">
+        <Transform target="alpha" value="((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) &gt;= 0 ? 255 : 0" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="225.0" startY="30.0" endX="225.0" endY="20.0">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="245.9057" startY="26.0956" endX="246.4283" endY="21.123">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="266.5823" startY="29.3705" endX="267.6219" endY="24.4797">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="286.8034" startY="34.7887" endX="288.3485" endY="30.0334">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="306.3473" startY="42.2909" endX="308.381" endY="37.7232">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="322.5" startY="56.125" endX="327.5" endY="47.4648">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="342.5571" startY="63.1966" endX="345.496" endY="59.1515">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="358.8261" startY="76.371" endX="362.1718" endY="72.6553">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="373.629" startY="91.1739" endX="377.3447" endY="87.8282">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="386.8034" startY="107.4429" endX="390.8485" endY="104.504">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="393.875" startY="127.5" endX="402.5352" endY="122.5">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="407.7091" startY="143.6527" endX="412.2768" endY="141.619">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="415.2113" startY="163.1966" endX="419.9666" endY="161.6515">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="420.6295" startY="183.4177" endX="425.5203" endY="182.3781">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="423.9044" startY="204.0943" endX="428.877" endY="203.5717">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="420.0" startY="225.0" endX="430.0" endY="225.0">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="423.9044" startY="245.9057" endX="428.877" endY="246.4283">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="420.6295" startY="266.5823" endX="425.5203" endY="267.6219">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="415.2113" startY="286.8034" endX="419.9666" endY="288.3485">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="407.7091" startY="306.3473" endX="412.2768" endY="308.381">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="393.875" startY="322.5" endX="402.5352" endY="327.5">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="386.8034" startY="342.5571" endX="390.8485" endY="345.496">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="373.629" startY="358.8261" endX="377.3447" endY="362.1718">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="358.8261" startY="373.629" endX="362.1718" endY="377.3447">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="342.5571" startY="386.8034" endX="345.496" endY="390.8485">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="322.5" startY="393.875" endX="327.5" endY="402.5352">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="306.3473" startY="407.7091" endX="308.381" endY="412.2768">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="286.8034" startY="415.2113" endX="288.3485" endY="419.9666">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="266.5823" startY="420.6295" endX="267.6219" endY="425.5203">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="245.9057" startY="423.9044" endX="246.4283" endY="428.877">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="225.0" startY="420.0" endX="225.0" endY="430.0">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="204.0943" startY="423.9044" endX="203.5717" endY="428.877">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="183.4177" startY="420.6295" endX="182.3781" endY="425.5203">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="163.1966" startY="415.2113" endX="161.6515" endY="419.9666">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="143.6527" startY="407.7091" endX="141.619" endY="412.2768">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="127.5" startY="393.875" endX="122.5" endY="402.5352">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="107.4429" startY="386.8034" endX="104.504" endY="390.8485">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="91.1739" startY="373.629" endX="87.8282" endY="377.3447">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="76.371" startY="358.8261" endX="72.6553" endY="362.1718">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="63.1966" startY="342.5571" endX="59.1515" endY="345.496">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="56.125" startY="322.5" endX="47.4648" endY="327.5">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="42.2909" startY="306.3473" endX="37.7232" endY="308.381">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="34.7887" startY="286.8034" endX="30.0334" endY="288.3485">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="29.3705" startY="266.5823" endX="24.4797" endY="267.6219">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="26.0956" startY="245.9057" endX="21.123" endY="246.4283">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="30.0" startY="225.0" endX="20.0" endY="225.0">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="26.0956" startY="204.0943" endX="21.123" endY="203.5717">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="29.3705" startY="183.4177" endX="24.4797" endY="182.3781">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="34.7887" startY="163.1966" endX="30.0334" endY="161.6515">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="42.2909" startY="143.6527" endX="37.7232" endY="141.619">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="56.125" startY="127.5" endX="47.4648" endY="122.5">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="63.1966" startY="107.4429" endX="59.1515" endY="104.504">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="76.371" startY="91.1739" endX="72.6553" endY="87.8282">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="91.1739" startY="76.371" endX="87.8282" endY="72.6553">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="107.4429" startY="63.1966" endX="104.504" endY="59.1515">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="180">
+          <Line startX="127.5" startY="56.125" endX="122.5" endY="47.4648">
+            <Stroke color="#545f60" thickness="1.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="143.6527" startY="42.2909" endX="141.619" endY="37.7232">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="163.1966" startY="34.7887" endX="161.6515" endY="30.0334">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="183.4177" startY="29.3705" endX="182.3781" endY="24.4797">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="90">
+          <Line startX="204.0943" startY="26.0956" endX="203.5717" endY="21.123">
+            <Stroke color="#545f60" thickness="0.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="22">
+          <Ellipse x="74" y="74" width="302" height="302">
+            <Stroke color="#545f60" thickness="0.8" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="22">
+          <Ellipse x="50" y="50" width="350" height="350">
+            <Stroke color="#545f60" thickness="0.8" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="castShadow">
+        <Transform target="alpha" value="255 * clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) / 0.07, 0, 1)" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="8">
+          <Line startX="225" startY="74" endX="225" endY="50">
+            <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Stroke color="#243e44" thickness="12" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="16">
+          <Line startX="225" startY="74" endX="225" endY="50">
+            <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Stroke color="#243e44" thickness="7" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" alpha="42">
+          <Line startX="225" startY="74" endX="225" endY="50">
+            <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6))) + (-8 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6))) + (8 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.19, 1))" />
+            <Stroke color="#243e44" thickness="3" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp(((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) / 0.07, 0, 1)" />
+        <Ellipse x="0" y="0" width="6" height="6">
+          <Fill color="#c87a47" />
+          <Transform target="x" value="222 + 188 * ((cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) - cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) / sqrt(clamp(1 - ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.001, 1))" />
+          <Transform target="y" value="222 - 188 * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.790527130771 - (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.612427020562) / sqrt(clamp(1 - ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) * ((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771), 0.001, 1))" />
+        </Ellipse>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="nightChord">
+        <Transform target="alpha" value="((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) &gt;= 0 ? 0 : 255" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Line startX="225" startY="74" endX="225" endY="50">
+            <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+            <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+            <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6)))" />
+            <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6)))" />
+            <Stroke color="#e1e6dc" thickness="2.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="16" height="16">
+            <Fill color="#e1e6dc" />
+            <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+            <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="4" height="4">
+            <Fill color="#c87a47" />
+            <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+            <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="12" height="12">
+            <Stroke color="#e1e6dc" thickness="2.6" />
+            <Transform target="x" value="(225 + 175 * sin(rad([MINUTE] * 6))) - 6" />
+            <Transform target="y" value="(225 - 175 * cos(rad([MINUTE] * 6))) - 6" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="dayChord">
+        <Transform target="alpha" value="((sin(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * 0.612427020562 + (cos(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360)) * cos(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360)) + (cos(rad(23.439 - 0.00000036 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5))) * sin(rad(((280.459 + 0.98564736 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) + 1.915 * sin(rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360)) + 0.020 * sin(2 * rad((357.529 + 0.98560028 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5)) % 360))) % 360))) * sin(rad((280.46061837 + 360.98564736629 * (floor([UTC_TIMESTAMP] / 60000) / 1440 - 10957.5) - 122.2416) % 360))) * 0.790527130771) &gt;= 0 ? 255 : 0" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Line startX="225" startY="74" endX="225" endY="50">
+            <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+            <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+            <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6)))" />
+            <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6)))" />
+            <Stroke color="#263e43" thickness="2.6" cap="ROUND" />
+          </Line>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="16" height="16">
+            <Fill color="#263e43" />
+            <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+            <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="4" height="4">
+            <Fill color="#c87a47" />
+            <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+            <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="0" y="0" width="12" height="12">
+            <Stroke color="#263e43" thickness="2.6" />
+            <Transform target="x" value="(225 + 175 * sin(rad([MINUTE] * 6))) - 6" />
+            <Transform target="y" value="(225 - 175 * cos(rad([MINUTE] * 6))) - 6" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" alpha="0" name="ambientChord">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Line startX="225" startY="74" endX="225" endY="50">
+          <Transform target="startX" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+          <Transform target="startY" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)))" />
+          <Transform target="endX" value="(225 + 175 * sin(rad([MINUTE] * 6)))" />
+          <Transform target="endY" value="(225 - 175 * cos(rad([MINUTE] * 6)))" />
+          <Stroke color="#b9c5c5" thickness="2.6" cap="ROUND" />
+        </Line>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="0" y="0" width="16" height="16">
+          <Fill color="#b9c5c5" />
+          <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+          <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 8" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="0" y="0" width="4" height="4">
+          <Fill color="#000000" />
+          <Transform target="x" value="(225 + 151 * sin(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+          <Transform target="y" value="(225 - 151 * cos(rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5))) - 2" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="0" y="0" width="12" height="12">
+          <Stroke color="#b9c5c5" thickness="2.6" />
+          <Transform target="x" value="(225 + 175 * sin(rad([MINUTE] * 6))) - 6" />
+          <Transform target="y" value="(225 - 175 * cos(rad([MINUTE] * 6))) - 6" />
+        </Ellipse>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" angle="0" name="ambientTick0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="120">
+          <Line startX="225" startY="21" endX="225" endY="29">
+            <Stroke color="#b9c5c5" thickness="1.5" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" angle="90" name="ambientTick90">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="120">
+          <Line startX="225" startY="21" endX="225" endY="29">
+            <Stroke color="#b9c5c5" thickness="1.5" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" angle="180" name="ambientTick180">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="120">
+          <Line startX="225" startY="21" endX="225" endY="29">
+            <Stroke color="#b9c5c5" thickness="1.5" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" angle="270" name="ambientTick270">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="120">
+          <Line startX="225" startY="21" endX="225" endY="29">
+            <Stroke color="#b9c5c5" thickness="1.5" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+    </Group>
+  </Scene>
+</WatchFace>

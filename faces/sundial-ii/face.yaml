@@ -1,0 +1,42 @@
+id: sundial-ii
+name: Sundial II
+status: draft
+platformTarget: pixel-watch
+
+display:
+  shape: round
+  baseResolution: 450
+  safeInset: 20
+
+wff:
+  version: 4
+  xmlOnly: true
+
+features:
+  ambient: true
+  complications: []
+
+style:
+  family: solar-geometric
+  background: "#f2efe5"
+  accent: "#c87a47"
+
+description: >
+  A floating chord joins an inner hour bead to an outer minute ring.
+  Its shadow follows the Sun above Alameda, California. Ivory daylight
+  fades through twilight to a quiet blue night dial.
+
+designNotes: >
+  No case, metallic bevels, conventional hands, center hub, or complications.
+  Unequal endpoint radii preserve readability when hour and minute coincide.
+
+implementationNotes: >
+  Resource-only WFF v4. USNO solar coordinates from UTC timestamp, projected
+  into the fixed Alameda east/north/up frame. Shadows fade at the horizon
+  and vanish at night; grazing lengths are capped. North is dial-up, not
+  compass-aligned. Black ambient mode preserves only time and cardinal ticks.
+
+location:
+  latitude: 37.7652
+  longitude: -122.2416
+  name: Alameda, California
