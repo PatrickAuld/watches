@@ -58,6 +58,18 @@ def noaa_reference(instant):
 
 
 class SundialGeometry(unittest.TestCase):
+    def test_rim_shadow_tracks_sun(self):
+        crown = ROOT.find(".//Group[@name='crownShadow']")
+        for date in ('2026-06-21', '2026-12-21'):
+            for hour in (9, 12, 16):
+                instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
+                shade = transforms(crown, instant)
+                east, north, up = noaa_reference(instant)
+                self.assertAlmostEqual(shade['x'], -10*east/max(0.38, up), delta=1)
+                self.assertAlmostEqual(shade['y'], 10*north/max(0.38, up), delta=1)
+        instant = datetime(2026, 10, 1, 23, tzinfo=PACIFIC)
+        self.assertEqual(transforms(crown, instant)['alpha'], 0)
+
     def test_solid_wall_shadow_corners(self):
         outer = ROOT.find(".//Group[@name='wallShadow']")
         inner = ROOT.find(".//Group[@name='wallShadowBasis']")

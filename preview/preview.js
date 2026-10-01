@@ -106,6 +106,8 @@ async function loadFace(slug) {
   currentFace._styleConfig = sceneConfig ? styleConfig.getAttribute('id') : null;
   styleCard.hidden = !sceneConfig;
   if (sceneConfig) {
+    stylePicker.closest('label').querySelector('span').textContent =
+      labels.get(styleConfig.getAttribute('displayName')) || 'Style';
     stylePicker.innerHTML = [...styleConfig.querySelectorAll(':scope > ListOption')].map(opt => {
       const id = opt.getAttribute('id');
       const label = labels.get(opt.getAttribute('displayName')) || id;

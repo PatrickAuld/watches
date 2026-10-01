@@ -17,6 +17,16 @@ This is a new face; the original remains available for comparison.
 - The tiny copper dot on a separate orbit indicates the solar bearing.
 - Ivory becomes blue through twilight; the shadow disappears below the horizon.
 - Ambient mode shows the same time geometry on black, with four orientation ticks.
+- **Shadow geometry** in the watch face editor selects **Floating line** or
+  **Raised wall** (default). The web preview exposes the same choices.
+
+The rim curves down into a recessed dial. A narrow radial shade gives the bowl
+depth; the crown/rim casts an additional soft inner shadow toward the dial on
+the sun-facing side, with restrained reflected light opposite it. These
+directional gradients translate with the same east/north/up Sun vector as the
+chord, and fade below the horizon. Night retains only subtle static bowl shading.
+The entire bowl is disabled in ambient mode. This models the enclosing rim,
+rather than drawing an external case or a physical side-button crown.
 
 ## Light model
 
@@ -57,17 +67,21 @@ Status remains `draft` pending official APK validation and physical Pixel Watch
 testing. Preview the canonical XML through the existing WFF Web site; package with
 `./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii`.
 
-The WFF v4 XSD passes. Five regression tests cover canonical regeneration,
+The WFF v4 XSD passes. Six regression tests cover canonical regeneration,
 every minute of a full day, endpoint/marker alignment, shadow bounds, nighttime
 visibility, and independent NOAA solar comparisons across seasons, leap day,
 year rollover, and both DST changes. Solid-shadow corner checks cover another
-618 positions across equinox, summer, and winter. CI builds and validates this draft APK
+618 positions across equinox, summer, and winter. Rim translation is also checked
+against the independent solar calculation. CI builds and validates this draft APK
 without publishing it in the promoted installation catalog.
 
 Local Gradle compilation was blocked by unavailable network access to the Gradle
-distribution host. Eight canonical-XML WFF Web renders were inspected, including
-summer and winter. These are actual renderer output, not design mockups:
+distribution host. Nine canonical-XML WFF Web renders were inspected, including
+summer, winter, and both shadow options. The preview UI was verified to switch
+the two options, show their proper names, and render ambient mode on black.
+These are actual renderer output, not design mockups:
 
 ![October morning, 10:10](previews/day.png)
+![Floating line option, 10:10](previews/line.png)
 ![Night, 21:45](previews/night.png)
 ![Ambient, 10:10](previews/ambient.png)

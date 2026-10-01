@@ -122,10 +122,38 @@ def scale(parent, color):
         ellipse(draw(parent, alpha=22), 225-radius, 225-radius, 2*radius, stroke=color, thickness=0.8)
 
 
+def rim_gradient(parent, colors, positions):
+    part = element(parent, 'PartDraw', x=-50, y=-50, width=550, height=550)
+    shape = element(part, 'Rectangle', x=0, y=0, width=550, height=550)
+    fill = element(shape, 'Fill', color='#00000000')
+    element(fill, 'RadialGradient', centerX=275, centerY=275, radius=225,
+            colors=colors, positions=positions)
+
+
+def recessed_rim(parent, east, north, up):
+    bowl = element(parent, 'Group', x=0, y=0, width=450, height=450, name='concaveRim')
+    rim_gradient(bowl, '#0010181b #0010181b #1410181b #4410181b', '0 0.82 0.94 1')
+    shade = element(bowl, 'Group', x=0, y=0, width=450, height=450, name='crownShadow')
+    transform(shade, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
+    transform(shade, 'x', f'-10 * {east} / clamp({up}, 0.38, 1)')
+    transform(shade, 'y', f'10 * {north} / clamp({up}, 0.38, 1)')
+    rim_gradient(shade, '#0024383c #0024383c #2824383c #8024383c', '0 0.80 0.93 1')
+    light = element(bowl, 'Group', x=0, y=0, width=450, height=450, name='rimLight')
+    transform(light, 'alpha', f'160 * clamp({up} / 0.07, 0, 1)')
+    transform(light, 'x', f'10 * {east} / clamp({up}, 0.38, 1)')
+    transform(light, 'y', f'-10 * {north} / clamp({up}, 0.38, 1)')
+    rim_gradient(light, '#00fff9ec #00fff9ec #08fff9ec #48fff9ec', '0 0.88 0.96 1')
+
+
 def build():
     root = ET.Element('WatchFace', width='450', height='450', clipShape='CIRCLE')
     element(root, 'Metadata', key='CLOCK_TYPE', value='ANALOG')
     element(root, 'Metadata', key='PREVIEW_TIME', value='10:10:00')
+    configurations = element(root, 'UserConfigurations')
+    shadow_style = element(configurations, 'ListConfiguration', id='shadow_style',
+                           displayName='shadow_style', defaultValue='1')
+    element(shadow_style, 'ListOption', id='0', displayName='shadow_line')
+    element(shadow_style, 'ListOption', id='1', displayName='shadow_wall')
     scene = element(root, 'Scene', backgroundColor='#000000')
     east, north, up = solar_expressions()
     daylight = f'clamp(({up} + 0.105) / 0.22, 0, 1)'
@@ -135,6 +163,7 @@ def build():
     day = draw(active)
     transform(day, 'alpha', f'255 * {daylight}')
     ellipse(day, 0, 0, 450, fill='#f2efe5')
+    recessed_rim(active, east, north, up)
     night_scale = element(active, 'Group', x=0, y=0, width=450, height=450, name='nightScale')
     transform(night_scale, 'alpha', f'{up} >= 0 ? 0 : 255')
     scale(night_scale, '#afbfbe')
@@ -149,7 +178,13 @@ def build():
     shadow_points = tuple(f'{p} + {dx if i % 2 == 0 else dy}' for i, p in enumerate(points))
     shadow = element(active, 'Group', x=0, y=0, width=450, height=450, name='castShadow')
     transform(shadow, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
-    wall_shadow(shadow, points, dx, dy)
+    selection = element(shadow, 'ListConfiguration', id='shadow_style')
+    filament = element(selection, 'ListOption', id='0')
+    filament_group = element(filament, 'Group', x=0, y=0, width=450, height=450, name='lineShadow')
+    for width, alpha in ((12, 8), (7, 16), (3, 42)):
+        line(draw(filament_group, alpha=alpha), shadow_points, '#243e44', width)
+    wall = element(selection, 'ListOption', id='1')
+    wall_shadow(wall, points, dx, dy)
     line(draw(shadow, alpha=180), shadow_points, '#536c68', 0.8)
 
     # A small sun bearing on its own outer orbit; north is always dial-up.
