@@ -63,8 +63,9 @@ helper that expands the shared solar expressions into valid WFF attributes; it
 does not run on the watch or implement a separate browser face. Regenerate with
 `python3 faces/sundial-ii/generate_xml.py`.
 
-Status remains `draft` pending official APK validation and physical Pixel Watch
-testing. Preview the canonical XML through the existing WFF Web site; package with
+Promoted at Patrick’s request for installation and physical Pixel Watch testing.
+CI must pass official APK validation before publication. Preview the canonical
+XML through the existing WFF Web site; package with
 `./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii`.
 
 The WFF v4 XSD passes. Six regression tests cover canonical regeneration,
@@ -72,8 +73,8 @@ every minute of a full day, endpoint/marker alignment, shadow bounds, nighttime
 visibility, and independent NOAA solar comparisons across seasons, leap day,
 year rollover, and both DST changes. Solid-shadow corner checks cover another
 618 positions across equinox, summer, and winter. Rim translation is also checked
-against the independent solar calculation. CI builds and validates this draft APK
-without publishing it in the promoted installation catalog.
+against the independent solar calculation. CI builds, signs, and validates this
+face alongside the other promoted faces, then includes it in the installation catalog.
 
 Local Gradle compilation was blocked by unavailable network access to the Gradle
 distribution host. Nine canonical-XML WFF Web renders were inspected, including

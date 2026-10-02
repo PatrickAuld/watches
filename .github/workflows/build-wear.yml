@@ -71,17 +71,6 @@ jobs:
             grep -qi 'Validation is successful' <<< "$result"
             grep -qi 'generated token:' <<< "$result"
           done
-      - name: Validate Sundial II draft APK
-        run: |
-          ./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii
-          python3 scripts/prepare-face-apk.py \
-            watchface/build/outputs/apk/debug/watchface-debug.apk dist-debug/sundial-ii-debug.apk
-          result=$(java -jar "$RUNNER_TEMP/validator-push-cli.jar" \
-            --apk_path=dist-debug/sundial-ii-debug.apk \
-            --package_name=com.patrickauld.watches.companion)
-          echo "$result"
-          grep -qi 'Validation is successful' <<< "$result"
-          grep -qi 'generated token:' <<< "$result"
       - name: Package signed validated release
         if: github.event_name != 'pull_request' && env.WATCHES_KEYSTORE_B64 != ''
         run: python3 scripts/build-release.py --validator "$RUNNER_TEMP/validator-push-cli.jar"
