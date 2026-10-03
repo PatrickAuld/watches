@@ -21,3 +21,13 @@ follow the actual hour and minute.
 Interactive mode uses selectable dark ink on a light paper color. Ambient hides every dial and moving plate
 and displays only static textured hands on black, changing with the time.
 Regenerate with `python3 faces/radial-moire/generate_assets.py`.
+
+`preview.png` is the 450×450 picker thumbnail rendered from the canonical XML
+at 2026-03-13 10:10 UTC, using the default vertical geometry and Graphite palette
+with animation and ambient mode disabled. It was captured with wff-web at
+`c15d770a95828675cb03f54391645f2d8226c7a9`. The Android build stages it as
+`drawable-nodpi/face_preview.png` and points `WatchFaceInfo.Preview` to that
+bitmap instead of the shared XML shape placeholder. Regenerate the thumbnail
+after changing the default face appearance. This addresses the preview resource
+suspected in the long-press “Starting Up” failure; the device behavior still
+needs verification after reinstalling.

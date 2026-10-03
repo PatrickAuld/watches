@@ -17,6 +17,7 @@ abstract class StageWatchFace : DefaultTask() {
     @get:InputFile abstract val xml: RegularFileProperty
     @get:InputDirectory @get:Optional abstract val assets: DirectoryProperty
     @get:InputFile @get:Optional abstract val strings: RegularFileProperty
+    @get:InputFile @get:Optional abstract val preview: RegularFileProperty
     @get:Input abstract val faceSlug: Property<String>
     @get:OutputDirectory abstract val outputDir: DirectoryProperty
 
@@ -28,6 +29,11 @@ abstract class StageWatchFace : DefaultTask() {
         xml.get().asFile.copyTo(raw.resolve("watchface.xml"))
         if (assets.isPresent) {
             assets.get().asFile.copyRecursively(output.resolve("drawable"))
+        }
+        if (preview.isPresent) {
+            preview.get().asFile.copyTo(
+                output.resolve("drawable-nodpi").apply { mkdirs() }.resolve("face_preview.png")
+            )
         }
         val displayName = faceSlug.get().split('-').joinToString(" ") {
             it.replaceFirstChar(Char::uppercaseChar)
@@ -45,7 +51,8 @@ abstract class StageWatchFace : DefaultTask() {
             .writeText(buildString {
                 appendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
                 appendLine("<WatchFaceInfo>")
-                appendLine("    <Preview value=\"@drawable/preview\" />")
+                val previewResource = if (preview.isPresent) "face_preview" else "preview"
+                appendLine("    <Preview value=\"@drawable/$previewResource\" />")
                 appendLine("    <Editable value=\"$editable\" />")
                 if (hasFlavors) {
                     appendLine("    <MultipleInstancesAllowed value=\"true\" />")
@@ -104,6 +111,8 @@ androidComponents.onVariants { variant ->
         if (assetDir.isDirectory) assets.set(assetDir)
         val stringsFile = faceDir.resolve("strings.xml")
         if (stringsFile.isFile) strings.set(stringsFile)
+        val previewFile = faceDir.resolve("preview.png")
+        if (previewFile.isFile) preview.set(previewFile)
         faceSlug.set(slug)
         outputDir.set(layout.buildDirectory.dir("generated/wff/${variant.name}/res"))
     }
