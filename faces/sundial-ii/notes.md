@@ -52,9 +52,24 @@ No terrain, weather, atmospheric refraction, or live location is modeled.
 
 Patrick's follow-up asked for more depth and a solid shadow as though the chord
 were a wall. The wall height is doubled from the first version. WFF has no polygon
-or shear primitive, so two nested rotations and a signed nonuniform scale map
-a filled unit rectangle exactly to the four shadow vertices. The decomposition
-also handles sunlight parallel to the wall, when the shadow naturally narrows.
+or shear primitive, so the solid shadow is the chord swept along the shadow vector:
+thirteen overlapping opaque copies of the chord, evenly spaced from the chord to the
+far edge. Their spacing never exceeds the stroke width, so the parallelogram is solid,
+and the sweep naturally narrows when sunlight runs parallel to the wall.
+
+## Pixel Watch rendering constraints
+
+The first promoted build rendered on the watch with **no shadows or rim shading**,
+although the dial colour and sun dot (which share the solar math) were correct.
+Everything missing used constructs no other installed face used: a ~31,000-character
+SVD rotation/scale expression for the solid shadow, a shadow-style `ListConfiguration`
+nested inside a `Group`, `Group` alpha fades driven by expressions, and a
+`RadialGradient` rim on a `PartDraw` at negative coordinates. The face now uses
+only primitives proven on the watch: the style selection sits directly under
+`Scene` (as in Radial Moiré), fades are `PartDraw` alpha transforms (as on the sun
+dot), the rim is nested stroked ellipses whose alphas compound to the original
+gradient stops, and no expression exceeds 5,000 characters (a regression test
+enforces this). WFF Web renders it identically to the earlier version.
 
 ## Canonical source and validation
 

@@ -63,34 +63,24 @@ def time_points():
             f'(225 + 175 * sin({minute}))', f'(225 - 175 * cos({minute}))')
 
 
-def wall_shadow(parent, points, dx, dy):
-    # R(theta) * diag(s1, s2) * R(phi) maps a unit square exactly onto the
-    # parallelogram [hour, minute, minute+shadow, hour+shadow]. WFF has no path
-    # or shear primitive, but nested rotation/scale transforms support this SVD.
-    a, c = f'({points[2]} - {points[0]})', f'({points[3]} - {points[1]})'
-    b, d = dx, dy
-    x1, y1 = f'({a} + {d})', f'({c} - {b})'
-    x2, y2 = f'({a} - {d})', f'({c} + {b})'
-    r1 = f'sqrt({x1} * {x1} + {y1} * {y1})'
-    r2 = f'sqrt({x2} * {x2} + {y2} * {y2})'
+WALL_LAYERS = 12
+WALL_THICKNESS = 4.5
 
-    def angle(x, y, radius):
-        return f'(({y} >= 0 ? 1 : -1) * acos(clamp({x} / clamp({radius}, 0.000001, 1000000), -1, 1)))'
 
-    alpha, beta = angle(x1, y1, r1), angle(x2, y2, r2)
-    outer = element(parent, 'Group', x=0, y=0, width=1, height=1,
-                    pivotX=0, pivotY=0, name='wallShadow')
-    transform(outer, 'x', points[0])
-    transform(outer, 'y', points[1])
-    transform(outer, 'angle', f'deg(({alpha} + {beta}) / 2)')
-    transform(outer, 'scaleX', f'({r1} + {r2}) / 2')
-    transform(outer, 'scaleY', f'({r1} - {r2}) / 2')
-    inner = element(outer, 'Group', x=0, y=0, width=1, height=1,
-                    pivotX=0, pivotY=0, name='wallShadowBasis')
-    transform(inner, 'angle', f'deg(({alpha} - {beta}) / 2)')
-    part = element(inner, 'PartDraw', x=0, y=0, width=1, height=1)
-    rectangle = element(part, 'Rectangle', x=0, y=0, width=1, height=1)
-    element(rectangle, 'Fill', color='#81918b')
+def wall_shadow(parent, points, dx, dy, fade):
+    # The solid shadow is the chord swept along the shadow vector. Overlapping
+    # opaque copies at evenly spaced offsets fill that parallelogram using only
+    # Line transforms, which keeps every expression short enough for the watch.
+    # Spacing is at most 16 / 0.38 / WALL_LAYERS units, below the stroke width.
+    group = element(parent, 'Group', x=0, y=0, width=450, height=450, name='wallShadow')
+    ambient(group)
+    part = draw(group)
+    transform(part, 'alpha', fade)
+    for i in range(WALL_LAYERS + 1):
+        t = f'{i / WALL_LAYERS:.12g}'
+        offsets = (dx, dy, dx, dy)
+        line(part, tuple(p if i == 0 else f'{p} + {t} * {o}' for p, o in zip(points, offsets)),
+             '#81918b', WALL_THICKNESS)
 
 
 def time_geometry(parent, color, core, points):
@@ -122,27 +112,52 @@ def scale(parent, color):
         ellipse(draw(parent, alpha=22), 225-radius, 225-radius, 2*radius, stroke=color, thickness=0.8)
 
 
-def rim_gradient(parent, colors, positions):
-    part = element(parent, 'PartDraw', x=-50, y=-50, width=550, height=550)
-    shape = element(part, 'Rectangle', x=0, y=0, width=550, height=550)
-    fill = element(shape, 'Fill', color='#00000000')
-    element(fill, 'RadialGradient', centerX=275, centerY=275, radius=225,
-            colors=colors, positions=positions)
+def gradient_alpha(colors, positions, at):
+    alphas = [int(c[1:3], 16) for c in colors.split()]
+    stops = [float(p) for p in positions.split()]
+    for (a0, s0), (a1, s1) in zip(zip(alphas, stops), zip(alphas[1:], stops[1:])):
+        if at <= s1:
+            return round(a0 + (a1 - a0) * (at - s0) / max(s1 - s0, 1e-9))
+    return alphas[-1]
+
+
+def rim_rings(part, colors, positions, step=2, outer=262):
+    # Sample a radial gradient (radius 225 about the dial centre) as nested wide
+    # bands that all run past the screen edge. Each band shows only its inner
+    # edge, and their alphas compound to the gradient, so there are no seams.
+    # The outer margin keeps the bezel covered when a band set is translated.
+    rgb = colors.split()[0][3:]
+    radius = float(positions.split()[1]) * 225
+    covered = 0.0
+    while radius < 225:
+        target = gradient_alpha(colors, positions, radius / 225) / 255
+        alpha = round(255 * (1 - (1 - target) / (1 - covered)))
+        if alpha > 0:
+            covered = 1 - (1 - covered) * (1 - alpha / 255)
+            centre = (radius + outer) / 2
+            ellipse(part, round(225 - centre, 3), round(225 - centre, 3), round(2 * centre, 3),
+                    stroke=f'#{alpha:02x}{rgb}', thickness=round(outer - radius, 3))
+        radius += step
 
 
 def recessed_rim(parent, east, north, up):
+    fade = f'clamp({up} / 0.07, 0, 1)'
+    sx = f'10 * {east} / clamp({up}, 0.38, 1)'
+    sy = f'10 * {north} / clamp({up}, 0.38, 1)'
     bowl = element(parent, 'Group', x=0, y=0, width=450, height=450, name='concaveRim')
-    rim_gradient(bowl, '#0010181b #0010181b #1410181b #4410181b', '0 0.82 0.94 1')
+    rim_rings(draw(bowl), '#0010181b #0010181b #1410181b #4410181b', '0 0.82 0.94 1')
     shade = element(bowl, 'Group', x=0, y=0, width=450, height=450, name='crownShadow')
-    transform(shade, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
-    transform(shade, 'x', f'-10 * {east} / clamp({up}, 0.38, 1)')
-    transform(shade, 'y', f'10 * {north} / clamp({up}, 0.38, 1)')
-    rim_gradient(shade, '#0024383c #0024383c #2824383c #8024383c', '0 0.80 0.93 1')
+    transform(shade, 'x', f'-{sx}')
+    transform(shade, 'y', sy)
+    part = draw(shade)
+    transform(part, 'alpha', f'255 * {fade}')
+    rim_rings(part, '#0024383c #0024383c #2824383c #8024383c', '0 0.80 0.93 1')
     light = element(bowl, 'Group', x=0, y=0, width=450, height=450, name='rimLight')
-    transform(light, 'alpha', f'160 * clamp({up} / 0.07, 0, 1)')
-    transform(light, 'x', f'10 * {east} / clamp({up}, 0.38, 1)')
-    transform(light, 'y', f'-10 * {north} / clamp({up}, 0.38, 1)')
-    rim_gradient(light, '#00fff9ec #00fff9ec #08fff9ec #48fff9ec', '0 0.88 0.96 1')
+    transform(light, 'x', sx)
+    transform(light, 'y', f'-{sy}')
+    part = draw(light)
+    transform(part, 'alpha', f'160 * {fade}')
+    rim_rings(part, '#00fff9ec #00fff9ec #08fff9ec #48fff9ec', '0 0.88 0.96 1')
 
 
 def build():
@@ -172,33 +187,42 @@ def build():
     scale(day_scale, '#545f60')
 
     points = time_points()
+    fade = f'clamp({up} / 0.07, 0, 1)'
     # A sixteen-unit wall. Cap grazing shadows at ~42 units.
     dx = f'(-16 * {east} / clamp({up}, 0.38, 1))'
     dy = f'(16 * {north} / clamp({up}, 0.38, 1))'
     shadow_points = tuple(f'{p} + {dx if i % 2 == 0 else dy}' for i, p in enumerate(points))
-    shadow = element(active, 'Group', x=0, y=0, width=450, height=450, name='castShadow')
-    transform(shadow, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
-    selection = element(shadow, 'ListConfiguration', id='shadow_style')
+    # Scene-level selection, as in Radial Moire; fades live on PartDraw alpha.
+    selection = element(scene, 'ListConfiguration', id='shadow_style')
     filament = element(selection, 'ListOption', id='0')
     filament_group = element(filament, 'Group', x=0, y=0, width=450, height=450, name='lineShadow')
+    ambient(filament_group)
     for width, alpha in ((12, 8), (7, 16), (3, 42)):
-        line(draw(filament_group, alpha=alpha), shadow_points, '#243e44', width)
+        part = draw(filament_group)
+        transform(part, 'alpha', f'{alpha} * {fade}')
+        line(part, shadow_points, '#243e44', width)
     wall = element(selection, 'ListOption', id='1')
-    wall_shadow(wall, points, dx, dy)
-    line(draw(shadow, alpha=180), shadow_points, '#536c68', 0.8)
+    wall_shadow(wall, points, dx, dy, f'255 * {fade}')
+
+    top = element(scene, 'Group', x=0, y=0, width=450, height=450, name='solarTop')
+    ambient(top)
+    shadow = element(top, 'Group', x=0, y=0, width=450, height=450, name='castShadow')
+    edge = draw(shadow)
+    transform(edge, 'alpha', f'180 * {fade}')
+    line(edge, shadow_points, '#536c68', 0.8)
 
     # A small sun bearing on its own outer orbit; north is always dial-up.
-    solar = draw(active)
-    transform(solar, 'alpha', f'255 * clamp({up} / 0.07, 0, 1)')
+    solar = draw(top)
+    transform(solar, 'alpha', f'255 * {fade}')
     horizontal = f'sqrt(clamp(1 - {up} * {up}, 0.001, 1))'
     sun = ellipse(solar, 0, 0, 6, fill='#c87a47')
     transform(sun, 'x', f'222 + 188 * {east} / {horizontal}')
     transform(sun, 'y', f'222 - 188 * {north} / {horizontal}')
 
-    night_time = element(active, 'Group', x=0, y=0, width=450, height=450, name='nightChord')
+    night_time = element(top, 'Group', x=0, y=0, width=450, height=450, name='nightChord')
     transform(night_time, 'alpha', f'{up} >= 0 ? 0 : 255')
     time_geometry(night_time, '#e1e6dc', '#c87a47', points)
-    day_time = element(active, 'Group', x=0, y=0, width=450, height=450, name='dayChord')
+    day_time = element(top, 'Group', x=0, y=0, width=450, height=450, name='dayChord')
     transform(day_time, 'alpha', f'{up} >= 0 ? 255 : 0')
     time_geometry(day_time, '#263e43', '#c87a47', points)
 

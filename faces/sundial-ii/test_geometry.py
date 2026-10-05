@@ -64,34 +64,43 @@ class SundialGeometry(unittest.TestCase):
             for hour in (9, 12, 16):
                 instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
                 shade = transforms(crown, instant)
+                shade['alpha'] = transforms(crown.find('PartDraw'), instant)['alpha']
                 east, north, up = noaa_reference(instant)
                 self.assertAlmostEqual(shade['x'], -10*east/max(0.38, up), delta=1)
                 self.assertAlmostEqual(shade['y'], 10*north/max(0.38, up), delta=1)
         instant = datetime(2026, 10, 1, 23, tzinfo=PACIFIC)
-        self.assertEqual(transforms(crown, instant)['alpha'], 0)
+        self.assertEqual(transforms(crown.find('PartDraw'), instant)['alpha'], 0)
 
-    def test_solid_wall_shadow_corners(self):
-        outer = ROOT.find(".//Group[@name='wallShadow']")
-        inner = ROOT.find(".//Group[@name='wallShadowBasis']")
+    def test_solid_wall_shadow_fills_parallelogram(self):
+        part = ROOT.find(".//Group[@name='wallShadow']/PartDraw")
+        layers = part.findall('Line')
+        thickness = float(layers[0].find('Stroke').get('thickness'))
         chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
         edge = ROOT.find(".//Group[@name='castShadow']/PartDraw/Line")
+        keys = ('startX', 'startY', 'endX', 'endY')
         for date in ('2026-03-20', '2026-06-21', '2026-12-21'):
             start = datetime.fromisoformat(date).replace(tzinfo=PACIFIC)
             for i in range(0, 24*60, 7):
                 instant = start + timedelta(minutes=i)
-                o, b = transforms(outer, instant), transforms(inner, instant)
-                theta, phi = math.radians(o['angle']), math.radians(b['angle'])
                 c, s = transforms(chord, instant), transforms(edge, instant)
-                expected = ((c['startX'], c['startY']), (c['endX'], c['endY']),
-                            (s['endX'], s['endY']), (s['startX'], s['startY']))
-                for (x, y), (ex, ey) in zip(((0, 0), (1, 0), (1, 1), (0, 1)), expected):
-                    rx = (x*math.cos(phi)-y*math.sin(phi))*o['scaleX']
-                    ry = (x*math.sin(phi)+y*math.cos(phi))*o['scaleY']
-                    ax = o['x'] + rx*math.cos(theta)-ry*math.sin(theta)
-                    ay = o['y'] + rx*math.sin(theta)+ry*math.cos(theta)
-                    with self.subTest(instant=instant, corner=(x, y)):
-                        self.assertAlmostEqual(ax, ex, delta=0.00001)
-                        self.assertAlmostEqual(ay, ey, delta=0.00001)
+                values = [transforms(layer, instant) for layer in layers]
+                with self.subTest(instant=instant):
+                    for k in keys:
+                        self.assertAlmostEqual(values[0][k], c[k], places=7)
+                        self.assertAlmostEqual(values[-1][k], s[k], places=7)
+                    for n, v in enumerate(values):
+                        t = n / (len(values) - 1)
+                        for k in keys:
+                            self.assertAlmostEqual(v[k], c[k] + t * (s[k] - c[k]), places=7)
+                    # Adjacent copies overlap, so the sweep is solid.
+                    step = math.hypot(values[1]['startX'] - values[0]['startX'],
+                                      values[1]['startY'] - values[0]['startY'])
+                    self.assertLess(step, thickness)
+
+    def test_expressions_stay_short(self):
+        # Very long nested expressions did not render on a Pixel Watch.
+        longest = max(len(t.get('value')) for t in ROOT.iter('Transform'))
+        self.assertLess(longest, 5000)
 
     def test_shadow_agrees_with_independent_noaa_reference(self):
         chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
@@ -110,11 +119,14 @@ class SundialGeometry(unittest.TestCase):
                     self.assertAlmostEqual(s['endY']-c['endY'], s['startY']-c['startY'], places=7)
 
     def test_shadow_vanishes_at_night(self):
-        group = ROOT.find(".//Group[@name='castShadow']")
+        parts = [ROOT.find(".//Group[@name='castShadow']/PartDraw"),
+                 ROOT.find(".//Group[@name='wallShadow']/PartDraw"),
+                 *ROOT.findall(".//Group[@name='lineShadow']/PartDraw")]
         for date in ('2026-06-21', '2026-12-21'):
             for hour in (0, 3, 22):
                 instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
-                self.assertEqual(transforms(group, instant)['alpha'], 0)
+                for part in parts:
+                    self.assertEqual(transforms(part, instant)['alpha'], 0)
 
     def test_all_time_positions_and_shadows_fit_and_endpoints_remain_distinct(self):
         chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
