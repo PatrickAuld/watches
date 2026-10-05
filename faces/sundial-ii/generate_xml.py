@@ -56,11 +56,22 @@ def line(parent, points, color, thickness):
     return shape
 
 
+# Orbits: the hour bead sits well inside the minute ring so the two ends of the
+# chord read as different hands; the minute ring runs just inside the hour ticks
+# (195-205), and the sun dot orbits outside them.
+HOUR_RADIUS = 110
+MINUTE_RADIUS = 186
+SUN_RADIUS = 214
+# Grazing shadows are capped at 16 / SHADOW_MIN_UP units so a shadow cast from
+# the minute end (MINUTE_RADIUS + 6 for the ring) stays on the 225-unit screen.
+SHADOW_MIN_UP = 0.49
+
+
 def time_points():
     hour = 'rad(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)'
     minute = 'rad([MINUTE] * 6)'
-    return (f'(225 + 151 * sin({hour}))', f'(225 - 151 * cos({hour}))',
-            f'(225 + 175 * sin({minute}))', f'(225 - 175 * cos({minute}))')
+    return (f'(225 + {HOUR_RADIUS} * sin({hour}))', f'(225 - {HOUR_RADIUS} * cos({hour}))',
+            f'(225 + {MINUTE_RADIUS} * sin({minute}))', f'(225 - {MINUTE_RADIUS} * cos({minute}))')
 
 
 WALL_LAYERS = 12
@@ -71,7 +82,7 @@ def wall_shadow(parent, points, dx, dy, fade):
     # The solid shadow is the chord swept along the shadow vector. Overlapping
     # opaque copies at evenly spaced offsets fill that parallelogram using only
     # Line transforms, which keeps every expression short enough for the watch.
-    # Spacing is at most 16 / 0.38 / WALL_LAYERS units, below the stroke width.
+    # Spacing is at most 16 / SHADOW_MIN_UP / WALL_LAYERS units, below the stroke width.
     group = element(parent, 'Group', x=0, y=0, width=450, height=450, name='wallShadow')
     ambient(group)
     part = draw(group)
@@ -143,7 +154,7 @@ def scale(parent, color):
                         endX=round(225 + 205 * math.sin(angle), 4),
                         endY=round(225 - 205 * math.cos(angle), 4))
         element(shape, 'Stroke', color=color, thickness=1.6 if major else 0.8, cap='ROUND')
-    for radius in (151, 175):
+    for radius in (HOUR_RADIUS, MINUTE_RADIUS):
         ellipse(draw(parent, alpha=22), 225-radius, 225-radius, 2*radius, stroke=color, thickness=0.8)
 
 
@@ -223,9 +234,9 @@ def build():
 
     points = time_points()
     fade = f'clamp({up} / 0.07, 0, 1)'
-    # A sixteen-unit wall. Cap grazing shadows at ~42 units.
-    dx = f'(-16 * {east} / clamp({up}, 0.38, 1))'
-    dy = f'(16 * {north} / clamp({up}, 0.38, 1))'
+    # A sixteen-unit wall. Cap grazing shadows at ~33 units.
+    dx = f'(-16 * {east} / clamp({up}, {SHADOW_MIN_UP}, 1))'
+    dy = f'(16 * {north} / clamp({up}, {SHADOW_MIN_UP}, 1))'
     shadow_points = tuple(f'{p} + {dx if i % 2 == 0 else dy}' for i, p in enumerate(points))
     # Scene-level selection, as in Radial Moire; fades live on PartDraw alpha.
     selection = element(scene, 'ListConfiguration', id='shadow_style')
@@ -255,8 +266,8 @@ def build():
     transform(solar, 'alpha', f'255 * {fade}')
     horizontal = f'sqrt(clamp(1 - {up} * {up}, 0.001, 1))'
     sun = ellipse(solar, 0, 0, 6, fill='#c87a47')
-    transform(sun, 'x', f'222 + 188 * {east} / {horizontal}')
-    transform(sun, 'y', f'222 - 188 * {north} / {horizontal}')
+    transform(sun, 'x', f'222 + {SUN_RADIUS} * {east} / {horizontal}')
+    transform(sun, 'y', f'222 - {SUN_RADIUS} * {north} / {horizontal}')
 
     night_time = element(top, 'Group', x=0, y=0, width=450, height=450, name='nightChord')
     transform(night_time, 'alpha', f'{up} >= 0 ? 0 : 255')

@@ -10,11 +10,13 @@ This is a new face; the original remains available for comparison.
 
 ## Reading the dial
 
-- The filled bead on the inner orbit is the hour; it advances between hours.
-- The open ring on the outer orbit is the minute; each small outer tick is a minute.
+- The filled bead on the inner orbit (radius 110) is the hour; it advances between hours.
+- The open ring on the outer orbit (radius 186, just inside the ticks) is the minute;
+  each small outer tick is a minute. The wide gap between orbits makes the two ends
+  of the chord easy to tell apart.
 - The chord joins the centers of both markers. Unequal radii keep it visible at
   12:00 and other hand overlaps, without division by chord length or angle jumps.
-- The tiny copper dot on a separate orbit indicates the solar bearing.
+- The tiny copper dot orbiting outside the ticks indicates the solar bearing.
 - Ivory becomes blue through twilight; the shadow disappears below the horizon.
 - Ambient mode shows the same time geometry on black, with four orientation ticks.
 - **Shadow geometry** in the watch face editor selects **Floating line** or
@@ -43,8 +45,8 @@ an `atan2` function or quadrant discontinuities. The sidereal expression uses
 
 For an imagined wall sixteen design units above the surface, the screen shadow
 translation is `(-16 × east / up, +16 × north / up)`. Elevation changes length;
-azimuth changes direction. The denominator is clamped to 0.38 so shadows remain
-inside the round screen near the horizon. Opacity fades between 0° and ~4° solar
+azimuth changes direction. The denominator is clamped to 0.49 (shadows of at most
+~33 units) so a shadow cast from the outer minute ring stays inside the round screen. Opacity fades between 0° and ~4° solar
 elevation. There is no moonlight or fictional nighttime Sun shadow. The solid
 shadow fills the parallelogram between the chord and its projected edge, with
 a crisp far boundary. It stays attached to the wall instead of floating apart.

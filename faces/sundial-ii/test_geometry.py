@@ -111,7 +111,7 @@ class SundialGeometry(unittest.TestCase):
                 instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
                 c, s = transforms(chord, instant), transforms(shadow, instant)
                 east, north, up = noaa_reference(instant)
-                denominator = max(0.38, up)
+                denominator = max(0.49, up)
                 with self.subTest(instant=instant):
                     self.assertAlmostEqual(s['startX']-c['startX'], -16*east/denominator, delta=1.5)
                     self.assertAlmostEqual(s['startY']-c['startY'], 16*north/denominator, delta=1.5)
