@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Watch Faces</title>
+    <meta name="description" content="Watch Face Format v4 designs for Pixel Watch, rendered live from their canonical XML." />
+    <meta property="og:title" content="Watch Faces" />
+    <meta property="og:description" content="Watch Face Format v4 designs for Pixel Watch, rendered live from their canonical XML." />
+    <meta property="og:url" content="${base_url}" />
+    <link rel="canonical" href="${base_url}" />
+    <link rel="stylesheet" href="preview.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <h1>Watch Faces</h1>
+        <p>Watch Face Format v4 designs for Pixel Watch, rendered live at the current time from canonical XML.</p>
+      </header>
+
+      <div class="gallery">
+${cards}
+      </div>
+
+      <footer>
+        Rendered with wff-web &middot; <a href="privacy.html">Privacy policy</a>
+      </footer>
+    </main>
+
+    <script type="module" src="gallery.js"></script>
+  </body>
+</html>

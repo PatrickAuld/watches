@@ -3,14 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WFF Preview Lab</title>
-    <link rel="stylesheet" href="preview.css" />
+    <title>${name} — Watch Faces</title>
+    <meta name="description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="${name}" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:url" content="${url}" />
+${og_image}
+    <link rel="canonical" href="${url}" />
+    <link rel="stylesheet" href="../../preview.css" />
   </head>
-  <body>
+  <body data-root="../../" data-face="${slug}">
     <main class="shell">
+      <nav class="crumbs"><a href="../../">&larr; All watch faces</a></nav>
       <header>
-        <h1>WFF Preview Lab</h1>
-        <p>WFF v4 XML watch face preview powered by wff-web</p>
+        <h1>${name} <span class="badge status-${status}">${status}</span></h1>
+        <p class="lede">${description}</p>
       </header>
 
       <div class="layout">
@@ -18,7 +26,7 @@
           <div class="watch-frame">
             <div class="watch-screen">
               <canvas id="watch-canvas" width="450" height="450"></canvas>
-              <div id="placeholder" class="placeholder" style="display:none">Select a face</div>
+              <div id="placeholder" class="placeholder" style="display:none"></div>
             </div>
           </div>
         </div>
@@ -42,7 +50,7 @@
             <label><span>Dial palette</span><select id="palette-picker"></select></label>
           </div>
 
-          <div class="card controls">
+          <div class="card controls" id="time-card">
             <h3>Time</h3>
             <label>
               <span>Mode</span>
@@ -64,13 +72,13 @@
             </div>
           </div>
 
-          <div class="card controls">
+          <div class="card controls" id="display-card">
             <h3>Display</h3>
-            <label style="flex-direction:row;align-items:center;gap:10px;display:flex">
+            <label class="check">
               <input type="checkbox" id="ambient-toggle" />
               <span>Ambient mode</span>
             </label>
-            <label style="flex-direction:row;align-items:center;gap:10px;display:flex">
+            <label class="check">
               <input type="checkbox" id="animate-toggle" />
               <span>Animate (live rendering)</span>
             </label>
@@ -78,20 +86,16 @@
 
           <div class="card meta">
             <h3>Metadata</h3>
-            <div id="meta-panel"><p style="color:var(--muted)">Select a face</p></div>
+            <div id="meta-panel"><p class="muted">Loading&hellip;</p></div>
           </div>
         </div>
       </div>
 
       <footer>
-        WFF Preview Lab &mdash; faces rendered from canonical watchface.xml via wff-web
+        Rendered from canonical watchface.xml via wff-web &middot; <a href="../../privacy.html">Privacy policy</a>
       </footer>
     </main>
 
-    <script type="module">
-      import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.1.1/dist/index.js';
-      window.renderWatchFace = renderWatchFace;
-      await import('./preview.js');
-    </script>
+    <script type="module" src="../../preview.js"></script>
   </body>
 </html>

@@ -1,9 +1,8 @@
-let faces = [];
-let currentFace = null;
-let renderResult = null;
-let animating = false;
+import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.1.1/dist/index.js';
+import { escapeHtml, faceUrl, loadCatalog, loadFace, prepare } from './render.js';
 
-const facesBase = 'faces';
+const root = document.body.dataset.root;
+const slug = document.body.dataset.face;
 
 const canvas = document.getElementById('watch-canvas');
 const facePicker = document.getElementById('face-picker');
@@ -18,128 +17,74 @@ const animateToggle = document.getElementById('animate-toggle');
 const quickBtns = document.querySelectorAll('[data-set-time]');
 const metaPanel = document.getElementById('meta-panel');
 const placeholder = document.getElementById('placeholder');
-const canvasEl = document.getElementById('watch-canvas');
+
+let face = null;
+let renderResult = null;
 let renderVersion = 0;
 
+function optionsHtml(options) {
+  return options.map(o => `<option value="${escapeHtml(o.id)}">${escapeHtml(o.label)}</option>`).join('');
+}
+
 async function init() {
-  const resp = await fetch('faces.json');
-  faces = await resp.json();
-
-  facePicker.innerHTML = faces.map(f =>
-    `<option value="${f.slug}">${f.name} (${f.status})</option>`
+  const catalog = await loadCatalog(root);
+  facePicker.innerHTML = catalog.map(f =>
+    `<option value="${escapeHtml(f.slug)}">${escapeHtml(f.name)} (${escapeHtml(f.status)})</option>`
   ).join('');
+  facePicker.value = slug;
+  facePicker.addEventListener('change', () => { location.href = faceUrl(root, facePicker.value); });
 
-  // Default time
+  loadMetadata();
+
+  const entry = catalog.find(f => f.slug === slug);
+  if (!entry || !entry.xml) {
+    showPlaceholder('In design — no watchface.xml yet');
+    for (const id of ['time-card', 'display-card']) document.getElementById(id).hidden = true;
+    return;
+  }
+
   timeInput.value = '2026-03-13T10:10';
-
-  facePicker.addEventListener('change', () => loadFace(facePicker.value));
   timeInput.addEventListener('input', () => { timeModeSelect.value = 'fixed'; render(); });
-  timeModeSelect.addEventListener('change', render);
-  ambientToggle.addEventListener('change', render);
-  stylePicker.addEventListener('change', render);
-  palettePicker.addEventListener('change', render);
-  animateToggle.addEventListener('change', render);
+  for (const el of [timeModeSelect, ambientToggle, stylePicker, palettePicker, animateToggle]) {
+    el.addEventListener('change', render);
+  }
   quickBtns.forEach(btn => btn.addEventListener('click', () => {
     timeInput.value = `2026-03-13T${btn.dataset.setTime}`;
     timeModeSelect.value = 'fixed';
     render();
   }));
 
-  // Load first face that has XML (or just the first one)
-  if (faces.length > 0) {
-    await loadFace(faces[0].slug);
-  }
-}
-
-async function loadFace(slug) {
-  // Stop any running animation
-  if (renderResult && renderResult.stop) {
-    renderResult.stop();
-    renderResult = null;
-  }
-
-  currentFace = faces.find(f => f.slug === slug);
-  facePicker.value = slug;
-
-  // Try to fetch XML
-  let xml;
   try {
-    const resp = await fetch(`${facesBase}/${slug}/watchface.xml`);
-    if (!resp.ok) throw new Error(`${resp.status}`);
-    xml = await resp.text();
-  } catch {
-    showPlaceholder(`No watchface.xml for "${slug}" yet`);
-    loadMetadata(slug);
+    face = await loadFace(root, entry);
+  } catch (error) {
+    showPlaceholder(error.message);
     return;
   }
 
-  // Parse XML for image resource references and load them
-  const assets = new Map();
-  for (const [name, filename] of Object.entries(currentFace.assets)) {
-    try {
-      const resp = await fetch(`${facesBase}/${slug}/assets/${filename}`);
-      if (!resp.ok) throw new Error(`${resp.status}`);
-      assets.set(name, await resp.arrayBuffer());
-    } catch (error) {
-      showPlaceholder(`Missing asset ${filename}: ${error.message}`);
-      return;
-    }
+  styleCard.hidden = !face.style;
+  if (face.style) {
+    stylePicker.closest('label').querySelector('span').textContent = face.style.label;
+    stylePicker.innerHTML = optionsHtml(face.style.options);
+    stylePicker.value = face.style.defaultValue;
   }
-
-  currentFace._xml = xml;
-  currentFace._assets = assets;
-  currentFace._tintedAssets = new Map();
-  const doc = new DOMParser().parseFromString(xml, 'application/xml');
-  const labels = new Map();
-  try {
-    const response = await fetch(`${facesBase}/${slug}/strings.xml`);
-    if (response.ok) {
-      const strings = new DOMParser().parseFromString(await response.text(), 'application/xml');
-      for (const el of strings.querySelectorAll('string[name]')) {
-        labels.set(el.getAttribute('name'), el.textContent);
-      }
-    }
-  } catch { /* Not every face supplies its own strings. */ }
-  const styleConfig = doc.querySelector('UserConfigurations > ListConfiguration');
-  const sceneConfig = styleConfig && [...doc.querySelectorAll('Scene ListConfiguration')]
-    .find(el => el.getAttribute('id') === styleConfig.getAttribute('id'));
-  currentFace._styleConfig = sceneConfig ? styleConfig.getAttribute('id') : null;
-  styleCard.hidden = !sceneConfig;
-  if (sceneConfig) {
-    stylePicker.closest('label').querySelector('span').textContent =
-      labels.get(styleConfig.getAttribute('displayName')) || 'Style';
-    stylePicker.innerHTML = [...styleConfig.querySelectorAll(':scope > ListOption')].map(opt => {
-      const id = opt.getAttribute('id');
-      const label = labels.get(opt.getAttribute('displayName')) || id;
-      return `<option value="${escapeHtml(id)}">${escapeHtml(label)}</option>`;
-    }).join('');
-    stylePicker.value = styleConfig.getAttribute('defaultValue');
-  }
-  const paletteConfig = doc.querySelector('UserConfigurations > ColorConfiguration');
-  currentFace._paletteConfig = paletteConfig?.getAttribute('id');
-  paletteCard.hidden = !paletteConfig;
-  if (paletteConfig) {
-    palettePicker.innerHTML = [...paletteConfig.querySelectorAll(':scope > ColorOption')].map(opt => {
-      const id = opt.getAttribute('id');
-      const label = labels.get(opt.getAttribute('displayName')) || id;
-      return `<option value="${escapeHtml(id)}">${escapeHtml(label)}</option>`;
-    }).join('');
-    palettePicker.value = paletteConfig.getAttribute('defaultValue');
+  paletteCard.hidden = !face.palette;
+  if (face.palette) {
+    palettePicker.innerHTML = optionsHtml(face.palette.options);
+    palettePicker.value = face.palette.defaultValue;
   }
 
   showCanvas();
   await render();
-  loadMetadata(slug);
 }
 
-function showPlaceholder(msg) {
-  canvasEl.style.display = 'none';
+function showPlaceholder(message) {
+  canvas.style.display = 'none';
   placeholder.style.display = 'block';
-  placeholder.textContent = msg;
+  placeholder.textContent = message;
 }
 
 function showCanvas() {
-  canvasEl.style.display = 'block';
+  canvas.style.display = 'block';
   placeholder.style.display = 'none';
 }
 
@@ -149,101 +94,45 @@ function getTime() {
 }
 
 async function render() {
-  if (!currentFace || !currentFace._xml) return;
+  if (!face) return;
   const version = ++renderVersion;
-
-  // Stop previous animation
   if (renderResult && renderResult.stop) {
     renderResult.stop();
     renderResult = null;
   }
-
-  const shouldAnimate = animateToggle.checked;
-  const ambient = ambientToggle.checked;
-
+  const animate = animateToggle.checked;
   try {
-    const doc = new DOMParser().parseFromString(currentFace._xml, 'application/xml');
-    if (currentFace._styleConfig) {
-      const sceneConfig = [...doc.querySelectorAll('Scene ListConfiguration')]
-        .find(el => el.getAttribute('id') === currentFace._styleConfig);
-      const option = [...sceneConfig.children].find(el =>
-        el.tagName === 'ListOption' && el.getAttribute('id') === stylePicker.value);
-      sceneConfig.replaceWith(...[...option.children].map(el => el.cloneNode(true)));
-    }
-    const assets = new Map(currentFace._assets);
-    if (currentFace._paletteConfig) {
-      const selected = [...doc.querySelectorAll('UserConfigurations > ColorConfiguration > ColorOption')]
-        .find(el => el.getAttribute('id') === palettePicker.value);
-      const ink = selected.getAttribute('colors').split(/\s+/)[1];
-      for (const part of doc.querySelectorAll('Scene PartImage[tintColor]')) {
-        const image = part.querySelector(':scope > Image');
-        const source = image.getAttribute('resource');
-        const tinted = `${source}_palette_${palettePicker.value}`;
-        if (!currentFace._tintedAssets.has(tinted)) {
-          currentFace._tintedAssets.set(tinted, await tintImage(currentFace._assets.get(source), ink));
-        }
-        image.setAttribute('resource', tinted);
-        assets.set(tinted, currentFace._tintedAssets.get(tinted));
-      }
-    }
+    const input = await prepare(face, {
+      style: face.style ? stylePicker.value : undefined,
+      palette: face.palette ? palettePicker.value : undefined,
+    });
     if (version !== renderVersion) return;
-    const previewXml = new XMLSerializer().serializeToString(doc);
     renderResult = await renderWatchFace(canvas, {
-      xml: previewXml,
-      assets,
-      configuration: currentFace._paletteConfig ? {[currentFace._paletteConfig]: palettePicker.value} : {},
+      ...input,
       width: 450,
       height: 450,
-      time: shouldAnimate ? undefined : getTime(),
-      ambient: ambient,
-      animate: shouldAnimate,
+      time: animate ? undefined : getTime(),
+      ambient: ambientToggle.checked,
+      animate,
     });
-  } catch (err) {
-    showPlaceholder(`Render error: ${err.message}`);
+  } catch (error) {
+    showPlaceholder(`Render error: ${error.message}`);
   }
 }
 
-async function tintImage(bytes, color) {
-  const bitmap = await createImageBitmap(new Blob([bytes]));
-  const surface = document.createElement('canvas');
-  surface.width = bitmap.width;
-  surface.height = bitmap.height;
-  const context = surface.getContext('2d');
-  context.drawImage(bitmap, 0, 0);
-  bitmap.close();
-  const pixels = context.getImageData(0, 0, surface.width, surface.height);
-  const rgb = color.slice(-6);
-  const channels = [0, 2, 4].map(i => parseInt(rgb.slice(i, i + 2), 16));
-  for (let i = 0; i < pixels.data.length; i += 4) {
-    pixels.data[i] = channels[0];
-    pixels.data[i + 1] = channels[1];
-    pixels.data[i + 2] = channels[2];
-  }
-  context.putImageData(pixels, 0, 0);
-  const blob = await new Promise(resolve => surface.toBlob(resolve, 'image/png'));
-  return blob.arrayBuffer();
-}
-
-async function loadMetadata(slug) {
+async function loadMetadata() {
   try {
-    const resp = await fetch(`${facesBase}/${slug}/face.yaml`);
-    if (!resp.ok) throw new Error('not found');
-    const text = await resp.text();
-    metaPanel.innerHTML = `<pre style="white-space:pre-wrap;margin:0;font-size:0.82rem;color:var(--text);font-family:monospace">${escapeHtml(text)}</pre>`;
+    const response = await fetch(`${root}faces/${slug}/face.yaml`);
+    if (!response.ok) throw new Error('not found');
+    metaPanel.innerHTML = `<pre class="yaml">${escapeHtml(await response.text())}</pre>`;
   } catch {
-    metaPanel.innerHTML = '<p style="color:var(--muted)">No metadata found</p>';
+    metaPanel.innerHTML = '<p class="muted">No metadata found</p>';
   }
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // Live mode ticker
 setInterval(() => {
-  if (timeModeSelect.value === 'live' && !animateToggle.checked) {
-    render();
-  }
+  if (face && timeModeSelect.value === 'live' && !animateToggle.checked) render();
 }, 1000);
 
 init();
