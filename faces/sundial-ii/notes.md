@@ -101,3 +101,13 @@ These are actual renderer output, not design mockups:
 ![Floating line option, 10:10](previews/line.png)
 ![Night, 21:45](previews/night.png)
 ![Ambient, 10:10](previews/ambient.png)
+
+## Picker thumbnail
+
+`preview.png` is the 450×450 picker thumbnail, rendered with WFF Web from the
+canonical XML with the default Raised wall option at 2026-10-05 10:10 PDT. The
+Android build stages it as the `WatchFaceInfo` preview. Without it, the shared
+shape placeholder made long-pressing the face hang at "Starting" on a Pixel Watch,
+as Radial Moiré did before it gained a bitmap preview. Regenerate it after changing
+the default appearance. (WFF Web renders some dates, e.g. 2026-03-13, as night even
+though the face's solar math and NOAA agree the Sun is up; pick a render that shows day.)

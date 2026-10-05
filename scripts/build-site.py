@@ -50,6 +50,18 @@ def face_metadata(path):
     return result
 
 
+def check_picker_preview(directory):
+    """Editable faces need a real bitmap preview: with the shared shape
+    placeholder, long-pressing them on a Pixel Watch hangs at "Starting"."""
+    preview = directory / "preview.png"
+    if not preview.is_file():
+        raise ValueError(f"{directory.name}: editable promoted faces need a 450x450 preview.png")
+    header = preview.read_bytes()[:24]
+    if header[:8] != b"\x89PNG\r\n\x1a\n" or (
+            int.from_bytes(header[16:20], "big"), int.from_bytes(header[20:24], "big")) != (450, 450):
+        raise ValueError(f"{preview}: must be a 450x450 PNG")
+
+
 def discover():
     faces = []
     for directory in sorted(FACES.iterdir()):
@@ -76,6 +88,8 @@ def discover():
                 if len(matches) != 1:
                     raise ValueError(f"{xml_file}: resource {resource} must resolve to exactly one image")
                 assets[resource] = matches[0]
+            if metadata["status"] == "promoted" and root.find("UserConfigurations") is not None:
+                check_picker_preview(directory)
         previews = sorted(p for p in (directory / "previews").glob("*") if p.suffix.lower() in EXTENSIONS) \
             if (directory / "previews").is_dir() else []
         faces.append({"dir": directory, "slug": slug, "meta": metadata, "xml": xml_file.exists(),
