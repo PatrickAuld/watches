@@ -104,25 +104,24 @@ These are actual renderer output, not design mockups:
 ![Night, 21:45](previews/night.png)
 ![Ambient, 10:10](previews/ambient.png)
 
-## Wrist-tilt parallax
+## Wrist-tilt shadow
 
-The chord is the top of a 16-unit wall standing on the dial. While the screen is
-interactive, `Gyro` offsets driven by `[ACCELEROMETER_ANGLE_X]` and
-`[ACCELEROMETER_ANGLE_Y]` shift the chord and its beads by up to ~12 units
-(0.3 units per degree, clamped at ±40°). Everything on the dial floor stays put:
-the cast shadow, its edge line, the sun dot and the scale. With **Raised wall**,
-six Gyro layers at fractions 1/6…1 of the offset sweep the chord from its base
-to its tilted top, showing the side of the wall; with **Floating line**, the line
-simply floats above its shadow. Ambient mode has no Gyro.
+While the screen is interactive, tilting the wrist swings the cast shadow; the
+hour and minute markers, the chord, the sun dot and the scale stay fixed.
+`Gyro` offsets driven by `[ACCELEROMETER_ANGLE_X]` and `[ACCELEROMETER_ANGLE_Y]`
+(0.3 units per degree, clamped at ±40°, up to ~12 units per axis) move the far
+edge of the shadow. With **Raised wall**, each of the thirteen shadow layers takes
+its fraction of that offset, so the near edge stays attached to the chord and the
+parallelogram shears; with **Floating line**, the whole line shadow shifts.
+Ambient mode has no Gyro. At extreme tilt with the longest shadows, the far edge
+can slip under the rim.
 
-This is depth only. Watch Face Format exposes tilt but no compass heading, so
-the Sun's direction still assumes north is dial-up. Gyro does not run in WFF Web,
-so tilt must be judged on the watch; `TILT_SIGN_X`/`TILT_SIGN_Y` in
-`generate_xml.py` flip an axis if the wall leans the wrong way.
+This is a visual effect only. Watch Face Format exposes tilt but no compass
+heading, so the Sun's direction still assumes north is dial-up. Gyro does not run
+in WFF Web, so judge it on the watch; `TILT_SIGN_X`/`TILT_SIGN_Y` in
+`generate_xml.py` flip an axis if the shadow moves the wrong way.
 
-The face validates against the official WFF v4 XSD from github.com/google/watchface
-(a `ListOption` takes exactly one child, so the wall's shadow and face share the
-`raisedWall` group).
+The face validates against the official WFF v4 XSD from github.com/google/watchface.
 
 ## Picker thumbnail
 

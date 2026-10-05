@@ -72,8 +72,7 @@ class SundialGeometry(unittest.TestCase):
         self.assertEqual(transforms(crown.find('PartDraw'), instant)['alpha'], 0)
 
     def test_solid_wall_shadow_fills_parallelogram(self):
-        part = ROOT.find(".//Group[@name='wallShadow']/PartDraw")
-        layers = part.findall('Line')
+        layers = ROOT.findall(".//Group[@name='wallShadow']/PartDraw/Line")
         thickness = float(layers[0].find('Stroke').get('thickness'))
         chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
         edge = ROOT.find(".//Group[@name='castShadow']/PartDraw/Line")
@@ -120,7 +119,7 @@ class SundialGeometry(unittest.TestCase):
 
     def test_shadow_vanishes_at_night(self):
         parts = [ROOT.find(".//Group[@name='castShadow']/PartDraw"),
-                 ROOT.find(".//Group[@name='wallShadow']/PartDraw"),
+                 *ROOT.findall(".//Group[@name='wallShadow']/PartDraw"),
                  *ROOT.findall(".//Group[@name='lineShadow']/PartDraw")]
         for date in ('2026-06-21', '2026-12-21'):
             for hour in (0, 3, 22):
@@ -146,27 +145,38 @@ class SundialGeometry(unittest.TestCase):
             for prefix in ('start', 'end'):
                 self.assertLess(math.hypot(s[prefix+'X']-225, s[prefix+'Y']-225)+6, 225)
 
-    def test_tilt_parallax_moves_wall_top_over_fixed_floor(self):
-        def offset(group, ax, ay):
-            g = group.find('Gyro')
+    def test_tilt_swings_shadow_while_markers_stay_fixed(self):
+        def offset(element, ax, ay):
+            g = element.find('Gyro')
+            if g is None:
+                return (0, 0)
             values = {'ACCELEROMETER_ANGLE_X': ax, 'ACCELEROMETER_ANGLE_Y': ay}
             def ev(expr):
                 for k, v in values.items():
                     expr = expr.replace(f'[{k}]', str(v))
                 return eval(expr, {'__builtins__': {}}, {'clamp': lambda x, lo, hi: max(lo, min(hi, x))})
             return ev(g.get('x')), ev(g.get('y'))
-        day = ROOT.find(".//Group[@name='dayChord']")
-        night = ROOT.find(".//Group[@name='nightChord']")
-        layers = ROOT.findall(".//Group[@name='wallFace']/Group")
+        layers = ROOT.findall(".//Group[@name='wallShadow']/PartDraw")
+        thickness = float(layers[0].find('Line/Stroke').get('thickness'))
+        edge = ROOT.find(".//Group[@name='castShadow']")
+        line_shadow = ROOT.find(".//Group[@name='lineShadow']")
         for ax, ay in ((0, 0), (25, -10), (90, 90), (-90, -90)):
-            top = offset(day, ax, ay)
-            self.assertEqual(top, offset(night, ax, ay))
-            self.assertLessEqual(math.hypot(*top), 17)
-            self.assertEqual(offset(layers[-1], ax, ay), top)
-            step = math.hypot(*offset(layers[0], ax, ay))
-            self.assertLess(step, 3)
-        # Floor elements (shadows, sun dot) and ambient geometry never move.
-        for name in ('castShadow', 'wallShadow', 'lineShadow', 'ambientChord', 'solarTop'):
+            far = offset(edge, ax, ay)
+            self.assertLessEqual(math.hypot(*far), 17)
+            self.assertEqual(offset(line_shadow, ax, ay), far)
+            # Near edge stays on the chord; far edge moves with the edge line.
+            self.assertEqual(offset(layers[0], ax, ay), (0, 0))
+            self.assertEqual(offset(layers[-1], ax, ay), far)
+            for n, layer in enumerate(layers):
+                t = n / (len(layers) - 1)
+                x, y = offset(layer, ax, ay)
+                self.assertAlmostEqual(x, t * far[0], places=9)
+                self.assertAlmostEqual(y, t * far[1], places=9)
+            # Worst-case spacing: longest shadow plus full tilt, still overlapping.
+            longest = 16 / 0.49 + math.hypot(*far)
+            self.assertLess(longest / (len(layers) - 1), thickness)
+        # Hour and minute markers, the sun dot and ambient geometry never move.
+        for name in ('dayChord', 'nightChord', 'solarTop', 'ambientChord'):
             self.assertIsNone(ROOT.find(f".//Group[@name='{name}']/Gyro"), name)
 
     def test_regeneration_matches_canonical_xml(self):
