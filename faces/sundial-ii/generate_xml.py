@@ -83,6 +83,41 @@ def wall_shadow(parent, points, dx, dy, fade):
              '#81918b', WALL_THICKNESS)
 
 
+# Wrist-tilt parallax. The chord is the top of a wall standing on the dial, so
+# tilting the watch shifts it against the floor-bound shadow. Gain is screen
+# units per degree of tilt; the clamp caps the lean at about 12 units. Flip a
+# sign if the wall leans the wrong way on the device.
+TILT_GAIN = 0.3
+TILT_LIMIT = 40
+TILT_SIGN_X = 1
+TILT_SIGN_Y = 1
+WALL_FACE_LAYERS = 6
+
+
+def tilt(fraction=1):
+    def axis(source, sign):
+        gain = f'{sign * TILT_GAIN * fraction:.12g}'
+        return f'{gain} * clamp([{source}], -{TILT_LIMIT}, {TILT_LIMIT})'
+    return axis('ACCELEROMETER_ANGLE_X', TILT_SIGN_X), axis('ACCELEROMETER_ANGLE_Y', TILT_SIGN_Y)
+
+
+def gyro(parent, fraction=1):
+    x, y = tilt(fraction)
+    element(parent, 'Gyro', x=x, y=y)
+
+
+def wall_face(parent, points):
+    # The visible side of the wall: the chord swept from its base (fraction 0)
+    # to its tilted top (fraction 1), one Gyro-offset copy per layer. Spacing is
+    # at most 12 / WALL_FACE_LAYERS units, below the stroke width.
+    face = element(parent, 'Group', x=0, y=0, width=450, height=450, name='wallFace')
+    ambient(face)
+    for i in range(1, WALL_FACE_LAYERS + 1):
+        layer = element(face, 'Group', x=0, y=0, width=450, height=450, name=f'wallFace{i}')
+        gyro(layer, i / WALL_FACE_LAYERS)
+        line(draw(layer), points, '#55686a', 3)
+
+
 def time_geometry(parent, color, core, points):
     line(draw(parent), points, color, 2.6)
     hour = ellipse(draw(parent), 0, 0, 16, fill=color)
@@ -201,8 +236,12 @@ def build():
         part = draw(filament_group)
         transform(part, 'alpha', f'{alpha} * {fade}')
         line(part, shadow_points, '#243e44', width)
-    wall = element(selection, 'ListOption', id='1')
+    # A ListOption holds exactly one child, so the wall's floor shadow and its
+    # tilted face share a group.
+    wall = element(element(selection, 'ListOption', id='1'), 'Group',
+                   x=0, y=0, width=450, height=450, name='raisedWall')
     wall_shadow(wall, points, dx, dy, f'255 * {fade}')
+    wall_face(wall, points)
 
     top = element(scene, 'Group', x=0, y=0, width=450, height=450, name='solarTop')
     ambient(top)
@@ -221,9 +260,11 @@ def build():
 
     night_time = element(top, 'Group', x=0, y=0, width=450, height=450, name='nightChord')
     transform(night_time, 'alpha', f'{up} >= 0 ? 0 : 255')
+    gyro(night_time)
     time_geometry(night_time, '#e1e6dc', '#c87a47', points)
     day_time = element(top, 'Group', x=0, y=0, width=450, height=450, name='dayChord')
     transform(day_time, 'alpha', f'{up} >= 0 ? 255 : 0')
+    gyro(day_time)
     time_geometry(day_time, '#263e43', '#c87a47', points)
 
     aod = element(scene, 'Group', x=0, y=0, width=450, height=450, alpha=0, name='ambientChord')

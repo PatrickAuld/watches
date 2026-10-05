@@ -146,6 +146,29 @@ class SundialGeometry(unittest.TestCase):
             for prefix in ('start', 'end'):
                 self.assertLess(math.hypot(s[prefix+'X']-225, s[prefix+'Y']-225)+6, 225)
 
+    def test_tilt_parallax_moves_wall_top_over_fixed_floor(self):
+        def offset(group, ax, ay):
+            g = group.find('Gyro')
+            values = {'ACCELEROMETER_ANGLE_X': ax, 'ACCELEROMETER_ANGLE_Y': ay}
+            def ev(expr):
+                for k, v in values.items():
+                    expr = expr.replace(f'[{k}]', str(v))
+                return eval(expr, {'__builtins__': {}}, {'clamp': lambda x, lo, hi: max(lo, min(hi, x))})
+            return ev(g.get('x')), ev(g.get('y'))
+        day = ROOT.find(".//Group[@name='dayChord']")
+        night = ROOT.find(".//Group[@name='nightChord']")
+        layers = ROOT.findall(".//Group[@name='wallFace']/Group")
+        for ax, ay in ((0, 0), (25, -10), (90, 90), (-90, -90)):
+            top = offset(day, ax, ay)
+            self.assertEqual(top, offset(night, ax, ay))
+            self.assertLessEqual(math.hypot(*top), 17)
+            self.assertEqual(offset(layers[-1], ax, ay), top)
+            step = math.hypot(*offset(layers[0], ax, ay))
+            self.assertLess(step, 3)
+        # Floor elements (shadows, sun dot) and ambient geometry never move.
+        for name in ('castShadow', 'wallShadow', 'lineShadow', 'ambientChord', 'solarTop'):
+            self.assertIsNone(ROOT.find(f".//Group[@name='{name}']/Gyro"), name)
+
     def test_regeneration_matches_canonical_xml(self):
         from generate_xml import build
         root = build()
