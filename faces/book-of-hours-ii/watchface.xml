@@ -1,0 +1,1585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450" clipShape="CIRCLE">
+  <Metadata key="CLOCK_TYPE" value="DIGITAL" />
+  <Metadata key="PREVIEW_TIME" value="13:10:00" />
+  <Scene backgroundColor="#000000">
+    <Group x="0" y="0" width="450" height="450" name="camera" pivotX="0.5" pivotY="0.5" angle="0" scaleX="1" scaleY="1">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <Transform target="x" value="((-68.74642) * ((pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) / 0.23024) * sin(rad((-140.625) * (1 - clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1))))) + ((-329) * ((pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) / 1.6) * sin(rad((-70.625) * (1 - clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1))))) + ((-57.24513) * ((pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) / 0.16971) * sin(rad(21.25 * (1 - clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1))))) + ((-329) * ((pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) / 1.6) * sin(rad(112.5 * (1 - clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1))))) + ((-329) * ((pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1) / 1.6) * sin(rad(146.25 * (1 - clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)))))" />
+      <Transform target="y" value="(68.74642 * ((pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) / 0.23024) * cos(rad((-140.625) * (1 - clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1))))) + (329 * ((pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) / 1.6) * cos(rad((-70.625) * (1 - clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1))))) + (57.24513 * ((pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) / 0.16971) * cos(rad(21.25 * (1 - clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1))))) + (329 * ((pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) / 1.6) * cos(rad(112.5 * (1 - clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1))))) + (329 * ((pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1) / 1.6) * cos(rad(146.25 * (1 - clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)))))" />
+      <Transform target="angle" value="140.625 * clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + 70.625 * clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + (-21.25) * clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + (-112.5) * clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + (-146.25) * clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)" />
+      <Transform target="scaleX" value="(1 + (pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) + (pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1))" />
+      <Transform target="scaleY" value="(1 + (pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) + (pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1))" />
+      <PartImage x="0" y="0" width="450" height="450">
+        <Image resource="field" />
+      </PartImage>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="78" y="78" width="294" height="294">
+          <Stroke color="#FFC79A3C" thickness="5" />
+        </Ellipse>
+        <Ellipse x="79.2" y="79.2" width="291.6" height="291.6">
+          <Stroke color="#FFFFEAB0" thickness="0.7" />
+        </Ellipse>
+        <Ellipse x="75.8" y="75.8" width="298.4" height="298.4">
+          <Stroke color="#FF6E4A14" thickness="0.6" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="61.3" y="61.3" width="327.4" height="327.4">
+          <Stroke color="#FF100D24" thickness="27.4" />
+        </Ellipse>
+        <Arc centerX="225" centerY="225" width="305.6" height="305.6" startAngle="179.7938" endAngle="539.7938">
+          <Stroke color="#B0E7BE6A" thickness="1.200000000000017" dashIntervals="1.10000 0.23343" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="350.4" height="350.4" startAngle="179.8201" endAngle="539.8201">
+          <Stroke color="#B0E7BE6A" thickness="1.200000000000017" dashIntervals="1.10000 0.42891" />
+        </Arc>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="sleepEmblemAt" pivotX="0.5" pivotY="0.5" angle="219.375">
+        <Group x="209" y="89" width="32" height="32" name="sleepEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_sleep" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="dawnEmblemAt" pivotX="0.5" pivotY="0.5" angle="289.375">
+        <Group x="209" y="89" width="32" height="32" name="dawnEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_dawn" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="workEmblemAt" pivotX="0.5" pivotY="0.5" angle="21.25">
+        <Group x="209" y="89" width="32" height="32" name="workEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_work" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="hearthEmblemAt" pivotX="0.5" pivotY="0.5" angle="112.5">
+        <Group x="209" y="89" width="32" height="32" name="hearthEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_hearth" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="eveningEmblemAt" pivotX="0.5" pivotY="0.5" angle="146.25">
+        <Group x="209" y="89" width="32" height="32" name="eveningEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_evening" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="to_workEmblemAt" pivotX="0.5" pivotY="0.5" angle="313.75">
+        <Group x="209" y="89" width="32" height="32" name="to_workEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440) - 35)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_to_work" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="homewardEmblemAt" pivotX="0.5" pivotY="0.5" angle="88.75">
+        <Group x="209" y="89" width="32" height="32" name="homewardEmblem" alpha="90">
+          <Transform target="alpha" value="(90 + 0.6 * 255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440) - 35)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <PartImage x="0" y="0" width="32" height="32">
+            <Image resource="emblem_homeward" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="rosetteA" pivotX="0.5" pivotY="0.5" angle="0">
+        <Transform target="angle" value="(([MINUTE] % 4) * 60 + ([SECOND] + [MILLISECOND] / 1000)) * 1.5" />
+        <PartImage x="85" y="85" width="280" height="280">
+          <Image resource="rosette_a" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="rosetteB" pivotX="0.5" pivotY="0.5" angle="0">
+        <Transform target="angle" value="(([MINUTE] % 6) * 60 + ([SECOND] + [MILLISECOND] / 1000)) * -1" />
+        <PartImage x="85" y="85" width="280" height="280">
+          <Image resource="rosette_b" />
+        </PartImage>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="11" y="11" width="428" height="428">
+          <Stroke color="#FF0A0816" thickness="22" />
+        </Ellipse>
+        <Ellipse x="19.6" y="19.6" width="410.8" height="410.8">
+          <Stroke color="#FFC79A3C" thickness="1" />
+        </Ellipse>
+        <Ellipse x="2.5" y="2.5" width="445.0" height="445.0">
+          <Stroke color="#FFC79A3C" thickness="0.8" />
+        </Ellipse>
+        <Arc centerX="225" centerY="225" width="416.0" height="416.0" startAngle="179.9697" endAngle="539.9697">
+          <Stroke color="#C0E7BE6A" thickness="3.0" dashIntervals="0.22000 0.68757" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="418.5" height="418.5" startAngle="179.9452" endAngle="539.9452">
+          <Stroke color="#E0E7BE6A" thickness="5.5" dashIntervals="0.40000 4.16513" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="422.0" height="422.0" startAngle="179.8507" endAngle="539.8507">
+          <Stroke color="#FFE7BE6A" thickness="9.0" dashIntervals="1.10000 54.13967" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="35" y="35" width="380" height="380">
+          <Stroke color="#FF07050E" thickness="23" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="525.0" endAngle="633.75">
+          <Stroke color="#2E57F0" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="273.75" endAngle="305.0">
+          <Stroke color="#F04F7C" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="322.5" endAngle="440.0">
+          <Stroke color="#10B57E" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="457.5" endAngle="487.5">
+          <Stroke color="#F2662A" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="487.5" endAngle="525.0">
+          <Stroke color="#A04BE6" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="305.0" endAngle="322.5">
+          <Stroke color="#FFE9BE55" thickness="2.4" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="368" height="368" startAngle="305.0" endAngle="322.5">
+          <Stroke color="#66E9BE55" thickness="1" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="392" height="392" startAngle="305.0" endAngle="322.5">
+          <Stroke color="#66E9BE55" thickness="1" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="440.0" endAngle="457.5">
+          <Stroke color="#FFE9BE55" thickness="2.4" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="368" height="368" startAngle="440.0" endAngle="457.5">
+          <Stroke color="#66E9BE55" thickness="1" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="392" height="392" startAngle="440.0" endAngle="457.5">
+          <Stroke color="#66E9BE55" thickness="1" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="525.0" endAngle="525.0">
+          <Transform target="endAngle" value="525 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440), 0, 435) / 4" />
+          <Stroke color="#34FFF6DC" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="525.0" endAngle="633.75">
+          <Transform target="startAngle" value="525 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440), 0, 435) / 4" />
+          <Stroke color="#58000000" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="404" height="404" startAngle="525.0" endAngle="525.0">
+          <Transform target="endAngle" value="525 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440), 0, 435) / 4" />
+          <Stroke color="#FFFFEFB8" thickness="2.4" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="273.75" endAngle="273.75">
+          <Transform target="endAngle" value="273.75 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440), 0, 125) / 4" />
+          <Stroke color="#34FFF6DC" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="273.75" endAngle="305.0">
+          <Transform target="startAngle" value="273.75 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440), 0, 125) / 4" />
+          <Stroke color="#58000000" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="404" height="404" startAngle="273.75" endAngle="273.75">
+          <Transform target="endAngle" value="273.75 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440), 0, 125) / 4" />
+          <Stroke color="#FFFFEFB8" thickness="2.4" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="322.5" endAngle="322.5">
+          <Transform target="endAngle" value="322.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440), 0, 470) / 4" />
+          <Stroke color="#34FFF6DC" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="322.5" endAngle="440.0">
+          <Transform target="startAngle" value="322.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440), 0, 470) / 4" />
+          <Stroke color="#58000000" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="404" height="404" startAngle="322.5" endAngle="322.5">
+          <Transform target="endAngle" value="322.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440), 0, 470) / 4" />
+          <Stroke color="#FFFFEFB8" thickness="2.4" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="457.5" endAngle="457.5">
+          <Transform target="endAngle" value="457.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440), 0, 120) / 4" />
+          <Stroke color="#34FFF6DC" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="457.5" endAngle="487.5">
+          <Transform target="startAngle" value="457.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440), 0, 120) / 4" />
+          <Stroke color="#58000000" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="404" height="404" startAngle="457.5" endAngle="457.5">
+          <Transform target="endAngle" value="457.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440), 0, 120) / 4" />
+          <Stroke color="#FFFFEFB8" thickness="2.4" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="487.5" endAngle="487.5">
+          <Transform target="endAngle" value="487.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440), 0, 150) / 4" />
+          <Stroke color="#34FFF6DC" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="487.5" endAngle="525.0">
+          <Transform target="startAngle" value="487.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440), 0, 150) / 4" />
+          <Stroke color="#58000000" thickness="20" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="404" height="404" startAngle="487.5" endAngle="487.5">
+          <Transform target="endAngle" value="487.5 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440), 0, 150) / 4" />
+          <Stroke color="#FFFFEFB8" thickness="2.4" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440) - 35)) / 3, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="305.0" endAngle="305.0">
+          <Transform target="endAngle" value="305 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440), 0, 70) / 4" />
+          <Stroke color="#B0FFD77A" thickness="8" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="305.0" endAngle="305.0">
+          <Transform target="endAngle" value="305 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440), 0, 70) / 4" />
+          <Stroke color="#FFFFF8E0" thickness="2.6" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440) - 35)) / 3, 0, 1) * (0.3 + 0.22 * sin(([SECOND] + [MILLISECOND] / 1000) * 2.4))" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="322.5" endAngle="440.0">
+          <Stroke color="#B0FFF6E0" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="to_workBead0" pivotX="0.5" pivotY="0.5" angle="305.0">
+        <Transform target="angle" value="305 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="to_workBead1" pivotX="0.5" pivotY="0.5" angle="308.5">
+        <Transform target="angle" value="305 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.2) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.2) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="to_workBead2" pivotX="0.5" pivotY="0.5" angle="312.0">
+        <Transform target="angle" value="305 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.4) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.4) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="to_workBead3" pivotX="0.5" pivotY="0.5" angle="315.5">
+        <Transform target="angle" value="305 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.6) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.6) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="to_workBead4" pivotX="0.5" pivotY="0.5" angle="319.0">
+        <Transform target="angle" value="305 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.8) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.8) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440) - 35)) / 3, 0, 1)" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="440.0" endAngle="440.0">
+          <Transform target="endAngle" value="440 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440), 0, 70) / 4" />
+          <Stroke color="#B0FFD77A" thickness="8" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="440.0" endAngle="440.0">
+          <Transform target="endAngle" value="440 + clamp(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440), 0, 70) / 4" />
+          <Stroke color="#FFFFF8E0" thickness="2.6" />
+        </Arc>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440) - 35)) / 3, 0, 1) * (0.3 + 0.22 * sin(([SECOND] + [MILLISECOND] / 1000) * 2.4))" />
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="457.5" endAngle="487.5">
+          <Stroke color="#B0FFF6E0" thickness="20" />
+        </Arc>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="homewardBead0" pivotX="0.5" pivotY="0.5" angle="80.0">
+        <Transform target="angle" value="440 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="homewardBead1" pivotX="0.5" pivotY="0.5" angle="83.5">
+        <Transform target="angle" value="440 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.2) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.2) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="homewardBead2" pivotX="0.5" pivotY="0.5" angle="87.0">
+        <Transform target="angle" value="440 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.4) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.4) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="homewardBead3" pivotX="0.5" pivotY="0.5" angle="90.5">
+        <Transform target="angle" value="440 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.6) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.6) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="homewardBead4" pivotX="0.5" pivotY="0.5" angle="94.0">
+        <Transform target="angle" value="440 + 17.5 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.8) % 1)" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Transform target="alpha" value="255 * sin(3.14159 * ((([SECOND] + [MILLISECOND] / 1000) / 5 + 0.8) % 1)) * clamp(1 - (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+          <Ellipse x="221.0" y="31.0" width="8" height="8">
+            <Fill color="#80FFE7A0" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FFFFFAEA" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="43.6" y="43.6" width="362.8" height="362.8">
+          <Stroke color="#58000000" thickness="3" />
+        </Ellipse>
+        <Ellipse x="27.7" y="27.7" width="394.6" height="394.6">
+          <Stroke color="#40FFFFFF" thickness="1.4" />
+        </Ellipse>
+        <Ellipse x="31.5" y="31.5" width="387.0" height="387.0">
+          <Stroke color="#14FFFFFF" thickness="5" />
+        </Ellipse>
+        <Ellipse x="46.9" y="46.9" width="356.2" height="356.2">
+          <Stroke color="#FFC79A3C" thickness="3.2" />
+        </Ellipse>
+        <Ellipse x="47.8" y="47.8" width="354.4" height="354.4">
+          <Stroke color="#FFFFEAB0" thickness="0.7" />
+        </Ellipse>
+        <Ellipse x="23.0" y="23.0" width="404.0" height="404.0">
+          <Stroke color="#FFC79A3C" thickness="3.2" />
+        </Ellipse>
+        <Ellipse x="23.9" y="23.9" width="402.2" height="402.2">
+          <Stroke color="#FFFFEAB0" thickness="0.7" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="363.5" height="363.5" startAngle="179.9716" endAngle="539.9716">
+          <Stroke color="#B0F4E3B0" thickness="2.5" dashIntervals="0.18000 0.61303" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="365.5" height="365.5" startAngle="179.9373" endAngle="539.9373">
+          <Stroke color="#E0F4E3B0" thickness="4.5" dashIntervals="0.40000 3.58699" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="367.5" height="367.5" startAngle="179.8909" endAngle="539.8909">
+          <Stroke color="#FFFFEAB0" thickness="6.5" dashIntervals="0.70000 11.32641" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="370.0" height="370.0" startAngle="179.7522" endAngle="539.7522">
+          <Stroke color="#FFE7BE6A" thickness="9.0" dashIntervals="1.60000 46.83289" />
+        </Arc>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="micro15" pivotX="0.5" pivotY="0.5" angle="183.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro30" pivotX="0.5" pivotY="0.5" angle="187.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro45" pivotX="0.5" pivotY="0.5" angle="191.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro75" pivotX="0.5" pivotY="0.5" angle="198.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro90" pivotX="0.5" pivotY="0.5" angle="202.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro105" pivotX="0.5" pivotY="0.5" angle="206.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro135" pivotX="0.5" pivotY="0.5" angle="213.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro150" pivotX="0.5" pivotY="0.5" angle="217.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro165" pivotX="0.5" pivotY="0.5" angle="221.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro195" pivotX="0.5" pivotY="0.5" angle="228.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro210" pivotX="0.5" pivotY="0.5" angle="232.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro225" pivotX="0.5" pivotY="0.5" angle="236.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro255" pivotX="0.5" pivotY="0.5" angle="243.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro270" pivotX="0.5" pivotY="0.5" angle="247.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro285" pivotX="0.5" pivotY="0.5" angle="251.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro315" pivotX="0.5" pivotY="0.5" angle="258.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro330" pivotX="0.5" pivotY="0.5" angle="262.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro345" pivotX="0.5" pivotY="0.5" angle="266.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro375" pivotX="0.5" pivotY="0.5" angle="273.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro390" pivotX="0.5" pivotY="0.5" angle="277.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro405" pivotX="0.5" pivotY="0.5" angle="281.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro435" pivotX="0.5" pivotY="0.5" angle="288.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro450" pivotX="0.5" pivotY="0.5" angle="292.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro465" pivotX="0.5" pivotY="0.5" angle="296.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro495" pivotX="0.5" pivotY="0.5" angle="303.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro510" pivotX="0.5" pivotY="0.5" angle="307.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro525" pivotX="0.5" pivotY="0.5" angle="311.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro555" pivotX="0.5" pivotY="0.5" angle="318.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro570" pivotX="0.5" pivotY="0.5" angle="322.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro585" pivotX="0.5" pivotY="0.5" angle="326.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro615" pivotX="0.5" pivotY="0.5" angle="333.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro630" pivotX="0.5" pivotY="0.5" angle="337.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro645" pivotX="0.5" pivotY="0.5" angle="341.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro675" pivotX="0.5" pivotY="0.5" angle="348.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro690" pivotX="0.5" pivotY="0.5" angle="352.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro705" pivotX="0.5" pivotY="0.5" angle="356.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro735" pivotX="0.5" pivotY="0.5" angle="3.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro750" pivotX="0.5" pivotY="0.5" angle="7.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro765" pivotX="0.5" pivotY="0.5" angle="11.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro795" pivotX="0.5" pivotY="0.5" angle="18.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro810" pivotX="0.5" pivotY="0.5" angle="22.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro825" pivotX="0.5" pivotY="0.5" angle="26.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro855" pivotX="0.5" pivotY="0.5" angle="33.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro870" pivotX="0.5" pivotY="0.5" angle="37.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro885" pivotX="0.5" pivotY="0.5" angle="41.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro915" pivotX="0.5" pivotY="0.5" angle="48.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro930" pivotX="0.5" pivotY="0.5" angle="52.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro945" pivotX="0.5" pivotY="0.5" angle="56.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro975" pivotX="0.5" pivotY="0.5" angle="63.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro990" pivotX="0.5" pivotY="0.5" angle="67.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1005" pivotX="0.5" pivotY="0.5" angle="71.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1035" pivotX="0.5" pivotY="0.5" angle="78.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1050" pivotX="0.5" pivotY="0.5" angle="82.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1065" pivotX="0.5" pivotY="0.5" angle="86.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1095" pivotX="0.5" pivotY="0.5" angle="93.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1110" pivotX="0.5" pivotY="0.5" angle="97.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1125" pivotX="0.5" pivotY="0.5" angle="101.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1155" pivotX="0.5" pivotY="0.5" angle="108.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1170" pivotX="0.5" pivotY="0.5" angle="112.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1185" pivotX="0.5" pivotY="0.5" angle="116.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1215" pivotX="0.5" pivotY="0.5" angle="123.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1230" pivotX="0.5" pivotY="0.5" angle="127.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1245" pivotX="0.5" pivotY="0.5" angle="131.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1275" pivotX="0.5" pivotY="0.5" angle="138.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1290" pivotX="0.5" pivotY="0.5" angle="142.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1305" pivotX="0.5" pivotY="0.5" angle="146.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1335" pivotX="0.5" pivotY="0.5" angle="153.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1350" pivotX="0.5" pivotY="0.5" angle="157.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1365" pivotX="0.5" pivotY="0.5" angle="161.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1395" pivotX="0.5" pivotY="0.5" angle="168.75">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_15" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1410" pivotX="0.5" pivotY="0.5" angle="172.5">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_30" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="micro1425" pivotX="0.5" pivotY="0.5" angle="176.25">
+        <PartImage x="217" y="25" width="16" height="9">
+          <Image resource="micro_45" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral0" pivotX="0.5" pivotY="0.5" angle="180.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="glyph_moon" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral1" pivotX="0.5" pivotY="0.5" angle="195.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_1" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral2" pivotX="0.5" pivotY="0.5" angle="210.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_2" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral3" pivotX="0.5" pivotY="0.5" angle="225.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_3" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral4" pivotX="0.5" pivotY="0.5" angle="240.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_4" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral5" pivotX="0.5" pivotY="0.5" angle="255.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_5" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral6" pivotX="0.5" pivotY="0.5" angle="270.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_6" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral7" pivotX="0.5" pivotY="0.5" angle="285.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_7" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral8" pivotX="0.5" pivotY="0.5" angle="300.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_8" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral9" pivotX="0.5" pivotY="0.5" angle="315.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_9" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral10" pivotX="0.5" pivotY="0.5" angle="330.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_10" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral11" pivotX="0.5" pivotY="0.5" angle="345.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_11" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral12" pivotX="0.5" pivotY="0.5" angle="0.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="glyph_sun" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral13" pivotX="0.5" pivotY="0.5" angle="15.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_1" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral14" pivotX="0.5" pivotY="0.5" angle="30.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_2" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral15" pivotX="0.5" pivotY="0.5" angle="45.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_3" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral16" pivotX="0.5" pivotY="0.5" angle="60.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_4" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral17" pivotX="0.5" pivotY="0.5" angle="75.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_5" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral18" pivotX="0.5" pivotY="0.5" angle="90.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_6" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral19" pivotX="0.5" pivotY="0.5" angle="105.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_7" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral20" pivotX="0.5" pivotY="0.5" angle="120.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_8" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral21" pivotX="0.5" pivotY="0.5" angle="135.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_9" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral22" pivotX="0.5" pivotY="0.5" angle="150.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_10" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="numeral23" pivotX="0.5" pivotY="0.5" angle="165.0">
+        <PartImage x="207" y="51" width="36" height="22">
+          <Image resource="numeral_11" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star0" pivotX="0.5" pivotY="0.5" angle="169.9432">
+        <Group x="219" y="34" width="12" height="12" name="twinkle0" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 0.00))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -8" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star1" pivotX="0.5" pivotY="0.5" angle="179.8295">
+        <Group x="219" y="26" width="12" height="12" name="twinkle1" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 2.10))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * 11" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star2" pivotX="0.5" pivotY="0.5" angle="189.7159">
+        <Group x="219" y="30" width="12" height="12" name="twinkle2" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 4.20))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -14" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star3" pivotX="0.5" pivotY="0.5" angle="199.6023">
+        <Group x="219" y="24" width="12" height="12" name="twinkle3" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 6.30))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * 17" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star4" pivotX="0.5" pivotY="0.5" angle="209.4886">
+        <Group x="219" y="33" width="12" height="12" name="twinkle4" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 8.40))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -20" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star5" pivotX="0.5" pivotY="0.5" angle="219.375">
+        <Group x="219" y="28" width="12" height="12" name="twinkle5" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 10.50))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * 23" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star6" pivotX="0.5" pivotY="0.5" angle="229.2614">
+        <Group x="219" y="25" width="12" height="12" name="twinkle6" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 12.60))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -26" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star7" pivotX="0.5" pivotY="0.5" angle="239.1477">
+        <Group x="219" y="32" width="12" height="12" name="twinkle7" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 14.70))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * 29" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star8" pivotX="0.5" pivotY="0.5" angle="249.0341">
+        <Group x="219" y="27" width="12" height="12" name="twinkle8" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 16.80))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -32" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star9" pivotX="0.5" pivotY="0.5" angle="258.9205">
+        <Group x="219" y="34" width="12" height="12" name="twinkle9" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 18.90))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * 35" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="star10" pivotX="0.5" pivotY="0.5" angle="268.8068">
+        <Group x="219" y="26" width="12" height="12" name="twinkle10" pivotX="0.5" pivotY="0.5">
+          <Transform target="alpha" value="255 * (0.6 + 0.4 * sin(([SECOND] + [MILLISECOND] / 1000) * 1.3 + 21.00))" />
+          <Transform target="angle" value="([SECOND] + [MILLISECOND] / 1000) * -38" />
+          <PartImage x="0" y="0" width="12" height="12">
+            <Image resource="star" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge375" pivotX="0.5" pivotY="0.5" angle="273.75">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge500" pivotX="0.5" pivotY="0.5" angle="305.0">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge570" pivotX="0.5" pivotY="0.5" angle="322.5">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge1040" pivotX="0.5" pivotY="0.5" angle="80.0">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge1110" pivotX="0.5" pivotY="0.5" angle="97.5">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge1230" pivotX="0.5" pivotY="0.5" angle="127.5">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="lozenge1380" pivotX="0.5" pivotY="0.5" angle="165.0">
+        <PartImage x="217" y="24" width="16" height="22">
+          <Image resource="lozenge" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="now" pivotX="0.5" pivotY="0.5" angle="0">
+        <Transform target="angle" value="([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) / 4 + 180" />
+        <PartImage x="0" y="0" width="450" height="450">
+          <Image resource="trail" />
+        </PartImage>
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Line startX="225" startY="74" endX="225" endY="48">
+            <Stroke color="#D9F5D27A" thickness="1.4" cap="ROUND" />
+          </Line>
+          <Ellipse x="223.0" y="72.0" width="4" height="4">
+            <Fill color="#FFF5D27A" />
+          </Ellipse>
+        </PartDraw>
+        <Group x="193" y="3" width="64" height="64" name="steadyJewel" pivotX="0.5" pivotY="0.5">
+          <Transform target="scaleX" value="1 / (1 + (pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) + (pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1))" />
+          <Transform target="scaleY" value="1 / (1 + (pow(1.23024, clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1)) - 1) + (pow(1.16971, clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1)) - 1) + (pow(2.6, clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)) - 1))" />
+          <Group x="0" y="0" width="64" height="64" name="halo">
+            <Transform target="alpha" value="170 + 85 * sin(([SECOND] + [MILLISECOND] / 1000) * 2.1)" />
+            <PartImage x="0" y="0" width="64" height="64">
+              <Image resource="halo" />
+            </PartImage>
+          </Group>
+          <PartImage x="15" y="15" width="34" height="34">
+            <Image resource="jewel" />
+          </PartImage>
+        </Group>
+      </Group>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="bezel">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartImage x="0" y="0" width="450" height="450">
+        <Image resource="bezel" />
+      </PartImage>
+    </Group>
+    <PartDraw x="0" y="0" width="450" height="450">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <Transform target="alpha" value="255 * clamp((clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1)), 0, 1)" />
+      <Ellipse x="45" y="170" width="360" height="220">
+        <Fill color="#80000000">
+          <RadialGradient centerX="225" centerY="285" radius="180" colors="#B0050310 #80050310 #00050310" positions="0 0.55 1" />
+        </Fill>
+      </Ellipse>
+    </PartDraw>
+    <Group x="0" y="0" width="450" height="450" name="sleepLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_sleep" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_sleep" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="dawnLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_dawn" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_dawn" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="workLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_work" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_work" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="hearthLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_hearth" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_hearth" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="eveningLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_evening" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_evening" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="to_workLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 940) % 1440) - 35)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_to_work" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_to_work" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="homewardLettering" alpha="0">
+      <Transform target="alpha" value="255 * clamp((35 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 400) % 1440) - 35)) / 3, 0, 1)" />
+      <PartImage x="100" y="201" width="250" height="50">
+        <Image resource="title_homeward" />
+      </PartImage>
+      <PartImage x="100" y="309" width="250" height="22">
+        <Image resource="subtitle_homeward" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="time">
+      <Variant mode="AMBIENT" target="alpha" value="215" />
+      <Group x="0" y="0" width="450" height="450" name="digits">
+        <Transform target="x" value="-15 * (1 - floor([HOUR_1_12] / 10))" />
+        <Group x="158" y="250" width="30" height="52" name="hourTens1" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([HOUR_1_12] / 10) - 1), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_1" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits0" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 0), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_0" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits1" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 1), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_1" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits2" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 2), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_2" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits3" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 3), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_3" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits4" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 4), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_4" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits5" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 5), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_5" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits6" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 6), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_6" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits7" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 7), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_7" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits8" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 8), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_8" />
+          </PartImage>
+        </Group>
+        <Group x="188" y="250" width="30" height="52" name="hourUnits9" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([HOUR_1_12] % 10) - 9), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_9" />
+          </PartImage>
+        </Group>
+        <PartImage x="218" y="250" width="14" height="52">
+          <Image resource="colon" />
+        </PartImage>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens0" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 0), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_0" />
+          </PartImage>
+        </Group>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens1" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 1), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_1" />
+          </PartImage>
+        </Group>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens2" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 2), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_2" />
+          </PartImage>
+        </Group>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens3" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 3), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_3" />
+          </PartImage>
+        </Group>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens4" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 4), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_4" />
+          </PartImage>
+        </Group>
+        <Group x="232" y="250" width="30" height="52" name="minuteTens5" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(floor([MINUTE] / 10) - 5), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_5" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits0" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 0), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_0" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits1" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 1), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_1" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits2" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 2), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_2" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits3" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 3), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_3" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits4" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 4), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_4" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits5" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 5), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_5" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits6" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 6), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_6" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits7" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 7), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_7" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits8" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 8), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_8" />
+          </PartImage>
+        </Group>
+        <Group x="262" y="250" width="30" height="52" name="minuteUnits9" alpha="0">
+          <Transform target="alpha" value="255 * clamp(1 - abs(([MINUTE] % 10) - 9), 0, 1)" />
+          <PartImage x="0" y="0" width="30" height="52">
+            <Image resource="digit_9" />
+          </PartImage>
+        </Group>
+      </Group>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="countdown">
+      <Variant mode="AMBIENT" target="alpha" value="190" />
+      <Group x="183" y="334" width="11" height="20" name="remainHours0" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 0), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_0" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours1" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 1), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_1" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours2" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 2), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_2" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours3" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 3), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_3" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours4" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 4), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_4" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours5" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 5), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_5" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours6" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 6), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_6" />
+        </PartImage>
+      </Group>
+      <Group x="183" y="334" width="11" height="20" name="remainHours7" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) / 60) - 7), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_7" />
+        </PartImage>
+      </Group>
+      <PartImage x="194" y="334" width="5" height="20">
+        <Image resource="small_colon" />
+      </PartImage>
+      <Group x="199" y="334" width="11" height="20" name="remainTens0" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 0), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_0" />
+        </PartImage>
+      </Group>
+      <Group x="199" y="334" width="11" height="20" name="remainTens1" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 1), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_1" />
+        </PartImage>
+      </Group>
+      <Group x="199" y="334" width="11" height="20" name="remainTens2" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 2), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_2" />
+        </PartImage>
+      </Group>
+      <Group x="199" y="334" width="11" height="20" name="remainTens3" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 3), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_3" />
+        </PartImage>
+      </Group>
+      <Group x="199" y="334" width="11" height="20" name="remainTens4" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 4), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_4" />
+        </PartImage>
+      </Group>
+      <Group x="199" y="334" width="11" height="20" name="remainTens5" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(floor(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 60) / 10) - 5), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_5" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits0" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 0), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_0" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits1" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 1), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_1" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits2" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 2), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_2" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits3" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 3), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_3" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits4" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 4), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_4" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits5" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 5), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_5" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits6" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 6), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_6" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits7" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 7), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_7" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits8" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 8), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_8" />
+        </PartImage>
+      </Group>
+      <Group x="210" y="334" width="11" height="20" name="remainUnits9" alpha="0">
+        <Transform target="alpha" value="255 * clamp(1 - abs(((clamp(435 - ((([HOUR_0_23] * 60 + [MINUTE]) + 60) % 1440), 0, 1440) + clamp(125 - ((([HOUR_0_23] * 60 + [MINUTE]) + 1065) % 1440), 0, 1440) + clamp(470 - ((([HOUR_0_23] * 60 + [MINUTE]) + 870) % 1440), 0, 1440) + clamp(120 - ((([HOUR_0_23] * 60 + [MINUTE]) + 330) % 1440), 0, 1440) + clamp(150 - ((([HOUR_0_23] * 60 + [MINUTE]) + 210) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 940) % 1440), 0, 1440) + clamp(70 - ((([HOUR_0_23] * 60 + [MINUTE]) + 400) % 1440), 0, 1440)) % 10) - 9), 0, 1)" />
+        <PartImage x="0" y="0" width="11" height="20">
+          <Image resource="small_9" />
+        </PartImage>
+      </Group>
+      <PartImage x="227" y="334" width="40" height="20">
+        <Image resource="word_left" />
+      </PartImage>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="ambientDial" alpha="0">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="525.6" endAngle="633.15">
+          <Stroke color="#B02E57F0" thickness="3" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="274.35" endAngle="304.4">
+          <Stroke color="#B0F04F7C" thickness="3" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="323.1" endAngle="439.4">
+          <Stroke color="#B010B57E" thickness="3" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="458.1" endAngle="486.9">
+          <Stroke color="#B0F2662A" thickness="3" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="488.1" endAngle="524.4">
+          <Stroke color="#B0A04BE6" thickness="3" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="305.0" endAngle="322.5">
+          <Stroke color="#70E9BE55" thickness="1" />
+        </Arc>
+        <Arc centerX="225" centerY="225" width="380" height="380" startAngle="440.0" endAngle="457.5">
+          <Stroke color="#70E9BE55" thickness="1" />
+        </Arc>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark0" pivotX="0.5" pivotY="0.5" angle="180.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark180" pivotX="0.5" pivotY="0.5" angle="225.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark360" pivotX="0.5" pivotY="0.5" angle="270.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark540" pivotX="0.5" pivotY="0.5" angle="315.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark720" pivotX="0.5" pivotY="0.5" angle="0.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark900" pivotX="0.5" pivotY="0.5" angle="45.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark1080" pivotX="0.5" pivotY="0.5" angle="90.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMark1260" pivotX="0.5" pivotY="0.5" angle="135.0">
+        <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+          <Line startX="225" startY="44" endX="225" endY="39">
+            <Stroke color="#FFB89A55" thickness="1.2" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientNow" pivotX="0.5" pivotY="0.5" angle="0">
+        <Transform target="angle" value="([HOUR_0_23] * 60 + [MINUTE]) / 4 + 180" />
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Line startX="225" startY="74" endX="225" endY="43">
+            <Stroke color="#C0F5D27A" thickness="1.2" cap="ROUND" />
+          </Line>
+          <Ellipse x="220.5" y="30.5" width="9" height="9">
+            <Fill color="#FFF5D27A" />
+          </Ellipse>
+          <Ellipse x="223.0" y="33.0" width="4" height="4">
+            <Fill color="#FF201608" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+    </Group>
+  </Scene>
+</WatchFace>
