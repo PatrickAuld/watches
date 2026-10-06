@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450" clipShape="CIRCLE">
+  <Metadata key="CLOCK_TYPE" value="ANALOG" />
+  <Metadata key="PREVIEW_TIME" value="10:10:00" />
+  <UserConfigurations>
+    <ColorConfiguration id="radar_theme" displayName="radar_theme" defaultValue="0">
+      <ColorOption id="0" displayName="theme_green" colors="#FF020B05 #FF3DFF6E #FFE2FFE8 #FF0E5523" />
+      <ColorOption id="1" displayName="theme_amber" colors="#FF0B0702 #FFFFB21E #FFFFF1CC #FF5A3907" />
+      <ColorOption id="2" displayName="theme_cyan" colors="#FF020A10 #FF38E1FF #FFE0FAFF #FF0C485A" />
+      <ColorOption id="3" displayName="theme_red" colors="#FF0B0203 #FFFF3B36 #FFFFDAD4 #FF581213" />
+      <ColorOption id="4" displayName="theme_violet" colors="#FF07030D #FFB774FF #FFF1E6FF #FF3D2368" />
+    </ColorConfiguration>
+  </UserConfigurations>
+  <Scene backgroundColor="#000000">
+    <Group x="0" y="0" width="450" height="450" name="scope">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="0" y="0" width="450" height="450">
+          <Fill color="[CONFIGURATION.radar_theme.0]" />
+        </Ellipse>
+      </PartDraw>
+      <PartImage x="0" y="0" width="450" height="450" tintColor="[CONFIGURATION.radar_theme.1]">
+        <Image resource="radar_glow" />
+      </PartImage>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="159" y="159" width="132" height="132">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.2" />
+        </Ellipse>
+        <Ellipse x="93" y="93" width="264" height="264">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.2" />
+        </Ellipse>
+        <Ellipse x="27" y="27" width="396" height="396">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.2" />
+        </Ellipse>
+        <Line startX="225.0" startY="215.0" endX="225.0" endY="27.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="235.0" startY="225.0" endX="423.0" endY="225.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="225.0" startY="235.0" endX="225.0" endY="423.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="215.0" startY="225.0" endX="27.0" endY="225.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450" alpha="110">
+        <Line startX="235.0" startY="207.679" endX="324.0" endY="53.527">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="242.321" startY="215.0" endX="396.473" endY="126.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="242.321" startY="235.0" endX="396.473" endY="324.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="235.0" startY="242.321" endX="324.0" endY="396.473">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="215.0" startY="242.321" endX="126.0" endY="396.473">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="207.679" startY="235.0" endX="53.527" endY="324.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="207.679" startY="215.0" endX="53.527" endY="126.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Line startX="215.0" startY="207.679" endX="126.0" endY="53.527">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.8" cap="ROUND" />
+        </Line>
+        <Ellipse x="192" y="192" width="66" height="66">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.7" />
+        </Ellipse>
+        <Ellipse x="126" y="126" width="198" height="198">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.7" />
+        </Ellipse>
+        <Ellipse x="60" y="60" width="330" height="330">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="0.7" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Line startX="225.0" startY="23.0" endX="225.0" endY="13.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="242.693" startY="22.772" endX="243.041" endY="18.788">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="260.251" startY="25.084" endX="260.945" endY="21.145">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="277.54" startY="28.917" endX="278.576" endY="25.053">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="294.43" startY="34.242" endX="295.798" endY="30.484">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="310.792" startY="41.02" endX="312.482" endY="37.394">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="326.0" startY="50.063" endX="331.0" endY="41.403">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="341.436" startY="58.712" endX="343.73" endY="55.436">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="355.486" startY="69.493" endX="358.057" endY="66.429">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="368.543" startY="81.457" endX="371.371" endY="78.629">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="380.507" startY="94.514" endX="383.571" endY="91.943">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="391.288" startY="108.564" endX="394.564" endY="106.27">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="399.937" startY="124.0" endX="408.597" endY="119.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="408.98" startY="139.208" endX="412.606" endY="137.518">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="415.758" startY="155.57" endX="419.516" endY="154.202">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="421.083" startY="172.46" endX="424.947" endY="171.424">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="424.916" startY="189.749" endX="428.855" endY="189.055">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="427.228" startY="207.307" endX="431.212" endY="206.959">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="427.0" startY="225.0" endX="437.0" endY="225.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="427.228" startY="242.693" endX="431.212" endY="243.041">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="424.916" startY="260.251" endX="428.855" endY="260.945">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="421.083" startY="277.54" endX="424.947" endY="278.576">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="415.758" startY="294.43" endX="419.516" endY="295.798">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="408.98" startY="310.792" endX="412.606" endY="312.482">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="399.937" startY="326.0" endX="408.597" endY="331.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="391.288" startY="341.436" endX="394.564" endY="343.73">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="380.507" startY="355.486" endX="383.571" endY="358.057">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="368.543" startY="368.543" endX="371.371" endY="371.371">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="355.486" startY="380.507" endX="358.057" endY="383.571">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="341.436" startY="391.288" endX="343.73" endY="394.564">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="326.0" startY="399.937" endX="331.0" endY="408.597">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="310.792" startY="408.98" endX="312.482" endY="412.606">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="294.43" startY="415.758" endX="295.798" endY="419.516">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="277.54" startY="421.083" endX="278.576" endY="424.947">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="260.251" startY="424.916" endX="260.945" endY="428.855">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="242.693" startY="427.228" endX="243.041" endY="431.212">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="225.0" startY="427.0" endX="225.0" endY="437.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="207.307" startY="427.228" endX="206.959" endY="431.212">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="189.749" startY="424.916" endX="189.055" endY="428.855">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="172.46" startY="421.083" endX="171.424" endY="424.947">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="155.57" startY="415.758" endX="154.202" endY="419.516">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="139.208" startY="408.98" endX="137.518" endY="412.606">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="124.0" startY="399.937" endX="119.0" endY="408.597">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="108.564" startY="391.288" endX="106.27" endY="394.564">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="94.514" startY="380.507" endX="91.943" endY="383.571">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="81.457" startY="368.543" endX="78.629" endY="371.371">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="69.493" startY="355.486" endX="66.429" endY="358.057">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="58.712" startY="341.436" endX="55.436" endY="343.73">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="50.063" startY="326.0" endX="41.403" endY="331.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="41.02" startY="310.792" endX="37.394" endY="312.482">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="34.242" startY="294.43" endX="30.484" endY="295.798">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="28.917" startY="277.54" endX="25.053" endY="278.576">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="25.084" startY="260.251" endX="21.145" endY="260.945">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="22.772" startY="242.693" endX="18.788" endY="243.041">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="23.0" startY="225.0" endX="13.0" endY="225.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="22.772" startY="207.307" endX="18.788" endY="206.959">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="25.084" startY="189.749" endX="21.145" endY="189.055">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="28.917" startY="172.46" endX="25.053" endY="171.424">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="34.242" startY="155.57" endX="30.484" endY="154.202">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="41.02" startY="139.208" endX="37.394" endY="137.518">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="50.063" startY="124.0" endX="41.403" endY="119.0">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="58.712" startY="108.564" endX="55.436" endY="106.27">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="69.493" startY="94.514" endX="66.429" endY="91.943">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="81.457" startY="81.457" endX="78.629" endY="78.629">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="94.514" startY="69.493" endX="91.943" endY="66.429">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="108.564" startY="58.712" endX="106.27" endY="55.436">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="124.0" startY="50.063" endX="119.0" endY="41.403">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1.6" cap="ROUND" />
+        </Line>
+        <Line startX="139.208" startY="41.02" endX="137.518" endY="37.394">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="155.57" startY="34.242" endX="154.202" endY="30.484">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="172.46" startY="28.917" endX="171.424" endY="25.053">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="189.749" startY="25.084" endX="189.055" endY="21.145">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+        <Line startX="207.307" startY="22.772" endX="206.959" endY="18.788">
+          <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
+        </Line>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 0 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="220.5" y="22.5" width="9" height="9">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 30 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="321.0" y="50.527" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 60 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="393.473" y="123.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 90 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="420.0" y="222.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 120 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="393.473" y="321.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 150 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="321.0" y="393.473" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 180 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="222.0" y="420.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 210 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="123.0" y="393.473" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 240 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="50.527" y="321.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 270 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="24.0" y="222.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 300 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="50.527" y="123.0" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 330 + 720) % 360) / 160, 0, 1)" />
+        <Ellipse x="123.0" y="50.527" width="6" height="6">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="sweepArm" pivotX="0.5" pivotY="0.5">
+        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06)" />
+        <PartImage x="0" y="0" width="450" height="450" tintColor="[CONFIGURATION.radar_theme.1]">
+          <Image resource="radar_sweep" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="echoes">
+        <Group x="0" y="0" width="450" height="450" name="hourEcho" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="((([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) - 0.000138908182 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360))" />
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="216.0" y="182.0" width="18" height="18">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="216.0" y="164.0" width="18" height="18">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="216.0" y="146.0" width="18" height="18">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="216.0" y="128.0" width="18" height="18">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="216.0" y="110.0" width="18" height="18">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1))" />
+            <Ellipse x="220.0" y="186.0" width="10" height="10">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="220.0" y="168.0" width="10" height="10">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="220.0" y="150.0" width="10" height="10">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="220.0" y="132.0" width="10" height="10">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="220.0" y="114.0" width="10" height="10">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="221.5" y="187.5" width="7" height="7">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.5" y="169.5" width="7" height="7">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.5" y="151.5" width="7" height="7">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.5" y="133.5" width="7" height="7">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.5" y="115.5" width="7" height="7">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="minuteEcho" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="(([MINUTE] * 6 + [SECOND] * 0.1) - 0.00166944908 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360))" />
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="218.0" y="188.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="174.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="160.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="146.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="132.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="118.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="104.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="90.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="76.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="62.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="218.0" y="48.0" width="14" height="14">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1))" />
+            <Ellipse x="222.0" y="192.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="178.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="164.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="150.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="136.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="122.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="108.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="94.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="80.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="66.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="222.0" y="52.0" width="6" height="6">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="223.5" y="193.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="179.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="165.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="151.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="137.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="123.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="109.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="95.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="81.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="67.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="223.5" y="53.5" width="3" height="3">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="secondEcho2" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720))" />
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="70 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1)) + 90 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 40, 0, 1)" />
+            <Ellipse x="215.5" y="29.5" width="19" height="19">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="200 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1))" />
+            <Ellipse x="219.5" y="33.5" width="11" height="11">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="secondEcho1" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360))" />
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="70 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1)) + 90 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 40, 0, 1)" />
+            <Ellipse x="215.5" y="29.5" width="19" height="19">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="200 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1))" />
+            <Ellipse x="219.5" y="33.5" width="11" height="11">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="secondEcho0" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360))" />
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="215.5" y="29.5" width="19" height="19">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1))" />
+            <Ellipse x="219.5" y="33.5" width="11" height="11">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450">
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
+            <Ellipse x="221.0" y="35.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="sweepBeam" pivotX="0.5" pivotY="0.5">
+        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06)" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="235">
+          <Line startX="225" startY="225" endX="225" endY="15">
+            <Stroke color="[CONFIGURATION.radar_theme.2]" thickness="1.8" cap="ROUND" />
+          </Line>
+        </PartDraw>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450">
+        <Ellipse x="221.5" y="221.5" width="7" height="7">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" name="ambientScope" alpha="0">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <PartDraw x="0" y="0" width="450" height="450" alpha="150">
+        <Ellipse x="221.5" y="23.5" width="7" height="7">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+        <Ellipse x="420.5" y="222.5" width="5" height="5">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+        <Ellipse x="222.5" y="420.5" width="5" height="5">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+        <Ellipse x="24.5" y="222.5" width="5" height="5">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="ambientHour" pivotX="0.5" pivotY="0.5">
+        <Transform target="angle" value="(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="200">
+          <Ellipse x="221.0" y="187.0" width="8" height="8">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="221.0" y="169.0" width="8" height="8">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="221.0" y="151.0" width="8" height="8">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="221.0" y="133.0" width="8" height="8">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="221.0" y="115.0" width="8" height="8">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ambientMinute" pivotX="0.5" pivotY="0.5">
+        <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1)" />
+        <PartDraw x="0" y="0" width="450" height="450" alpha="200">
+          <Ellipse x="223.0" y="193.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="179.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="165.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="151.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="137.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="123.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="109.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="95.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="81.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="67.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="223.0" y="53.0" width="4" height="4">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
+      <PartDraw x="0" y="0" width="450" height="450" alpha="200">
+        <Ellipse x="222.5" y="222.5" width="5" height="5">
+          <Fill color="[CONFIGURATION.radar_theme.1]" />
+        </Ellipse>
+      </PartDraw>
+    </Group>
+  </Scene>
+</WatchFace>

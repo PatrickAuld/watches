@@ -1,0 +1,9 @@
+<resources>
+  <string name="watch_face_name">Radar</string>
+  <string name="radar_theme">Scope color</string>
+  <string name="theme_green">Phosphor green</string>
+  <string name="theme_amber">Amber</string>
+  <string name="theme_cyan">Arctic cyan</string>
+  <string name="theme_red">Night red</string>
+  <string name="theme_violet">Ultraviolet</string>
+</resources>
