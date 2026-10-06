@@ -9,9 +9,9 @@ sideways under the mask to show the time.
 - **Hour**: the big amber numeral in the centre. It stands alone from about
   :11 to :49. Around each hour change it interleaves with the next numeral,
   like a Scanimation in-between frame. The brighter numeral is the current hour.
-- **Minute**: the hatched arc on the outer ring, brightest at the current
-  minute and fading out about five minutes either side. Faint printed indices
-  sit just outside the ring.
+- **Minute**: sixty faint markings are printed around the ring. The current
+  minute's marking lights up white, striped by the sliding minute ink, and
+  steps to the next marking each minute.
 
 ## Mechanism
 
@@ -19,14 +19,22 @@ Two layers, one motion:
 
 | Layer | What it is |
 | --- | --- |
-| Mask (fixed) | Black plate. The twelve numerals are cut into it as tilted slits, interleaved: numeral k owns phase band k of 12 in a 24 px period. The minute ring is cut as vertical slits whose phase advances 12 px per turn. |
-| Sheet (moves) | One strip printed with two rulings: vertical rules every 12 px (minute ink) and rules tilted so they repeat every 144 px horizontally (hour ink). |
+| Mask (fixed) | Black plate. The twelve numerals are cut into it as tilted slits, interleaved: numeral k owns phase band k of 12 in a 24 px period. |
+| Minute window | One marking-sized window that steps to the current minute (`[MINUTE] * 6`). |
+| Sheet (moves) | One strip printed with two rulings: fine vertical rules every 4 px (minute ink) and rules tilted so they repeat every 144 px horizontally (hour ink). |
 
 The sheet slides right 0.2 px per minute, which is 144 px per 12 hours. Both
-rulings repeat over 144 px, so the 12:00 wrap is invisible. Each slide of
-12 px moves the vertical rules through a full period, one turn of the minute
-arc. The same 12 px moves the tilted rules through only 1/12 of their phase.
-This 12:1 gear lets a single lateral slide drive both hands.
+rulings repeat over 144 px, so the 12:00 wrap is invisible. The same slide
+moves the tilted hour rules through one full phase period in 12 hours, so the
+numerals change once an hour.
+
+**The minutes are faked** (Patrick, October 2026: "narrow the minutes, we can
+fake the effect there and get per-minute markings"). The first version lit
+the ring by true moiré. Vertical slits shifted phase 12 px per turn, which
+gave a hatched arc about ten minutes wide. One pixel of phase is five minutes,
+so a single slide can't resolve one minute. Now a marking-shaped window rotates
+in one-minute steps. Through it you see the real sliding minute ink, so the
+lit marking keeps the striped Scanimation look.
 
 The numerals are cut into the mask, not printed on the sheet. A picture on a
 sheet that travels 144 px would ride along with it. The time is carried by

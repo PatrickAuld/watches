@@ -19,27 +19,27 @@ The mask is a black plate with the dial cut into it as slits:
   hour window    the twelve hour numerals, all stacked in the centre and
                  interleaved. Their slits are tilted rules with a 24 px period;
                  numeral k owns the 2 px phase band 2k..2k+2.
-  minute ring    an annulus whose vertical slits shift phase continuously
-                 with angle, 12 px over one turn (1 px = five minutes).
+  minute tick    one narrow window, the size of a single minute marking.
 
 The sheet is a single 12-hour strip printed with two inks of fine rules:
 
-  minute ink     vertical rules, period 12 px.
+  minute ink     fine vertical rules, period 4 px.
   hour ink       rules tilted so their horizontal period is 144 px (normal at
                  acos(1/6) from horizontal, perpendicular period 24 px).
 
 The whole sheet slides right 0.2 px per minute: 144 px in 12 hours, then wraps
-seamlessly because both rulings repeat over 144 px. The tilted hour rules turn
-that one slide into a 12:1 gear: the vertical rules cycle once an hour, the
-tilted rules once in twelve hours. Where a rule lies over a slit, light comes
-through:
+seamlessly because both rulings repeat over 144 px. Where a rule lies over a
+slit, light comes through:
 
   * the hour numeral whose phase band sits under an hour rule appears; it is
     complete at half past and interleaves (the Scanimation in-between frame)
     with its neighbour across each hour, so the brighter numeral is always the
     current hour;
-  * a hatched arc lights the minute ring, brightest at the current minute and
-    fading out five minutes either side.
+  * the minutes are faked. A true barrier grid can only resolve about five
+    minutes on this ring (a 1 px slit phase = 5 min), so instead the minute
+    window itself steps to the current minute marking, one of sixty printed
+    faintly on the plate. Through it you see the sliding minute ink, so the lit
+    marking is striped and drifts like the rest of the sheet.
 
 The two inks share one transform expression; they are separate SOURCE/MASK
 groups only so each ink shows through its own windows (in print they would be
@@ -59,8 +59,9 @@ SIZE = 450
 C = SIZE / 2
 SS = 4                      # supersampling for antialiased rules and slits
 
-PERIOD = 12.0               # px: vertical minute rule period (one hour of slide)
-SLIT = 1.0                  # px: minute slit and minute rule width (1 px = 5 min)
+PERIOD = 12.0               # px: slide per hour
+MINUTE_RULE_PERIOD = 4.0    # px: fine vertical minute rules (divides TRAVEL)
+MINUTE_RULE = 2.5           # px
 HOUR_PERIOD = 24.0          # px: perpendicular period of the tilted hour rules
 HOUR_SLIT = HOUR_PERIOD / 12  # px: each numeral owns a 2 px phase band
 HOUR_RULE = 1.25            # px: narrower than a 2 px band, so antialiasing at the
@@ -72,12 +73,16 @@ COS_A = HOUR_PERIOD / TRAVEL  # tilt: hour phase advances one period per 12 h
 SIN_A = math.sqrt(1 - COS_A ** 2)
 
 RING_IN, RING_OUT = 180, 201     # minute ring (safe inset 24 -> r <= 201)
+TICK = (RING_IN + 3, RING_OUT - 1, 1.6)      # printed minute marking: r0, r1, width
+TICK_FIVE = (RING_IN, RING_OUT, 3.0)         # printed five-minute marking
+LIT_TICK = (RING_IN - 1, RING_OUT + 1, 7.0)  # lit window, covers either marking
 NUMERAL_HEIGHT = 224             # cap height of the stacked hour numerals
 HOUR_LABELS = ["12"] + [str(h) for h in range(1, 12)]
 
 HOUR_INK = "#FFFFC46B"
 MINUTE_INK = "#FFE9F3FF"
 PLATE_PRINT = "#FF2A2A2A"
+MINUTE_PRINT = "#FF4A4A4A"
 
 # Minutes since 12:00 including seconds, so the slide is continuous.
 CLOCK = "(([HOUR_0_23] % 12) * 60 + [MINUTE] + [SECOND] / 60)"
@@ -91,7 +96,7 @@ def grid(width, height, x0=0.0):
     return np.meshgrid(xs, ys)
 
 
-def band(phase, centre=0.0, width=SLIT, period=PERIOD):
+def band(phase, centre, width, period):
     """True where phase lies within +/- width/2 of centre, modulo period."""
     d = (phase - centre + period / 2) % period - period / 2
     return np.abs(d) < width / 2
@@ -101,10 +106,17 @@ def hour_phase(x, y):
     return x * COS_A + y * SIN_A
 
 
-def minute_phase(x, y):
-    """0..12 px clockwise from twelve o'clock."""
-    theta = np.degrees(np.arctan2(x, -y)) % 360
-    return PERIOD * theta / 360
+def radial_bar(x, y, angle, r0, r1, width):
+    """A radial marking at `angle` degrees clockwise from twelve."""
+    a = math.radians(angle)
+    along = x * math.sin(a) - y * math.cos(a)
+    across = x * math.cos(a) + y * math.sin(a)
+    return (along >= r0) & (along <= r1) & (np.abs(across) <= width / 2)
+
+
+def minute_window(angle=0.0):
+    x, y = grid(SIZE, SIZE)
+    return downsample(radial_bar(x, y, angle, *LIT_TICK))
 
 
 def downsample(mask):
@@ -148,10 +160,7 @@ def build_masks():
         hour |= (slot == k) & layer
     # Keep the window in the dial's interior.
     hour &= r < RING_IN - 6
-
-    ring = (r >= RING_IN) & (r <= RING_OUT)
-    minute = ring & band(x, minute_phase(x, y))
-    return downsample(hour), downsample(minute)
+    return downsample(hour), minute_window(0.0)
 
 
 def build_sheets():
@@ -159,8 +168,17 @@ def build_sheets():
     width = SIZE + TRAVEL
     x, y = grid(width, SIZE, x0=-TRAVEL)
     hour = band(hour_phase(x, y), 0.0, HOUR_RULE, HOUR_PERIOD)
-    minute = band(x)
+    minute = band(x, 0.0, MINUTE_RULE, MINUTE_RULE_PERIOD)
     return downsample(hour), downsample(minute)
+
+
+def build_minute_print():
+    """Sixty faint minute markings printed on the plate."""
+    x, y = grid(SIZE, SIZE)
+    marks = np.zeros_like(x, dtype=bool)
+    for m in range(60):
+        marks |= radial_bar(x, y, m * 6, *(TICK_FIVE if m % 5 == 0 else TICK))
+    return downsample(marks)
 
 
 def build_plate():
@@ -174,7 +192,7 @@ def build_plate():
         p0 = (C + r0 * math.sin(a), C - r0 * math.cos(a))
         p1 = (C + r1 * math.sin(a), C - r1 * math.cos(a))
         draw.line([(p0[0] * SS, p0[1] * SS), (p1[0] * SS, p1[1] * SS)], fill=255, width=int(w * SS))
-    for rr in (RING_IN - 3, RING_OUT + 2):
+    for rr in (RING_IN - 4,):
         box = [(C - rr) * SS, (C - rr) * SS, (C + rr) * SS, (C + rr) * SS]
         draw.ellipse(box, outline=255, width=int(0.75 * SS))
     return downsample(np.asarray(img) / 255.0)
@@ -197,7 +215,8 @@ def simulate(minutes, layers, scale=1.0):
 
     Uses the same half-open slide and bilinear sub-pixel shift a renderer would.
     """
-    hour_mask, minute_mask, hour_sheet, minute_sheet, plate = layers
+    hour_mask, _, hour_sheet, minute_sheet, plate, minute_print = layers
+    minute_mask = minute_window(math.floor(minutes % 60) * 6)
     shift = (minutes % 720) * RATE
     whole = int(math.floor(shift))
     frac = shift - whole
@@ -211,6 +230,7 @@ def simulate(minutes, layers, scale=1.0):
 
     out = np.zeros((SIZE, SIZE, 3))
     out += plate[..., None] * hex_rgb(PLATE_PRINT)
+    out += minute_print[..., None] * hex_rgb(MINUTE_PRINT) * (1 - minute_mask[..., None])
     out += (slide(hour_sheet) * hour_mask)[..., None] * hex_rgb(HOUR_INK) * scale
     out += (slide(minute_sheet) * minute_mask)[..., None] * hex_rgb(MINUTE_INK) * scale
     y, x = np.mgrid[:SIZE, :SIZE]
@@ -226,6 +246,9 @@ XML = f"""<?xml version="1.0" encoding="utf-8"?>
   <Scene backgroundColor="#FF000000">
     <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="mask_plate_print">
       <Image resource="scan_plate" />
+    </PartImage>
+    <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_markings_print">
+      <Image resource="scan_minute_print" />
     </PartImage>
     <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="hour_ink">
       <Variant mode="AMBIENT" target="alpha" value="170" />
@@ -249,10 +272,13 @@ XML = f"""<?xml version="1.0" encoding="utf-8"?>
           <Image resource="scan_sheet_minute" />
         </PartImage>
       </Group>
-      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="mask_minute_slits">
-        <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
-          <Image resource="scan_mask_minute" />
-        </PartImage>
+      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="mask_minute_window">
+        <Group x="0" y="0" width="{SIZE}" height="{SIZE}" pivotX="0.5" pivotY="0.5" name="minute_window_step">
+          <Transform target="angle" value="[MINUTE] * 6" />
+          <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
+            <Image resource="scan_mask_minute" />
+          </PartImage>
+        </Group>
       </Group>
     </Group>
   </Scene>
@@ -265,14 +291,16 @@ def main():
     hour_mask, minute_mask = build_masks()
     hour_sheet, minute_sheet = build_sheets()
     plate = build_plate()
+    minute_print = build_minute_print()
     save_alpha(hour_mask, "scan_mask_hour")
     save_alpha(minute_mask, "scan_mask_minute")
     save_alpha(hour_sheet, "scan_sheet_hour", HOUR_INK)
     save_alpha(minute_sheet, "scan_sheet_minute", MINUTE_INK)
     save_alpha(plate, "scan_plate", PLATE_PRINT)
+    save_alpha(minute_print, "scan_minute_print", MINUTE_PRINT)
     (HERE / "watchface.xml").write_text(XML)
 
-    layers = (hour_mask, minute_mask, hour_sheet, minute_sheet, plate)
+    layers = (hour_mask, minute_mask, hour_sheet, minute_sheet, plate, minute_print)
     previews = HERE / "previews"
     previews.mkdir(exist_ok=True)
     for label, minutes in [("10-10", 610), ("03-00", 180), ("03-30", 210), ("07-45", 465), ("12-05", 5)]:

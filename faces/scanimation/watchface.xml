@@ -7,6 +7,9 @@
     <PartImage x="0" y="0" width="450" height="450" name="mask_plate_print">
       <Image resource="scan_plate" />
     </PartImage>
+    <PartImage x="0" y="0" width="450" height="450" name="minute_markings_print">
+      <Image resource="scan_minute_print" />
+    </PartImage>
     <Group x="0" y="0" width="450" height="450" name="hour_ink">
       <Variant mode="AMBIENT" target="alpha" value="170" />
       <Group x="-144" y="0" width="594" height="450" renderMode="SOURCE" name="sheet_hour_rules">
@@ -29,10 +32,13 @@
           <Image resource="scan_sheet_minute" />
         </PartImage>
       </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="mask_minute_slits">
-        <PartImage x="0" y="0" width="450" height="450">
-          <Image resource="scan_mask_minute" />
-        </PartImage>
+      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="mask_minute_window">
+        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_window_step">
+          <Transform target="angle" value="[MINUTE] * 6" />
+          <PartImage x="0" y="0" width="450" height="450">
+            <Image resource="scan_mask_minute" />
+          </PartImage>
+        </Group>
       </Group>
     </Group>
   </Scene>
