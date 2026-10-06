@@ -6,7 +6,7 @@ Design Wear OS 6 watch faces in one XML file per face, preview that same XML on 
 
 ```text
 faces/<slug>/
-  watchface.xml    Canonical WFF v4 source
+  watchface.xml    Canonical WFF v5 source
   assets/          Android drawable resources referenced by the XML
   face.yaml        Name, status, and design context
   notes.md         Design history
@@ -30,7 +30,7 @@ The [phone and watch apps](apps/) are a paired Android app. Install both builds 
 
 The phone's **Automatic updates** switch checks the installed face twice daily and sends a newer validated build when the watch is connected and charging. It updates the current face only; selecting another design is always a deliberate action.
 
-Wear OS 6 (API 36) is required for WFF v4 and Watch Face Push. The build uses a single Push slot, replacing the app's previous face when another is selected.
+Faces declare Watch Face Format v5. Wear OS 6 (API 36) is required for Watch Face Push. The build uses a single Push slot, replacing the app's previous face when another is selected.
 
 ## Publishing
 

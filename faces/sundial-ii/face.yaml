@@ -32,7 +32,7 @@ designNotes: >
   Unequal endpoint radii preserve readability when hour and minute coincide.
 
 implementationNotes: >
-  Resource-only WFF v4. USNO solar coordinates from UTC timestamp, projected
+  Resource-only WFF v5. USNO solar coordinates from UTC timestamp, projected
   into the fixed Alameda east/north/up frame. An editable Shadow geometry
   setting selects Floating line or Raised wall. Solar rim shading creates
   a recessed dial. Shadows fade at the horizon

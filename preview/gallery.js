@@ -1,4 +1,4 @@
-import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.1.1/dist/index.js';
+import { renderWatchFace } from 'https://cdn.jsdelivr.net/npm/wff-web@0.2.0/dist/index.js';
 import { loadCatalog, loadFace, prepare } from './render.js';
 
 const root = './';

@@ -85,7 +85,7 @@ CI must pass official APK validation before publication. Preview the canonical
 XML through the existing WFF Web site; package with
 `./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii`.
 
-The WFF v4 XSD passes. Six regression tests cover canonical regeneration,
+The WFF v5 XSD passes. Six regression tests cover canonical regeneration,
 every minute of a full day, endpoint/marker alignment, shadow bounds, nighttime
 visibility, and independent NOAA solar comparisons across seasons, leap day,
 year rollover, and both DST changes. Solid-shadow corner checks cover another
@@ -121,7 +121,7 @@ heading, so the Sun's direction still assumes north is dial-up. Gyro does not ru
 in WFF Web, so judge it on the watch; `TILT_SIGN_X`/`TILT_SIGN_Y` in
 `generate_xml.py` flip an axis if the shadow moves the wrong way.
 
-The face validates against the official WFF v4 XSD from github.com/google/watchface.
+The face validates against the official WFF v5 XSD from github.com/google/watchface.
 
 ## Picker thumbnail
 
