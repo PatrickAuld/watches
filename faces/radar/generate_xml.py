@@ -18,8 +18,7 @@ gap / (omega - v) seconds ago, when the target stood at
 
 Each echo is drawn at theta_painted, flashes, then decays with gap. So a hand
 appears only after the arm passes it and stays where it was seen, as on a real
-plan-position indicator. Older second-hand echoes (gap + 360k) form a fading
-track that shows its direction of travel.
+plan-position indicator. There is exactly one echo per hand.
 """
 from pathlib import Path
 import math
@@ -32,7 +31,7 @@ HERE = Path(__file__).parent
 SIZE = 450
 C = 225
 
-SWEEP_SECONDS = 6
+SWEEP_SECONDS = 4
 OMEGA = 360 / SWEEP_SECONDS                      # deg/s
 SWEEP = f'(([SECONDS_SINCE_EPOCH] % {SWEEP_SECONDS}) * {OMEGA:g} + [MILLISECOND] * {OMEGA / 1000:g})'
 
@@ -42,9 +41,7 @@ HOUR = '(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)'
 SPEED = {'second': 6, 'minute': 0.1, 'hour': 1 / 120}
 
 FLASH_DEG = 40        # bright bloom right behind the arm (~0.7 s)
-FADE_DEG = 345        # hour/minute echoes are gone just before the next pass
-TRAIL_DEG = 1080      # second-hand echoes persist for three passes
-SECOND_ECHOES = 3
+FADE_DEG = 345        # echoes are gone just before the next pass
 
 # Theme colors: background, phosphor, flash core, graticule.
 THEMES = [
@@ -119,7 +116,7 @@ def gap(theta, extra=0):
 
 def painted(theta, v, g):
     lag = v / (OMEGA - v)
-    return f'({theta} - {lag:.9g} * {g})'
+    return f'({theta} - {lag:.10f} * {g})'
 
 
 def decay(g, span, peak=255):
@@ -206,10 +203,8 @@ def build():
     echo(echoes, 'hourEcho', HOUR_DOTS, g, FADE_DEG, painted(HOUR, SPEED['hour'], g))
     g = gap(MINUTE)
     echo(echoes, 'minuteEcho', MINUTE_DOTS, g, FADE_DEG, painted(MINUTE, SPEED['minute'], g))
-    for k in reversed(range(SECOND_ECHOES)):
-        g = gap(SECOND, 360 * k)
-        echo(echoes, f'secondEcho{k}', SECOND_DOTS, g, TRAIL_DEG,
-             painted(SECOND, SPEED['second'], g), flash=k == 0, peak=255 if k == 0 else 200)
+    g = gap(SECOND)
+    echo(echoes, 'secondEcho', SECOND_DOTS, g, FADE_DEG, painted(SECOND, SPEED['second'], g))
 
     beam = rotor(scope, 'sweepBeam', SWEEP)
     line(draw(beam, alpha=235), C, C, C, C - 210, FLASH, 1.8)

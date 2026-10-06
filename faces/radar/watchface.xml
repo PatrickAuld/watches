@@ -299,88 +299,88 @@
         </Line>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 0 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 0 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="220.5" y="22.5" width="9" height="9">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 30 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 30 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="321.0" y="50.527" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 60 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 60 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="393.473" y="123.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 90 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 90 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="420.0" y="222.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 120 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 120 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="393.473" y="321.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 150 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 150 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="321.0" y="393.473" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 180 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 180 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="222.0" y="420.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 210 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 210 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="123.0" y="393.473" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 240 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 240 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="50.527" y="321.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 270 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 270 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="24.0" y="222.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 300 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 300 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="50.527" y="123.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - 330 + 720) % 360) / 160, 0, 1)" />
+        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 330 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="123.0" y="50.527" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
       </PartDraw>
       <Group x="0" y="0" width="450" height="450" name="sweepArm" pivotX="0.5" pivotY="0.5">
-        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06)" />
+        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09)" />
         <PartImage x="0" y="0" width="450" height="450" tintColor="[CONFIGURATION.radar_theme.1]">
           <Image resource="radar_sweep" />
         </PartImage>
       </Group>
       <Group x="0" y="0" width="450" height="450" name="echoes">
         <Group x="0" y="0" width="450" height="450" name="hourEcho" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="((([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) - 0.000138908182 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360))" />
+          <Transform target="angle" value="((([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) - 0.0000926012 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360))" />
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="216.0" y="182.0" width="18" height="18">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -398,7 +398,7 @@
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1))" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1))" />
             <Ellipse x="220.0" y="186.0" width="10" height="10">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -416,7 +416,7 @@
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="221.5" y="187.5" width="7" height="7">
               <Fill color="[CONFIGURATION.radar_theme.2]" />
             </Ellipse>
@@ -435,9 +435,9 @@
           </PartDraw>
         </Group>
         <Group x="0" y="0" width="450" height="450" name="minuteEcho" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([MINUTE] * 6 + [SECOND] * 0.1) - 0.00166944908 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360))" />
+          <Transform target="angle" value="(([MINUTE] * 6 + [SECOND] * 0.1) - 0.0011123471 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360))" />
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="218.0" y="188.0" width="14" height="14">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -473,7 +473,7 @@
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1))" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1))" />
             <Ellipse x="222.0" y="192.0" width="6" height="6">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -509,7 +509,7 @@
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="223.5" y="193.5" width="3" height="3">
               <Fill color="[CONFIGURATION.radar_theme.2]" />
             </Ellipse>
@@ -545,52 +545,22 @@
             </Ellipse>
           </PartDraw>
         </Group>
-        <Group x="0" y="0" width="450" height="450" name="secondEcho2" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720))" />
+        <Group x="0" y="0" width="450" height="450" name="secondEcho" pivotX="0.5" pivotY="0.5">
+          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.0714285714 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360))" />
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1)) + 90 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 40, 0, 1)" />
+            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="215.5" y="29.5" width="19" height="19">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="200 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 720) / 1080, 0, 1))" />
-            <Ellipse x="219.5" y="33.5" width="11" height="11">
-              <Fill color="[CONFIGURATION.radar_theme.1]" />
-            </Ellipse>
-          </PartDraw>
-        </Group>
-        <Group x="0" y="0" width="450" height="450" name="secondEcho1" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360))" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1)) + 90 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 40, 0, 1)" />
-            <Ellipse x="215.5" y="29.5" width="19" height="19">
-              <Fill color="[CONFIGURATION.radar_theme.1]" />
-            </Ellipse>
-          </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="200 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - ((((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) + 360) / 1080, 0, 1))" />
-            <Ellipse x="219.5" y="33.5" width="11" height="11">
-              <Fill color="[CONFIGURATION.radar_theme.1]" />
-            </Ellipse>
-          </PartDraw>
-        </Group>
-        <Group x="0" y="0" width="450" height="450" name="secondEcho0" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.111111111 * (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360))" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
-            <Ellipse x="215.5" y="29.5" width="19" height="19">
-              <Fill color="[CONFIGURATION.radar_theme.1]" />
-            </Ellipse>
-          </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 1080, 0, 1))" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1))" />
             <Ellipse x="219.5" y="33.5" width="11" height="11">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
           <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
+            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
             <Ellipse x="221.0" y="35.0" width="8" height="8">
               <Fill color="[CONFIGURATION.radar_theme.2]" />
             </Ellipse>
@@ -598,7 +568,7 @@
         </Group>
       </Group>
       <Group x="0" y="0" width="450" height="450" name="sweepBeam" pivotX="0.5" pivotY="0.5">
-        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 6) * 60 + [MILLISECOND] * 0.06)" />
+        <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09)" />
         <PartDraw x="0" y="0" width="450" height="450" alpha="235">
           <Line startX="225" startY="225" endX="225" endY="15">
             <Stroke color="[CONFIGURATION.radar_theme.2]" thickness="1.8" cap="ROUND" />
