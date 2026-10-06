@@ -1,24 +1,22 @@
-"""Author the Radar face: a phosphor scope whose hands exist only as echoes.
+"""Author the Radar face: a phosphor scope whose hands are seen only by the sweep.
 
-Writes watchface.xml and the two tintable PNG assets. Nothing here runs on the
-watch; every runtime behaviour is a WFF expression in the canonical XML.
+Writes watchface.xml and its tintable PNG assets. Nothing here runs on the
+watch; all motion is WFF transforms in the canonical XML.
 
-Model
------
-The sweep arm turns clockwise once every SWEEP_SECONDS. A target at dial angle
-theta moving at v deg/s was last painted when the arm crossed it. The angle the
-arm has travelled since then is
+How the hands appear
+--------------------
+The hour, minute and second hands are dotted radar returns drawn at their true
+positions. They are never visible on their own. Two copies sit under masks that
+rotate with the sweep arm (renderMode SOURCE/MASK, as in Radial Moire):
 
-    gap = (sweep - theta + 720) % 360          (degrees, 0 at the arm)
+  afterglow  phosphor-colored hands under a mask that is opaque just behind the
+             arm and decays to nothing over most of a revolution, so a hand
+             appears the instant the line reaches it and then dims away.
+  ping       white-hot hands with a bloom halo under a narrow mask a few degrees
+             wide, so they flash only while the line is crossing them.
 
-and, because both move at constant speed, that crossing happened
-gap / (omega - v) seconds ago, when the target stood at
-
-    theta_painted = theta - v * gap / (omega - v).
-
-Each echo is drawn at theta_painted, flashes, then decays with gap. So a hand
-appears only after the arm passes it and stays where it was seen, as on a real
-plan-position indicator. There is exactly one echo per hand.
+The hour markers on the range ring are in both groups too. Because the masks
+move continuously with the arm, every reveal and fade is as fluid as the sweep.
 """
 from pathlib import Path
 import math
@@ -38,10 +36,10 @@ SWEEP = f'(([SECONDS_SINCE_EPOCH] % {SWEEP_SECONDS}) * {OMEGA:g} + [MILLISECOND]
 SECOND = '([SECOND] * 6 + [MILLISECOND] * 0.006)'
 MINUTE = '([MINUTE] * 6 + [SECOND] * 0.1)'
 HOUR = '(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)'
-SPEED = {'second': 6, 'minute': 0.1, 'hour': 1 / 120}
 
-FLASH_DEG = 40        # bright bloom right behind the arm (~0.7 s)
-FADE_DEG = 345        # echoes are gone just before the next pass
+TRAIL_DEG = 320       # afterglow decays to nothing over this much of a revolution
+PING_HOLD_DEG = 3     # ping mask is fully open this far behind the line
+PING_DECAY_DEG = 9    # then falls off with this e-folding angle
 
 # Theme colors: background, phosphor, flash core, graticule.
 THEMES = [
@@ -53,10 +51,12 @@ THEMES = [
 ]
 BG, PHOSPHOR, FLASH, GRID = (f'[CONFIGURATION.radar_theme.{i}]' for i in range(4))
 
-HOUR_DOTS = [(r, 10) for r in (34, 52, 70, 88, 106)]
-MINUTE_DOTS = [(r, 6) for r in range(30, 171, 14)]
-SECOND_DOTS = [(186, 11)]
-SCOPE = 198           # outer range ring
+HANDS = [
+    ('hour', HOUR, [(r, 10) for r in (34, 52, 70, 88, 106)]),
+    ('minute', MINUTE, [(r, 6) for r in range(30, 171, 14)]),
+    ('second', SECOND, [(186, 11)]),
+]
+SCOPE = 198           # outer range ring; hour markers sit on it
 
 
 # --- XML helpers -----------------------------------------------------------
@@ -77,14 +77,22 @@ def group(parent, name, **attrs):
     return element(parent, 'Group', x=0, y=0, width=SIZE, height=SIZE, name=name, **attrs)
 
 
-def rotor(parent, name, angle):
-    g = group(parent, name, pivotX=0.5, pivotY=0.5)
+def rotor(parent, name, angle, **attrs):
+    g = group(parent, name, pivotX=0.5, pivotY=0.5, **attrs)
     transform(g, 'angle', angle)
     return g
 
 
 def draw(parent, **attrs):
     return element(parent, 'PartDraw', x=0, y=0, width=SIZE, height=SIZE, **attrs)
+
+
+def image(parent, resource, tint=None, **attrs):
+    if tint:
+        attrs['tintColor'] = tint
+    part = element(parent, 'PartImage', x=0, y=0, width=SIZE, height=SIZE, **attrs)
+    element(part, 'Image', resource=resource)
+    return part
 
 
 def dot(part, x, y, d, color):
@@ -105,41 +113,6 @@ def line(part, x0, y0, x1, y1, color, thickness):
 def polar(r, deg):
     a = math.radians(deg)
     return C + r * math.sin(a), C - r * math.cos(a)
-
-
-# --- Echo expressions ------------------------------------------------------
-
-def gap(theta, extra=0):
-    g = f'(({SWEEP} - {theta} + 720) % 360)'
-    return f'({g} + {extra})' if extra else g
-
-
-def painted(theta, v, g):
-    lag = v / (OMEGA - v)
-    return f'({theta} - {lag:.10f} * {g})'
-
-
-def decay(g, span, peak=255):
-    f = f'clamp(1 - {g} / {span}, 0, 1)'
-    # Phosphor-like: quick initial drop, long dim tail.
-    return f'{peak} * {f} * (0.3 + 0.7 * {f})'
-
-
-def echo(parent, name, dots, g, span, angle, flash=True, peak=255):
-    blip = rotor(parent, name, angle)
-    halo = draw(blip)
-    transform(halo, 'alpha', f'{decay(g, span, 70)} + 90 * clamp(1 - {g} / {FLASH_DEG}, 0, 1)')
-    for r, d in dots:
-        dot(halo, C, C - r, d + 8, PHOSPHOR)
-    body = draw(blip)
-    transform(body, 'alpha', decay(g, span, peak))
-    for r, d in dots:
-        dot(body, C, C - r, d, PHOSPHOR)
-    if flash:
-        core = draw(blip)
-        transform(core, 'alpha', f'255 * clamp(1 - {g} / {FLASH_DEG}, 0, 1)')
-        for r, d in dots:
-            dot(core, C, C - r, max(d - 3, 3), FLASH)
 
 
 # --- Scene -----------------------------------------------------------------
@@ -164,14 +137,30 @@ def graticule(parent):
         line(ticks, *polar(inner, deg), *polar(outer, deg), GRID, 1.6 if deg % 30 == 0 else 1)
 
 
-def hour_markers(parent):
+def markers(part, color, grow=0):
     for k in range(12):
-        deg = k * 30
-        part = draw(parent)
-        g = gap(deg)
-        transform(part, 'alpha', f'60 + 195 * clamp(1 - {g} / 160, 0, 1)')
-        x, y = polar(SCOPE, deg)
-        dot(part, x, y, 9 if k == 0 else 6, PHOSPHOR)
+        dot(part, *polar(SCOPE, k * 30), (9 if k == 0 else 6) + grow, color)
+
+
+def hands(parent, prefix, layers, **attrs):
+    """Every hand as dotted returns. layers: (color, size offset, alpha)."""
+    for name, angle, dots in HANDS:
+        hand = rotor(parent, f'{prefix}{name.title()}', angle, **attrs)
+        for color, grow, alpha in layers:
+            part = draw(hand, alpha=alpha)
+            for r, d in dots:
+                dot(part, C, C - r, max(d + grow, 2), color)
+
+
+def masked(parent, name, mask, layers, marker_layers):
+    """Hands and markers visible only through a mask that turns with the sweep."""
+    g = group(parent, name)
+    for color, grow, alpha in marker_layers:
+        markers(draw(g, renderMode='SOURCE', alpha=alpha), color, grow)
+    hands(g, name, layers, renderMode='SOURCE')
+    window = group(g, f'{name}Mask', renderMode='MASK')
+    image(rotor(window, f'{name}MaskSweep', SWEEP), mask)
+    return g
 
 
 def build():
@@ -186,39 +175,33 @@ def build():
     scene = element(root, 'Scene', backgroundColor='#000000')
     scope = group(scene, 'scope')
     ambient(scope)
-    face = draw(scope)
-    face_disc = element(face, 'Ellipse', x=0, y=0, width=SIZE, height=SIZE)
-    element(face_disc, 'Fill', color=BG)
-    element(element(scope, 'PartImage', x=0, y=0, width=SIZE, height=SIZE, tintColor=PHOSPHOR),
-            'Image', resource='radar_glow')
+    disc = element(draw(scope), 'Ellipse', x=0, y=0, width=SIZE, height=SIZE)
+    element(disc, 'Fill', color=BG)
+    image(scope, 'radar_glow', PHOSPHOR)
     graticule(scope)
-    hour_markers(scope)
+    markers(draw(scope, alpha=55), PHOSPHOR)          # faint, always there
 
-    arm = rotor(scope, 'sweepArm', SWEEP)
-    element(element(arm, 'PartImage', x=0, y=0, width=SIZE, height=SIZE, tintColor=PHOSPHOR),
-            'Image', resource='radar_sweep')
+    image(rotor(scope, 'sweepArm', SWEEP), 'radar_sweep', PHOSPHOR)
 
-    echoes = group(scope, 'echoes')
-    g = gap(HOUR)
-    echo(echoes, 'hourEcho', HOUR_DOTS, g, FADE_DEG, painted(HOUR, SPEED['hour'], g))
-    g = gap(MINUTE)
-    echo(echoes, 'minuteEcho', MINUTE_DOTS, g, FADE_DEG, painted(MINUTE, SPEED['minute'], g))
-    g = gap(SECOND)
-    echo(echoes, 'secondEcho', SECOND_DOTS, g, FADE_DEG, painted(SECOND, SPEED['second'], g))
+    masked(scope, 'afterglow', 'radar_trail_mask',
+           layers=[(PHOSPHOR, 8, 70), (PHOSPHOR, 0, 255)],
+           marker_layers=[(PHOSPHOR, 0, 255)])
+    masked(scope, 'ping', 'radar_ping_mask',
+           layers=[(PHOSPHOR, 14, 110), (FLASH, 2, 255)],
+           marker_layers=[(PHOSPHOR, 8, 120), (FLASH, 1, 255)])
 
     beam = rotor(scope, 'sweepBeam', SWEEP)
     line(draw(beam, alpha=235), C, C, C, C - 210, FLASH, 1.8)
-    hub = draw(scope)
-    dot(hub, C, C, 7, PHOSPHOR)
+    dot(draw(scope), C, C, 7, PHOSPHOR)
 
-    # Always-on: static dotted hands, no sweep, very few lit pixels.
+    # Always-on: static dotted hour and minute hands, no sweep, few lit pixels.
     aod = group(scene, 'ambientScope', alpha=0)
     ambient(aod, 255)
     marks = draw(aod, alpha=150)
     for deg in (0, 90, 180, 270):
         dot(marks, *polar(SCOPE, deg), 5 if deg else 7, PHOSPHOR)
-    for name, angle, dots in (('ambientHour', HOUR, HOUR_DOTS), ('ambientMinute', MINUTE, MINUTE_DOTS)):
-        hand = rotor(aod, name, angle)
+    for name, angle, dots in HANDS[:2]:
+        hand = rotor(aod, f'ambient{name.title()}', angle)
         part = draw(hand, alpha=200)
         for r, d in dots:
             dot(part, C, C - r, d - 2, PHOSPHOR)
@@ -231,7 +214,7 @@ def build():
 def save(name, alpha):
     out = np.zeros((SIZE, SIZE, 4), np.uint8)
     out[..., :3] = 255
-    out[..., 3] = np.clip(alpha, 0, 255).astype(np.uint8)
+    out[..., 3] = np.clip(np.round(alpha), 0, 255).astype(np.uint8)
     (HERE / 'assets').mkdir(exist_ok=True)
     Image.fromarray(out, 'RGBA').save(HERE / 'assets' / f'{name}.png', optimize=True)
 
@@ -241,14 +224,25 @@ def assets():
     dx, dy = x - C, y - C
     r = np.hypot(dx, dy)
     bearing = np.degrees(np.arctan2(dx, -dy)) % 360       # clockwise from 12
-    inside = np.clip((SCOPE + 6 - r) / 3, 0, 1)
-    # Afterglow trails counter-clockwise behind an arm pointing at 12.
+    # Degrees behind an arm pointing at 12 (trailing counter-clockwise).
     behind = (-bearing) % 360
+    # Anti-aliased leading edge: the region about to be swept is fully closed.
+    edge = np.clip((360 - behind) / 0.8, 0, 1)
+
+    inside = np.clip((SCOPE + 6 - r) / 3, 0, 1)
     lead = np.clip(1 - np.minimum(behind, 360 - behind) / 1.2, 0, 1) * (behind > 180)
     tail = np.exp(-behind / 28) * 150 + np.exp(-behind / 6) * 60
     save('radar_sweep', (tail + lead * 120) * inside * np.clip(r / 12, 0, 1))
     glow = 34 * np.exp(-(r / 150) ** 2) + 18 * np.exp(-((r - SCOPE) / 10) ** 2)
     save('radar_glow', glow * np.clip((222 - r) / 2, 0, 1))
+
+    # Masks cover the whole dial. Afterglow: bright the moment the line passes,
+    # a phosphor-like decay, then nothing well before the next pass.
+    t = np.clip(1 - behind / TRAIL_DEG, 0, 1)
+    save('radar_trail_mask', 255 * t ** 1.8 * edge)
+    # Ping: a sliver just behind the line, so only a hand under it lights up.
+    ping = np.where(behind < PING_HOLD_DEG, 1, np.exp(-(behind - PING_HOLD_DEG) / PING_DECAY_DEG))
+    save('radar_ping_mask', 255 * ping * edge)
 
 
 if __name__ == '__main__':

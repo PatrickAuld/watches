@@ -298,74 +298,40 @@
           <Stroke color="[CONFIGURATION.radar_theme.3]" thickness="1" cap="ROUND" />
         </Line>
       </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 0 + 720) % 360) / 160, 0, 1)" />
+      <PartDraw x="0" y="0" width="450" height="450" alpha="55">
         <Ellipse x="220.5" y="22.5" width="9" height="9">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 30 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="321.0" y="50.527" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 60 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="393.473" y="123.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 90 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="420.0" y="222.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 120 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="393.473" y="321.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 150 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="321.0" y="393.473" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 180 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="222.0" y="420.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 210 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="123.0" y="393.473" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 240 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="50.527" y="321.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 270 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="24.0" y="222.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 300 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="50.527" y="123.0" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
-      </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450">
-        <Transform target="alpha" value="60 + 195 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - 330 + 720) % 360) / 160, 0, 1)" />
         <Ellipse x="123.0" y="50.527" width="6" height="6">
           <Fill color="[CONFIGURATION.radar_theme.1]" />
         </Ellipse>
@@ -376,11 +342,48 @@
           <Image resource="radar_sweep" />
         </PartImage>
       </Group>
-      <Group x="0" y="0" width="450" height="450" name="echoes">
-        <Group x="0" y="0" width="450" height="450" name="hourEcho" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="((([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) - 0.0000926012 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360))" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
+      <Group x="0" y="0" width="450" height="450" name="afterglow">
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="SOURCE" alpha="255">
+          <Ellipse x="220.5" y="22.5" width="9" height="9">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="321.0" y="50.527" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="393.473" y="123.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="420.0" y="222.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="393.473" y="321.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="321.0" y="393.473" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="222.0" y="420.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="123.0" y="393.473" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="50.527" y="321.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="24.0" y="222.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="50.527" y="123.0" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="123.0" y="50.527" width="6" height="6">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+        </PartDraw>
+        <Group x="0" y="0" width="450" height="450" name="afterglowHour" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="70">
             <Ellipse x="216.0" y="182.0" width="18" height="18">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -397,8 +400,7 @@
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 345, 0, 1))" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
             <Ellipse x="220.0" y="186.0" width="10" height="10">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -415,29 +417,10 @@
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - (([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5) + 720) % 360) / 40, 0, 1)" />
-            <Ellipse x="221.5" y="187.5" width="7" height="7">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="221.5" y="169.5" width="7" height="7">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="221.5" y="151.5" width="7" height="7">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="221.5" y="133.5" width="7" height="7">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="221.5" y="115.5" width="7" height="7">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-          </PartDraw>
         </Group>
-        <Group x="0" y="0" width="450" height="450" name="minuteEcho" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([MINUTE] * 6 + [SECOND] * 0.1) - 0.0011123471 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360))" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
+        <Group x="0" y="0" width="450" height="450" name="afterglowMinute" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="70">
             <Ellipse x="218.0" y="188.0" width="14" height="14">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -472,8 +455,7 @@
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 345, 0, 1))" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
             <Ellipse x="222.0" y="192.0" width="6" height="6">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
@@ -508,63 +490,236 @@
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([MINUTE] * 6 + [SECOND] * 0.1) + 720) % 360) / 40, 0, 1)" />
-            <Ellipse x="223.5" y="193.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="179.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="165.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="151.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="137.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="123.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="109.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="95.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="81.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="67.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-            <Ellipse x="223.5" y="53.5" width="3" height="3">
-              <Fill color="[CONFIGURATION.radar_theme.2]" />
-            </Ellipse>
-          </PartDraw>
         </Group>
-        <Group x="0" y="0" width="450" height="450" name="secondEcho" pivotX="0.5" pivotY="0.5">
-          <Transform target="angle" value="(([SECOND] * 6 + [MILLISECOND] * 0.006) - 0.0714285714 * (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360))" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="70 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1)) + 90 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
+        <Group x="0" y="0" width="450" height="450" name="afterglowSecond" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="([SECOND] * 6 + [MILLISECOND] * 0.006)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="70">
             <Ellipse x="215.5" y="29.5" width="19" height="19">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1) * (0.3 + 0.7 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 345, 0, 1))" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
             <Ellipse x="219.5" y="33.5" width="11" height="11">
               <Fill color="[CONFIGURATION.radar_theme.1]" />
             </Ellipse>
           </PartDraw>
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Transform target="alpha" value="255 * clamp(1 - (((([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09) - ([SECOND] * 6 + [MILLISECOND] * 0.006) + 720) % 360) / 40, 0, 1)" />
-            <Ellipse x="221.0" y="35.0" width="8" height="8">
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="afterglowMask" renderMode="MASK">
+          <Group x="0" y="0" width="450" height="450" name="afterglowMaskSweep" pivotX="0.5" pivotY="0.5">
+            <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09)" />
+            <PartImage x="0" y="0" width="450" height="450">
+              <Image resource="radar_trail_mask" />
+            </PartImage>
+          </Group>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ping">
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="SOURCE" alpha="120">
+          <Ellipse x="216.5" y="18.5" width="17" height="17">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="317.0" y="46.527" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="389.473" y="119.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="416.0" y="218.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="389.473" y="317.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="317.0" y="389.473" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="218.0" y="416.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="119.0" y="389.473" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="46.527" y="317.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="20.0" y="218.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="46.527" y="119.0" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+          <Ellipse x="119.0" y="46.527" width="14" height="14">
+            <Fill color="[CONFIGURATION.radar_theme.1]" />
+          </Ellipse>
+        </PartDraw>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="SOURCE" alpha="255">
+          <Ellipse x="220.0" y="22.0" width="10" height="10">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="320.5" y="50.027" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="392.973" y="122.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="419.5" y="221.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="392.973" y="320.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="320.5" y="392.973" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="221.5" y="419.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="122.5" y="392.973" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="50.027" y="320.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="23.5" y="221.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="50.027" y="122.5" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+          <Ellipse x="122.5" y="50.027" width="7" height="7">
+            <Fill color="[CONFIGURATION.radar_theme.2]" />
+          </Ellipse>
+        </PartDraw>
+        <Group x="0" y="0" width="450" height="450" name="pingHour" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="110">
+            <Ellipse x="213.0" y="179.0" width="24" height="24">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="213.0" y="161.0" width="24" height="24">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="213.0" y="143.0" width="24" height="24">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="213.0" y="125.0" width="24" height="24">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="213.0" y="107.0" width="24" height="24">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
+            <Ellipse x="219.0" y="185.0" width="12" height="12">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="219.0" y="167.0" width="12" height="12">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="219.0" y="149.0" width="12" height="12">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="219.0" y="131.0" width="12" height="12">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="219.0" y="113.0" width="12" height="12">
               <Fill color="[CONFIGURATION.radar_theme.2]" />
             </Ellipse>
           </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="pingMinute" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="110">
+            <Ellipse x="215.0" y="185.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="171.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="157.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="143.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="129.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="115.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="101.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="87.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="73.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="59.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+            <Ellipse x="215.0" y="45.0" width="20" height="20">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
+            <Ellipse x="221.0" y="191.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="177.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="163.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="149.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="135.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="121.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="107.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="93.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="79.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="65.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+            <Ellipse x="221.0" y="51.0" width="8" height="8">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="pingSecond" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
+          <Transform target="angle" value="([SECOND] * 6 + [MILLISECOND] * 0.006)" />
+          <PartDraw x="0" y="0" width="450" height="450" alpha="110">
+            <Ellipse x="212.5" y="26.5" width="25" height="25">
+              <Fill color="[CONFIGURATION.radar_theme.1]" />
+            </Ellipse>
+          </PartDraw>
+          <PartDraw x="0" y="0" width="450" height="450" alpha="255">
+            <Ellipse x="218.5" y="32.5" width="13" height="13">
+              <Fill color="[CONFIGURATION.radar_theme.2]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="pingMask" renderMode="MASK">
+          <Group x="0" y="0" width="450" height="450" name="pingMaskSweep" pivotX="0.5" pivotY="0.5">
+            <Transform target="angle" value="(([SECONDS_SINCE_EPOCH] % 4) * 90 + [MILLISECOND] * 0.09)" />
+            <PartImage x="0" y="0" width="450" height="450">
+              <Image resource="radar_ping_mask" />
+            </PartImage>
+          </Group>
         </Group>
       </Group>
       <Group x="0" y="0" width="450" height="450" name="sweepBeam" pivotX="0.5" pivotY="0.5">
