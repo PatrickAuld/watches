@@ -1,37 +1,53 @@
 # Crosshatch
 
-## Design intent
+## October 2026 redesign
 
-Abstract time display using only perpendicular line pairs. The rotation
-encodes the hour (like a clock hand, but expressed as a grid orientation).
-The breathing spacing encodes the minute within each half-hour cycle.
+Patrick found the first version (four 3px lines on black, rotating with the
+hour and spreading with the minute) dull. This rewrite keeps its idea that
+time is told by perpendicular lines and turns it into a scratchboard
+engraving.
 
-## Visual language
+## Reading the dial
 
-- Two perpendicular pairs of parallel lines
-- Lines extend beyond the watch edge (clipped by round display)
-- Spacing: triangle wave, 0px at :00/:30, 50px at :15/:45
-- Rotation: smooth sweep, 30° per hour
-- Hour arc: thin connector at the bezel edge on the hour side
+- **Ground:** the whole board is ruled in fine `/` hatching, a little heavier
+  toward the rim.
+- **Minutes:** a perpendicular `\` hatch fills the sector between 12 and the
+  minute line, so the passed part of the hour is crosshatched and brighter.
+  Even hours shade in clockwise. Odd hours scrape it back out (the hatch sits
+  ahead of the minute line), so the dial never jumps at :00.
+- **Minute hand:** a 2px hairline carved into the board by a 6px black
+  under-stroke.
+- **Hour hand:** a lance (tail -18, tip 130) cut out of the board, outlined,
+  shaded with strokes along its axis that swell toward the centre line and
+  thin at the ends.
+- **Seconds:** a nib, a small glow in the palette's accent, runs from r=16 to
+  r=206 along the minute line once a minute, as if scratching the next stroke.
+- **Indices:** bundles of short radial strokes on black reserves: five at 12,
+  three at the quarters, two elsewhere.
+- **Inks:** Scratchboard (ivory, ember nib, default), Silverpoint, Sepia,
+  Cyanotype, Vermilion. `[CONFIGURATION.palette.1]` is the ink, `.2` the nib.
+- **Ambient:** ground, sector and nib hidden. The lance, hairline and dimmed
+  indices remain.
 
-## Decisions
+## How it is made
 
-- Pair A (vertical in local space) is the hour-indicating pair
-- Hour-side identification by line brightness, not a separate marker:
-  the hour-pointing end of Pair A stays solid to the bezel; the other
-  three line-ends fade toward the bezel via black-alpha gradient
-  overlays (transparent at center → 80% black at the bezel). The
-  underlying lines stay in the user's chosen palette colour; only the
-  overlay darkens them, so no extra palette entries are needed.
-- Each line is rendered as a single full-length Rectangle with a solid
-  Fill, with one or two narrow overlay Rectangles stacked on top for
-  the fading half/halves. Pair A: one overlay on the bottom half. Pair
-  B: two overlays per line, one on each half.
-- Line width: 3px (medium)
-- 12 static hour ticks (6px dots) on a radius-215 circle outside the
-  rotating group — sit ~10px from the bezel so the rotating cross
-  visibly aligns with the nearest tick
-- Color themes via WFF UserConfigurations / ColorConfiguration, using the
-  canonical WFF v4 `<ColorOption id="..." colors="..."/>` format so
-  `[CONFIGURATION.lineColor.0]` resolves in Fill attributes
-- Default: off-white (#E0E0E0) on black
+`python3 faces/crosshatch/generate_xml.py` writes `watchface.xml`,
+`strings.xml` and all assets. Hatch lines are computed analytically per pixel
+at 3x and downsampled, with slight wobble, per-line weight and tone jitter,
+and ragged tapered ends near r=214.
+
+The sector mask is a `PartDraw` `Arc` (radius 113, stroke 228, butt caps) in a
+`renderMode="MASK"` group over the sector hatch image. Its `startAngle` and
+`endAngle` Transforms are `odd ? minute : 0` and `odd ? 360 : minute`.
+
+The XML validates against the official WFF v4 XSD (XSD 1.1, via
+`xmlschema`). Previews were checked in the web renderer at 11:59:50, 12:00:10
+and 12:59:30 for continuity across the hour.
+
+## Watch risks to check first
+
+- Transforms on `Arc` `startAngle`/`endAngle` inside a MASK group. Radar and
+  Radial Moiré only mask with rotating images. If the Arc mask misbehaves, swap
+  it for two half-disc mask images, one per half of the dial.
+- A 228px stroke on a 113px-radius arc must reach the centre without a hole.
+- Nib smoothness relies on `[MILLISECOND]` (as Radar's sweep does).

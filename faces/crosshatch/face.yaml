@@ -17,27 +17,28 @@ features:
   complications: []
 
 style:
-  family: abstract-geometric
+  family: scratchboard-engraving
   background: "#000000"
-  accent: "#E0E0E0"
+  accent: "#EDE4D3"
 
 description: >
-  Two sets of parallel lines, always perpendicular to each other. The
-  assembly rotates smoothly to indicate the hour. Line spacing breathes
-  linearly with the minutes — adjacent at :00/:30, maximally spread at
-  :15/:45. A thin arc connects the hour-indicating pair at the watch edge.
+  A scratchboard engraving that shades itself in. The board is ruled in fine
+  single hatching; a perpendicular hatch follows the minute line round from 12,
+  so the passed part of the hour is crosshatched. Even hours shade in, odd
+  hours scrape back out. A lance cut from the board marks the hour, and a
+  glowing nib runs out along the minute line once a minute. Five inks.
 
 designNotes: >
-  No numbers, no digital readout, no center dot. Hour is read from rotation
-  angle, minutes from line spacing. The arc identifies which pair marks the
-  hour. Minimal, abstract, geometric.
+  Every mark is an engraved line: no fills, no numerals. Tone comes from line
+  density and weight, so the crosshatched sector reads brighter than the
+  single-hatched ground. The hour lance is a black reserve shaded with
+  swelling strokes along its axis; the minute is a carved hairline. Ambient
+  keeps only the lance, the hairline and dimmed indices.
 
 implementationNotes: >
-  Single rotating Group with hour-angle Transform. Four solid Rectangles
-  with x/y offset Transforms driven by a triangle-wave minute expression.
-  Six additional overlay Rectangles inside the group apply black-alpha
-  LinearGradients (#00000000 → #CC000000) to fade the three non-hour
-  ends toward the bezel; the hour-side end of Pair A stays solid. Twelve
-  static 6px hour-tick ellipses sit outside the rotating group on a
-  radius-215 circle (close to the bezel). ColorConfiguration in WFF v4
-  canonical format drives line color via [CONFIGURATION.lineColor.0].
+  Resource-only WFF v4 written by generate_xml.py, which also renders the
+  tintable PNG assets (analytic per-pixel hatching at 3x with hand wobble and
+  ragged rim ends). The sector is a SOURCE hatch image under a MASK Arc whose
+  startAngle/endAngle Transforms follow the minute, switching between fill and
+  scrape on hour parity. Hour and minute are rotating Groups; the nib is a
+  small tinted glow whose y follows seconds plus milliseconds.

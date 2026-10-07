@@ -1,0 +1,9 @@
+<resources>
+  <string name="watch_face_name">Crosshatch</string>
+  <string name="palette">Ink</string>
+  <string name="palette_scratchboard">Scratchboard</string>
+  <string name="palette_silverpoint">Silverpoint</string>
+  <string name="palette_sepia">Sepia</string>
+  <string name="palette_cyanotype">Cyanotype</string>
+  <string name="palette_vermilion">Vermilion</string>
+</resources>
