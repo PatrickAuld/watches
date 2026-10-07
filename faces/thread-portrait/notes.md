@@ -12,7 +12,11 @@ move between times.
 - 340 threads: 140 for the hour, 100 for each minute digit. Every thread is
   always a true chord: both ends on the pin circle.
 - Threads catch the light inside the current digits and stay dim elsewhere,
-  so the numerals read at a glance and the whole web stays visible. Pure
+  so the numerals read at a glance and the whole web stays visible.
+- Seconds: the three pins at the current second glow warm gold (the centre
+  pin brightest), stepping 6 degrees each second around the rim. Patrick's
+  follow-up. It is one small PNG in a Group rotated by `[SECOND]*6`, so it
+  costs almost nothing. Hidden in ambient. Pure
   string art (uniform threads) was tried first: with a few hundred full-length
   chords the digits drowned in the crossings of the other slots.
 

@@ -212,6 +212,39 @@ def board_assets(radius):
         hr = 0.7 * ss
         d.ellipse([px - hr - ss * 0.5, py - hr - ss * 0.5, px + hr - ss * 0.5, py + hr - ss * 0.5], fill=(240, 214, 160, 255))
     pins.resize((SIZE, SIZE), Image.LANCZOS).save(ASSETS / 'pins.png', optimize=True)
+    second_glow(radius)
+
+
+SECOND_BOX = 56   # px square around the 12 o'clock pin holding the seconds highlight
+
+
+def second_glow(radius):
+    """second_pins.png: the 12 o'clock pin lit, with its two neighbours half lit,
+    and a soft halo. Rotated by 6 degrees a second, it lands on the pins of
+    the current second (three pins per second)."""
+    ss = 4
+    s = SECOND_BOX * ss
+    ox, oy = C - SECOND_BOX / 2, C - radius - SECOND_BOX / 2   # box origin on the dial
+    img = Image.new('RGBA', (s, s), (0, 0, 0, 0))
+    yy, xx = np.mgrid[0:s, 0:s] / ss + 0.5 / ss
+    halo = np.zeros((s, s))
+    d = ImageDraw.Draw(img)
+    for step, level in ((-1, 0.6), (1, 0.6), (0, 1.0)):
+        a = math.radians(step * 360 / solve.PINS)
+        px, py = C + radius * math.sin(a) - ox, C - radius * math.cos(a) - oy
+        halo = np.maximum(halo, level * np.exp(-((xx - px) ** 2 + (yy - py) ** 2) / (2 * 6.5 ** 2)))
+    glow = np.zeros((s, s, 4))
+    glow[..., :3] = (255, 214, 140)
+    glow[..., 3] = np.clip(halo * 330, 0, 255)
+    img = Image.alpha_composite(Image.fromarray(glow.astype(np.uint8), 'RGBA'), img)
+    d = ImageDraw.Draw(img)
+    for step, level in ((-1, 0.55), (1, 0.55), (0, 1.0)):
+        a = math.radians(step * 360 / solve.PINS)
+        px, py = (C + radius * math.sin(a) - ox) * ss, (C - radius * math.cos(a) - oy) * ss
+        pr = (1.8 + 1.0 * level) * ss
+        col = (255, int(200 + 50 * level), int(130 + 100 * level))
+        d.ellipse([px - pr, py - pr, px + pr, py + pr], fill=col + (255,))
+    img.resize((SECOND_BOX, SECOND_BOX), Image.LANCZOS).save(ASSETS / 'second_pins.png', optimize=True)
 
 
 def build():
@@ -267,6 +300,14 @@ def build():
     pins = group(scene, 'pins')
     element(pins, 'Variant', mode='AMBIENT', target='alpha', value=0)
     image(pins, 'pins')
+
+    # Seconds: the pins at the current second light up, stepping 6 degrees a
+    # second. Hidden in ambient, which only updates once a minute.
+    seconds = group(scene, 'secondPins', pivotX=0.5, pivotY=0.5)
+    element(seconds, 'Variant', mode='AMBIENT', target='alpha', value=0)
+    transform(seconds, 'angle', '[SECOND]*6')
+    image(seconds, 'second_pins', x=round(C - SECOND_BOX / 2), y=round(C - sol['radius'] - SECOND_BOX / 2),
+          w=SECOND_BOX, h=SECOND_BOX)
 
     ET.indent(root, '  ')
     xml = '<?xml version="1.0" encoding="utf-8"?>\n' + ET.tostring(root, encoding='unicode') + '\n'

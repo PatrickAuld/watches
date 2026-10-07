@@ -3260,5 +3260,12 @@
         <Image resource="pins" />
       </PartImage>
     </Group>
+    <Group x="0" y="0" width="450" height="450" name="secondPins" pivotX="0.5" pivotY="0.5">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <Transform target="angle" value="[SECOND]*6" />
+      <PartImage x="197" y="-17" width="56" height="56">
+        <Image resource="second_pins" />
+      </PartImage>
+    </Group>
   </Scene>
 </WatchFace>
