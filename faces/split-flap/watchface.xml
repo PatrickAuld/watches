@@ -5487,5 +5487,13 @@
         </PartDraw>
       </Group>
     </Group>
+    <Group x="0" y="0" width="450" height="450" name="wake">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartAnimatedImage x="0" y="0" width="450" height="450">
+        <AnimationController play="ON_VISIBLE" beforePlaying="DO_NOTHING" afterPlaying="HIDE" />
+        <AnimatedImage resource="wake" format="WEBP" />
+        <Thumbnail resource="wake_thumbnail" />
+      </PartAnimatedImage>
+    </Group>
   </Scene>
 </WatchFace>

@@ -31,9 +31,40 @@ Design goals:
   `RoundRectangle` height to zero.
 - Ambient: board hidden, flaps hidden, settled ivory cells at alpha 200.
 
+## Wake shuffle (October 2026)
+
+Feedback: the face needed more character. On wake the flaps should spin
+through the set and land on the current time.
+
+- WFF has no "seconds since wake" source, so the shuffle is baked into
+  `assets/wake.webp` (42 frames at 30 fps, about 1.4 s, 230 KB) and played by a
+  `PartAnimatedImage` with `AnimationController play="ON_VISIBLE"`,
+  `afterPlaying="HIDE"`. Its group is hidden in ambient, so it plays again on
+  every wake (also when returning to the face from a tile or app).
+- Each digit slot opens on a fixed digit (4 7 / 2 5) and its drum rotates
+  through the digit set, one fold per 0.1 s step, with a 4 ms shimmer per
+  (column + row) inside a slot. Slots take 7, 9, 11 and 13 steps, so the
+  board lands top left to bottom right, matching the minute ripple.
+  Meanwhile one dark-on-dark fold ripples across the background board from
+  the top left (14 ms per diagonal), so the whole dial clatters awake.
+  Falling flaps catch a little light (up to +35 %).
+- The overlay cannot know the time, so the last step of each cell folds
+  *off* the overlay: the old top flap falls about the hinge and the old
+  bottom is swept away from the hinge down, uncovering the live cell below.
+  It always lands on the real time; the final frame is fully transparent.
+- Every overlay cell sits on an opaque gap-coloured backing so the live
+  tile's anti-aliased edge never rims it.
+- Memory: 42 × 450² × 4 B ≈ 34 MB active (limit 100 MB). The ambient
+  calculator skips the group (ambient alpha 0).
+- `previews/wake-*.png` composite frames 0, 12 and 30 over the settled
+  10:08 render; wff-web ignores `PartAnimatedImage`, so the site shows the
+  settled face.
+
 `test_board.py` checks that the XML is regenerated, that every minute of the
 day spells the right digits, and that the top flaps start from the previous
-minute and have fallen two seconds later. The XML validates against the
+minute and have fallen two seconds later. Wake tests check the overlay is
+the top layer, plays on visible and hides in ambient, covers every digit cell
+on frame 0, clears each cell once it lands, and ends transparent. The XML validates against the
 official WFF v4 XSD. Regenerate with `python3 faces/split-flap/generate_xml.py`.
 
 ## Watch risks to check first
@@ -44,6 +75,12 @@ official WFF v4 XSD. Regenerate with `python3 faces/split-flap/generate_xml.py`.
   flip will not show.
 - ~330 KB of XML, ~110 animated cells. Their flip expressions use
   `[MILLISECOND]`, so they evaluate every frame while interactive.
+
+- `ON_VISIBLE` on wake from ambient is untested on Pixel Watch. If it does
+  not fire, the overlay stays hidden after the first play (the face still
+  reads correctly). If it plays late, the live time shows for a moment
+  before the shuffle covers it; `beforePlaying="FIRST_FRAME"` would trade
+  that for a scrambled board in system previews.
 
 ## Preview caveat
 

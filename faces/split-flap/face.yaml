@@ -26,7 +26,8 @@ description: >
   are spelled in a 5 x 7 cell font in ivory flaps; every other cell is a
   quiet dark flap. When the minute turns, the changed cells flip, each top
   flap falling and the new bottom flap landing, in a ripple from the top
-  left.
+  left. On wake the whole board clatters: each digit drum spins through
+  the set and lands, cell by cell, on the current time.
 
 designNotes: >
   Station-board mechanics, no other marks. 12-hour, leading zero blank.
@@ -38,4 +39,6 @@ implementationNotes: >
   digit)) % 2. The previous minute's digits come from the current time, so
   the flip needs no state. Flaps are Groups with scaleY transforms about
   the hinge. A lit face is hidden by transforming a RoundRectangle's height
-  to zero.
+  to zero. The wake shuffle is a baked animated WebP
+  played ON_VISIBLE and hidden in ambient; its last step uncovers the live
+  cells, so it always lands on the real time.

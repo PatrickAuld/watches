@@ -71,5 +71,49 @@ class Board(unittest.TestCase):
                 self.assertEqual(evaluate(g.find('Transform').get('value'), minute, 2, 0), 0)
 
 
+class Wake(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from PIL import Image, ImageSequence
+        import numpy as np
+        cls.np = np
+        cls.root = ET.parse(HERE / 'watchface.xml').getroot()
+        with Image.open(HERE / 'assets' / 'wake.webp') as image:
+            cls.frames = [np.asarray(f.convert('RGBA'))[..., 3] for f in ImageSequence.Iterator(image)]
+        cls.cells = [(cx, cy, *face.grid(cx, cy)) for cx, cy in face.board_cells()
+                     if face.slot_cell(*face.grid(cx, cy)) is not None]
+
+    def test_plays_on_wake_and_hides_in_ambient(self):
+        scene = self.root.find('Scene')
+        wake = scene.findall('Group')[-1]
+        self.assertEqual(wake.get('name'), 'wake', 'the wake overlay must be the top layer')
+        self.assertEqual(wake.find('Variant').attrib, {'mode': 'AMBIENT', 'target': 'alpha', 'value': '0'})
+        controller = wake.find('PartAnimatedImage/AnimationController')
+        self.assertEqual(controller.get('play'), 'ON_VISIBLE')
+        self.assertEqual(controller.get('afterPlaying'), 'HIDE')
+        self.assertEqual(wake.find('PartAnimatedImage/AnimatedImage').get('resource'), 'wake')
+
+    def test_first_frame_covers_every_digit_cell(self):
+        for cx, cy, gc, gr in self.cells:
+            for y in (cy - face.HALF // 2, cy + face.HALF // 2):
+                self.assertEqual(self.frames[0][y, cx], 255, (gc, gr))
+
+    def test_lands_on_the_live_cells_and_ends_clear(self):
+        self.assertEqual(self.frames[-1].max(), 0)
+        for cx, cy, gc, gr in self.cells:
+            k, r, c = face.slot_cell(gc, gr)
+            landed = face.WAKE_CELL_DELAY * (r + c) + face.WAKE_STEPS[k] * face.WAKE_STEP
+            first_clear = math.ceil(landed * face.WAKE_FPS + 1e-6)
+            for frame in self.frames[first_clear:]:
+                self.assertEqual(frame[cy - face.HALF + 2:cy + face.HALF - 2, cx - face.HALF + 2:cx + face.HALF - 2].max(),
+                                 0, (gc, gr))
+
+    def test_spins_through_the_digit_set(self):
+        for k, steps in enumerate(face.WAKE_STEPS):
+            glyphs = [face.wake_glyph(k, j) for j in range(steps)]
+            self.assertEqual(len(set(glyphs)), min(steps, 10))
+            self.assertTrue(all((b - a) % 10 == 1 for a, b in zip(glyphs, glyphs[1:])))
+
+
 if __name__ == '__main__':
     unittest.main()

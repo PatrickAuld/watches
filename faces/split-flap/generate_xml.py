@@ -26,6 +26,19 @@ left. Unchanged cells fold too, but with the same face front and back the
 fold is invisible, as on a real board. After
 the ripple every flap has settled on the new state, so ambient mode (where
 the flaps are hidden) shows the same digits.
+
+Wake
+----
+WFF has no "seconds since wake" source, so the wake shuffle is baked into an
+animated WebP (assets/wake.webp) played by an AnimationController with
+play="ON_VISIBLE". The overlay is hidden in ambient, so it plays each time the
+watch wakes. It covers every digit cell: each slot's drum spins through the
+digit set, one split-flap fold per step, slots landing top left to bottom
+right, while a single fold ripples across the background board. The overlay
+cannot know the time, so the last step of every cell is a fold *off* the
+overlay: the old top flap falls and the old bottom is swept away from the
+hinge down, uncovering the live cell underneath. The face therefore always
+lands on the true time, and the overlay ends fully transparent and hidden.
 """
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -47,6 +60,15 @@ HINGE = '#FF050506'
 
 HALF_FLIP = 0.16       # seconds for each flap to fall
 DELAY_PER_CELL = 0.035
+
+# Wake shuffle (baked into assets/wake.webp)
+WAKE_FPS = 30
+WAKE_STEP = 0.1        # seconds per digit step: top falls, then bottom lands
+WAKE_STEPS = (7, 9, 11, 13)   # steps per slot; later slots land later
+WAKE_START = (4, 7, 2, 5)     # digit each slot shows on wake before spinning
+WAKE_CELL_DELAY = 0.004       # shimmer within a slot, per (column + row)
+WAKE_RIPPLE = 0.014           # background fold delay per board diagonal step
+GAP = 6                       # board colour between cells and at the hinge
 
 FONT = {
     0: ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
@@ -181,6 +203,15 @@ def build():
         for row in range(7):
             for col in range(5):
                 cell(numerals, flaps, slot, row, col)
+
+    # Wake shuffle: hidden in ambient, so it plays again on every wake.
+    wake = group(scene, 'wake')
+    ambient(wake)
+    part = element(wake, 'PartAnimatedImage', x=0, y=0, width=SIZE, height=SIZE)
+    element(part, 'AnimationController', play='ON_VISIBLE', beforePlaying='DO_NOTHING',
+            afterPlaying='HIDE')
+    element(part, 'AnimatedImage', resource='wake', format='WEBP')
+    element(part, 'Thumbnail', resource='wake_thumbnail')
     return root
 
 
@@ -199,6 +230,16 @@ def board_cells():
     return out
 
 
+BOARD_TOP = np.array([31, 31, 34], float)
+BOARD_BOTTOM = np.array([25, 25, 28], float)
+
+
+def cell_wear():
+    """Per-cell brightness wear baked into board.png, keyed by (cx, cy)."""
+    rng = np.random.default_rng(7)
+    return {c: rng.uniform(-3, 3) for c in board_cells()}
+
+
 def board():
     os = 4
     k = SIZE * os
@@ -206,11 +247,8 @@ def board():
     rgba = np.zeros((k, k, 4))
     rgba[..., :3] = 6
     rgba[..., 3] = 255 * np.clip(SIZE / 2 - np.hypot(x - C, y - C) + 0.5, 0, 1)
-    top_rgb = np.array([31, 31, 34], float)
-    bottom_rgb = np.array([25, 25, 28], float)
-    rng = np.random.default_rng(7)
-    for cx, cy in board_cells():
-        wear = rng.uniform(-3, 3)
+    top_rgb, bottom_rgb = BOARD_TOP, BOARD_BOTTOM
+    for (cx, cy), wear in cell_wear().items():
         for top, rgb in ((True, top_rgb), (False, bottom_rgb)):
             y0 = cy - HALF if top else cy + 0.6
             y1 = cy - 0.6 if top else cy + HALF
@@ -232,8 +270,177 @@ def board():
     Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), 'RGBA').save(HERE / 'assets' / 'board.png', optimize=True)
 
 
+# --- Wake shuffle ----------------------------------------------------------
+
+OS = 4                 # supersampling for the baked frames
+LIT_RGB = {True: np.array([0xF3, 0xEF, 0xE6], float), False: np.array([0xE2, 0xDD, 0xD1], float)}
+FOLD_GLARE = 0.35      # a flap facing up catches the light as it falls
+
+
+def slot_cell(gc, gr):
+    """(slot index, local row, local col) for a digit-grid cell, or None for a gap cell."""
+    for k, (dc, dr, *_) in enumerate(SLOTS):
+        if dc <= gc < dc + 5 and dr <= gr < dr + 7:
+            return k, gr - dr, gc - dc
+    return None
+
+
+def grid(cx, cy):
+    """Digit-grid (column, row) of a board cell centre."""
+    return (cx - C) // PITCH + (COLUMNS - 1) // 2, (cy - C) // PITCH + (ROWS - 1) // 2
+
+
+class Frame:
+    """A premultiplied RGBA overlay frame drawn at OS x and reduced on save."""
+
+    def __init__(self):
+        self.px = np.zeros((SIZE * OS, SIZE * OS, 4), np.float32)
+
+    def rect(self, x0, x1, y0, y1, rgb, radius=2.0, sheen=0.0):
+        if y1 - y0 <= 0.05:
+            return
+        r = min(radius, (y1 - y0) / 2)
+        sl = (slice(int(y0 * OS), int(np.ceil(y1 * OS))), slice(int(x0 * OS), int(np.ceil(x1 * OS))))
+        yy = (np.arange(sl[0].start, sl[0].stop)[:, None] + 0.5) / OS
+        xx = (np.arange(sl[1].start, sl[1].stop)[None, :] + 0.5) / OS
+        dx = np.maximum(np.maximum(x0 + r - xx, xx - (x1 - r)), 0)
+        dy = np.maximum(np.maximum(y0 + r - yy, yy - (y1 - r)), 0)
+        cover = np.clip(r - np.hypot(dx, dy) + 0.5 / OS, 0, 1) if r > 0 else np.ones_like(dx + dy)
+        cover = cover * (yy >= y0) * (yy < y1) * (xx >= x0) * (xx < x1)
+        color = np.asarray(rgb, float) + (sheen * (1 - (yy - y0) / (y1 - y0)))[..., None]
+        src = np.concatenate([np.clip(color, 0, 255) * np.ones_like(cover)[..., None],
+                              np.full(cover.shape + (1,), 255.0)], -1) * cover[..., None]
+        dst = self.px[sl]
+        dst[:] = src + dst * (1 - cover[..., None])
+
+    def image(self):
+        prem = self.px.reshape(SIZE, OS, SIZE, OS, 4).mean((1, 3))
+        a = prem[..., 3:4]
+        rgb = np.where(a > 0, prem[..., :3] * 255 / np.maximum(a, 1e-6), 0)
+        out = np.concatenate([rgb, a], -1)
+        return Image.fromarray(np.clip(np.round(out), 0, 255).astype(np.uint8), 'RGBA')
+
+
+def half_rgb(lit_cell, top, wear):
+    """Colour and sheen of a resting half flap, matching the live tiles and board.png."""
+    if lit_cell:
+        return LIT_RGB[top], 0.0
+    return (BOARD_TOP if top else BOARD_BOTTOM) + wear, 6.0 if top else 2.0
+
+
+def draw_half(frame, cx, cy, top, lit_cell, wear, start=0.0, end=1.0, shade=1.0):
+    """The part of a half flap from `start` to `end` of the way from the hinge outwards."""
+    rgb, sheen = half_rgb(lit_cell, top, wear)
+    rgb = rgb * shade
+    x0, x1 = cx - HALF, cx + HALF
+    span = HALF - 0.6
+    if top:
+        frame.rect(x0, x1, cy - 0.6 - span * end, cy - 0.6 - span * start, rgb, sheen=sheen)
+    else:
+        frame.rect(x0, x1, cy + 0.6 + span * start, cy + 0.6 + span * end, rgb, sheen=sheen)
+
+
+def draw_fold(frame, cx, cy, f, old, new, wear):
+    """One split-flap step at phase f in [0, 1): `old` (lit or not) to `new`.
+
+    new=None is the landing step: everything the new state would draw is left
+    transparent, so the live cell underneath shows through.
+    """
+    # Opaque backing (gap colour, reaching halfway to the next cell) behind
+    # everything the overlay still covers, so no anti-aliased edge of the live
+    # tile underneath rims the overlay's flaps.
+    x0, x1, span = cx - HALF - 1, cx + HALF + 1, HALF - 0.6
+    backing = lambda y0, y1: frame.rect(x0, x1, y0, y1, (GAP,) * 3, radius=0)
+    if new is not None:
+        backing(cy - HALF - 1, cy + HALF + 1)
+    if f < 0.5:
+        p = f / 0.5
+        if new is not None:
+            draw_half(frame, cx, cy, True, new, wear)
+        else:
+            backing(cy - 0.6 - span * (1 - p) - 0.5, cy)
+            backing(cy, cy + HALF + 1)
+        # The old top flap falls about the hinge, shrinking toward it.
+        draw_half(frame, cx, cy, True, old, wear, 0.0, 1 - p, 1 + FOLD_GLARE * p)
+        draw_half(frame, cx, cy, False, old, wear)
+    else:
+        q = (f - 0.5) / 0.5
+        if new is not None:
+            draw_half(frame, cx, cy, True, new, wear)
+            draw_half(frame, cx, cy, False, old, wear)
+            draw_half(frame, cx, cy, False, new, wear, 0.0, q, 1 + FOLD_GLARE * (1 - q))
+        else:
+            # The new flap sweeping down from the hinge uncovers the live cell.
+            backing(cy + 0.6 + span * q - 0.3, cy + HALF + 1)
+            draw_half(frame, cx, cy, False, old, wear, q, 1.0)
+            return
+    frame.rect(cx - HALF, cx + HALF, cy - 0.6, cy + 0.6, (GAP,) * 3, radius=0)
+
+
+def wake_glyph(k, j):
+    return (WAKE_START[k] + j) % 10
+
+
+def wake_duration():
+    spin = max(WAKE_CELL_DELAY * 10 + n * WAKE_STEP for n in WAKE_STEPS)
+    ripple = WAKE_RIPPLE * 40 + WAKE_STEP
+    return max(spin, ripple)
+
+
+def wake_frame(t, wear=None):
+    """The overlay at t seconds after wake."""
+    wear = cell_wear() if wear is None else wear
+    frame = Frame()
+    for (cx, cy), w in wear.items():
+        gc, gr = grid(cx, cy)
+        where = slot_cell(gc, gr)
+        if where is None:
+            # Background: one fold rippling from the top left, dark onto dark.
+            i, j = (cx - C) // PITCH + 10, (cy - C) // PITCH + 10
+            f = (t - WAKE_RIPPLE * (i + j)) / WAKE_STEP
+            if 0 <= f < 1:
+                if f < 0.5:
+                    p = f / 0.5
+                    draw_half(frame, cx, cy, True, False, w, 0.0, 1 - p, 1 + FOLD_GLARE * p)
+                else:
+                    q = (f - 0.5) / 0.5
+                    draw_half(frame, cx, cy, False, False, w, 0.0, q, 1 + FOLD_GLARE * (1 - q))
+            continue
+        k, r, c = where
+        lit_in = lambda g: FONT[g][r][c] == '1'
+        u = (t - WAKE_CELL_DELAY * (r + c)) / WAKE_STEP
+        if u <= 0:
+            settled = lit_in(wake_glyph(k, 0))
+            draw_fold(frame, cx, cy, 0.0, settled, settled, w)
+            continue
+        step = int(np.floor(u)) + 1
+        if step > WAKE_STEPS[k]:
+            continue
+        old = lit_in(wake_glyph(k, step - 1))
+        new = None if step == WAKE_STEPS[k] else lit_in(wake_glyph(k, step))
+        draw_fold(frame, cx, cy, u - np.floor(u), old, new, w)
+    return frame.image()
+
+
+def wake_frames():
+    """Every frame of the shuffle; the last is fully transparent."""
+    count = int(np.ceil(wake_duration() * WAKE_FPS)) + 1
+    wear = cell_wear()
+    return [wake_frame(i / WAKE_FPS, wear) for i in range(count)]
+
+
+def wake():
+    frames = wake_frames()
+    # 30 fps as whole milliseconds: 33, 33, 34, ...
+    durations = [round((i + 1) * 1000 / WAKE_FPS) - round(i * 1000 / WAKE_FPS) for i in range(len(frames))]
+    frames[0].save(HERE / 'assets' / 'wake.webp', save_all=True, append_images=frames[1:],
+                   duration=durations, loop=0, lossless=True, quality=100, method=6)
+    Image.new('RGBA', (SIZE, SIZE)).save(HERE / 'assets' / 'wake_thumbnail.png', optimize=True)
+
+
 if __name__ == '__main__':
     board()
+    wake()
     root = build()
     ET.indent(root, space='  ')
     (HERE / 'watchface.xml').write_bytes(
