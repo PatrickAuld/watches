@@ -6,6 +6,12 @@
 //    and animation elapsed time, so the preview pages drive their own animation
 //    loop (start from any time, share a frame budget across many canvases, no
 //    half-drawn frames).
+// 3. Expressions are tokenized and parsed once and cached by their text, and
+//    renderWatchFaceFrame parses each face's XML once and clones it per frame
+//    (transforms write into the DOM, so every frame needs a fresh copy). Faces
+//    with hundreds of long expressions, like Thread Portrait, otherwise spend
+//    most of each frame re-parsing text that never changes. Groups whose
+//    alpha is 0 are skipped (they draw nothing).
 // Drop this file once wff-web publishes these.
 // src/color.ts
 function parseColor(value) {
@@ -575,10 +581,13 @@ function evalNode(node, ctx) {
     }
   }
 }
+const astCache = /* @__PURE__ */ new Map();
 function evaluateExpression(expr, context) {
-  const tokens = tokenize(expr);
-  const parser = new Parser(tokens);
-  const ast = parser.parse();
+  let ast = astCache.get(expr);
+  if (!ast) {
+    ast = new Parser(tokenize(expr)).parse();
+    astCache.set(expr, ast);
+  }
   return evalNode(ast, context);
 }
 function zeroPad(value) {
@@ -767,6 +776,7 @@ async function renderGroup(ctx, el, renderChild, renderCtx) {
   const alpha = parseFloat(el.getAttribute("alpha") ?? "255");
   const scaleX = parseFloat(el.getAttribute("scaleX") ?? "1");
   const scaleY = parseFloat(el.getAttribute("scaleY") ?? "1");
+  if (alpha <= 0) return;
   ctx.save();
   ctx.translate(x, y);
   const px = pivotX * w;
@@ -1457,9 +1467,16 @@ async function renderWatchFace(canvas, options) {
   return { metadata };
 }
 const frameBuffers = /* @__PURE__ */ new WeakMap();
+const parsedFaces = /* @__PURE__ */ new Map();
 async function renderWatchFaceFrame(canvas, options, elapsedMs, time) {
-  const doc = new DOMParser().parseFromString(options.xml, "text/xml");
-  if (doc.documentElement.tagName === "parsererror") return;
+  let template = parsedFaces.get(options.xml);
+  if (!template) {
+    template = new DOMParser().parseFromString(options.xml, "text/xml");
+    if (parsedFaces.size > 32) parsedFaces.clear();
+    parsedFaces.set(options.xml, template);
+  }
+  if (template.documentElement.tagName === "parsererror") return;
+  const doc = template.cloneNode(true);
   const width = options.width ?? 450;
   const height = options.height ?? 450;
   if (canvas.width !== width) canvas.width = width;

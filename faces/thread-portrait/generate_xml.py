@@ -242,6 +242,7 @@ def board_assets(radius):
     second_glow(radius)
 
 
+SECOND_HOP_MS = 420   # the seconds highlight's hop, from the top of each second
 SECOND_BOX = 56   # px square around the 12 o'clock pin holding the seconds highlight
 
 
@@ -341,11 +342,13 @@ def build():
     image(pins, 'pins', tintColor=f'[CONFIGURATION.{CONFIG}.1]')
     image(pins, 'pin_glint')
 
-    # Seconds: the pins at the current second light up, stepping 6 degrees a
+    # Seconds: the pins at the current second light up, hopping 6 degrees a
     # second. Hidden in ambient, which only updates once a minute.
     seconds = group(scene, 'secondPins', pivotX=0.5, pivotY=0.5)
     element(seconds, 'Variant', mode='AMBIENT', target='alpha', value=0)
-    transform(seconds, 'angle', '[SECOND]*6')
+    # each second the lit cluster hops to the next pins with the threads' bounce
+    hop = ease(f'clamp([MILLISECOND]/{SECOND_HOP_MS},0,1)')
+    transform(seconds, 'angle', f'6*([SECOND]-1+{hop})')
     box = dict(x=round(C - SECOND_BOX / 2), y=round(C - sol['radius'] - SECOND_BOX / 2), w=SECOND_BOX, h=SECOND_BOX)
     image(seconds, 'second_pins', tintColor=f'[CONFIGURATION.{CONFIG}.1]', **box)
     image(seconds, 'second_core', **box)

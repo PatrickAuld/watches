@@ -5326,7 +5326,7 @@
     </Group>
     <Group x="0" y="0" width="450" height="450" name="secondPins" pivotX="0.5" pivotY="0.5">
       <Variant mode="AMBIENT" target="alpha" value="0" />
-      <Transform target="angle" value="[SECOND]*6" />
+      <Transform target="angle" value="6*([SECOND]-1+(1-(1-clamp([MILLISECOND]/420,0,1))*pow(0.03,clamp([MILLISECOND]/420,0,1))*(cos(9.4248*clamp([MILLISECOND]/420,0,1))+1.15*sin(9.4248*clamp([MILLISECOND]/420,0,1)))))" />
       <PartImage x="197" y="-17" width="56" height="56" tintColor="[CONFIGURATION.spool.1]">
         <Image resource="second_pins" />
       </PartImage>
