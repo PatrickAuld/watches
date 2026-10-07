@@ -2,36 +2,39 @@
 
 A watch face for knowing when the next meeting starts, without reading a number.
 
-## October 2026 reimagining
+## October 2026: linear sweep
 
-The original face swung a vertical line across the dial on a 60-minute sine. It
-crossed the centre at :00 and :30, and a dashed line glowed as it got near. The
-line was in the same place at :10 and :20, so a trail had to show the direction.
+The first version swung a line on a 60-minute sine, centred at :00 and :30. A
+pendulum rework followed, with its swing equal to the minutes left. Patrick
+pointed out that in both, :02 and :32 (and every pair 30 minutes apart) looked
+identical. He asked for a linear sweep instead of a pendulum.
 
-This version makes the closing window literal and one-directional.
+The face is now a single timeline for the hour:
 
-- **The pendulum runs down.** A seconds pendulum hangs from the dial centre and
-  beats once per second (2 s period, at the extremes on each tick). Its swing equals the
-  minutes left until the next :00 or :30, at two degrees per minute. It swings
-  ±60° just after the half hour and hangs plumb when the meeting starts. Then the
-  window snaps open again.
-- **The gates** are two red bars on the minute scale at ±(minutes left). They show the
-  window without waiting for a swing, and also show in ambient.
-- **Minute scale.** One tick per minute either side of the centre, longer at 5,
-  longer still at 15. Ticks outside the window go dark as it closes, so the lit ticks count down.
-- **Final five minutes.** The bob turns red, and the dashed plumb line brightens as the
-  gates converge on the red centre mark.
-- **Hour.** A bone bar on the bezel track, moving continuously through the hour.
-- **Ambient.** No motion. The pendulum hangs at rest as an outline, and the
-  gates, lit window and hour bar stay.
+- **The sweep.** A full-height line with a bead on the minute track moves left to
+  right at a constant 6 units per minute. :00 is the left edge, :30 the centre
+  and :00 again the right edge. It only travels one way, so no two minutes of
+  the hour share a position. At the top of the hour it jumps from the right edge
+  back to the left.
+- **Meeting marks.** Red bars at both edges (:00) and a taller one at the centre (:30).
+- **The closing window.** A faint band from the line to the next meeting mark.
+  It narrows to nothing at :00 and :30, then reopens across the next half hour.
+- **Minute track.** One tick per minute, longer at 5 and 15. Ticks still ahead
+  of the line in the current half hour are lit and the rest are dim.
+- **Final five minutes.** The line, the bead and the window turn red.
+- **Hour.** A bone bar on the bezel track.
+- **Ambient.** The window band is hidden and the line, track and hour bar stay.
 
-Bone (#EDE6D6) and red (#FF3B2F) on black. No numerals.
+The slug and name remain `pendulum` so existing links and installs keep working.
 
-![10:08, 22 minutes left](previews/open.png)
-![10:19, 11 minutes left, mid-swing](previews/midswing.png)
-![10:26:30, final minutes](previews/closing.png)
-![14:59:50, the meeting starts](previews/meeting.png)
-![Ambient, 10:08](previews/ambient.png)
+![10:02](previews/top-of-hour.png)
+![10:32: same minute, other half](previews/half-past.png)
+![10:18](previews/mid.png)
+![10:57:30, final minutes](previews/final-minutes.png)
+![Ambient, 10:18](previews/ambient.png)
+
+WFF Web does not apply the round clip, so the band and line run past the circle
+in these renders. The Pixel Watch display clips them.
 
 ## Source and validation
 
@@ -41,9 +44,7 @@ WFF v4 XSD (github.com/google/watchface). The original's `dashIntervals="3,6"` w
 not valid; the list is space-separated. Previews and `preview.png` are WFF Web
 renders of the canonical XML.
 
-The face uses only constructs already proven on a Pixel Watch by Radial Moiré and
-Book of Hours: Group angle transforms, Group `Variant` alpha for ambient,
-PartDraw alpha transforms, Arc start/end angle transforms, `cos()`, and
-`[SECONDS_SINCE_EPOCH]` + `[MILLISECOND]`. It stays `draft` until it has been checked
-on the watch. Things to check there: how smooth the swing is, the battery cost of continuous
-animation, and whether `[MINUTE_SECOND]` advances per second on the device.
+The face uses only constructs already proven on a Pixel Watch: Group `Variant`
+alpha for ambient, PartDraw alpha transforms, shape size and position transforms
+(Split-Flap), and Arc start/end angle transforms (Book of Hours). It stays `draft` until it
+has been checked on the watch.
