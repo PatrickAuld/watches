@@ -15,80 +15,68 @@ ${og_image}
   </head>
   <body data-root="../../" data-face="${slug}">
     <main class="shell">
-      <nav class="crumbs"><a href="../../">&larr; All watch faces</a></nav>
-      <header>
-        <h1>${name} <span class="badge status-${status}">${status}</span></h1>
-        <p class="lede">${description}</p>
-      </header>
+      <nav class="topbar">
+        <a href="../../">&larr; All faces</a>
+        <span class="pager">${pager}</span>
+      </nav>
 
       <div class="layout">
-        <div>
+        <section class="stage">
           <div class="watch-frame">
             <div class="watch-screen">
-              <canvas id="watch-canvas" width="450" height="450"></canvas>
-              <div id="placeholder" class="placeholder" style="display:none"></div>
+              <canvas id="watch-canvas" width="450" height="450" aria-label="${name} preview"></canvas>
+              <div id="placeholder" class="placeholder" hidden></div>
             </div>
           </div>
-        </div>
+          <p class="readout" id="readout" hidden>
+            <span id="clock"></span>
+            <span class="pill" id="clock-mode">Live</span>
+          </p>
+        </section>
 
-        <div class="sidebar">
-          <div class="card controls">
-            <h3>Face</h3>
-            <label>
-              <span>Watch face</span>
-              <select id="face-picker"></select>
-            </label>
-          </div>
+        <aside class="panel">
+          <header>
+            <h1>${name} <span class="badge status-${status}">${status}</span></h1>
+            <p class="lede">${description}</p>
+          </header>
 
-          <div class="card controls" id="style-card" hidden>
-            <h3>Theme</h3>
-            <label><span>Plate geometry</span><select id="style-picker"></select></label>
-          </div>
+          <div id="controls" hidden>
+            <div class="group">
+              <h2>Time</h2>
+              <div class="chips" id="time-chips">
+                <button type="button" data-time="now" class="active">Now</button>
+                <button type="button" data-time="10:10">10:10</button>
+                <button type="button" data-time="03:30">3:30</button>
+                <button type="button" data-time="08:59">8:59</button>
+                <button type="button" data-time="23:59">23:59</button>
+                <input type="time" id="time-input" aria-label="Custom start time" />
+              </div>
+            </div>
 
-          <div class="card controls" id="palette-card" hidden>
-            <h3>Color</h3>
-            <label><span>Dial palette</span><select id="palette-picker"></select></label>
-          </div>
+            <div class="group" id="style-group" hidden>
+              <h2 id="style-label">Style</h2>
+              <div class="chips" id="style-chips"></div>
+            </div>
 
-          <div class="card controls" id="time-card">
-            <h3>Time</h3>
-            <label>
-              <span>Mode</span>
-              <select id="time-mode">
-                <option value="fixed">Fixed</option>
-                <option value="live">Live</option>
-              </select>
-            </label>
-            <label>
-              <span>Time</span>
-              <input type="datetime-local" id="time-input" />
-            </label>
-            <div class="button-row">
-              <button data-set-time="10:10">10:10</button>
-              <button data-set-time="12:00">12:00</button>
-              <button data-set-time="15:30">3:30</button>
-              <button data-set-time="21:45">9:45</button>
-              <button data-set-time="00:00">00:00</button>
+            <div class="group" id="palette-group" hidden>
+              <h2>Color</h2>
+              <div class="chips" id="palette-chips"></div>
+            </div>
+
+            <div class="group">
+              <label class="switch">
+                <input type="checkbox" id="ambient-toggle" />
+                <span class="track" aria-hidden="true"></span>
+                <span>Ambient mode</span>
+              </label>
             </div>
           </div>
 
-          <div class="card controls" id="display-card">
-            <h3>Display</h3>
-            <label class="check">
-              <input type="checkbox" id="ambient-toggle" />
-              <span>Ambient mode</span>
-            </label>
-            <label class="check">
-              <input type="checkbox" id="animate-toggle" />
-              <span>Animate (live rendering)</span>
-            </label>
-          </div>
-
-          <div class="card meta">
-            <h3>Metadata</h3>
-            <div id="meta-panel"><p class="muted">Loading&hellip;</p></div>
-          </div>
-        </div>
+          <details class="details">
+            <summary>face.yaml</summary>
+            <pre class="yaml" id="meta-panel">Loading&hellip;</pre>
+          </details>
+        </aside>
       </div>
 
       <footer>

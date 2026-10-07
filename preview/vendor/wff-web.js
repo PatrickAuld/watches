@@ -1,7 +1,12 @@
-// wff-web 0.1.1 (https://www.npmjs.com/package/wff-web), vendored with one patch:
-// buildDataSources also supplies SECONDS_SINCE_EPOCH, MINUTES_SINCE_EPOCH,
-// MILLISECOND, SECOND_MILLISECOND and MINUTE_SECOND, which Radar and Radial
-// Moire use for motion. Drop this file once wff-web publishes these sources.
+// wff-web 0.1.1 (https://www.npmjs.com/package/wff-web), vendored with two patches:
+// 1. buildDataSources also supplies SECONDS_SINCE_EPOCH, MINUTES_SINCE_EPOCH,
+//    MILLISECOND, SECOND_MILLISECOND and MINUTE_SECOND, which Radar and Radial
+//    Moire use for motion.
+// 2. renderWatchFaceFrame draws one double-buffered frame at a given clock time
+//    and animation elapsed time, so the preview pages drive their own animation
+//    loop (start from any time, share a frame budget across many canvases, no
+//    half-drawn frames).
+// Drop this file once wff-web publishes these.
 // src/color.ts
 function parseColor(value) {
   if (value == null) return "#000000";
@@ -1451,6 +1456,27 @@ async function renderWatchFace(canvas, options) {
   const metadata = await renderFrame(canvas, ctx, doc, options, 0, options.time ?? /* @__PURE__ */ new Date());
   return { metadata };
 }
+const frameBuffers = /* @__PURE__ */ new WeakMap();
+async function renderWatchFaceFrame(canvas, options, elapsedMs, time) {
+  const doc = new DOMParser().parseFromString(options.xml, "text/xml");
+  if (doc.documentElement.tagName === "parsererror") return;
+  const width = options.width ?? 450;
+  const height = options.height ?? 450;
+  if (canvas.width !== width) canvas.width = width;
+  if (canvas.height !== height) canvas.height = height;
+  // Draw off screen and copy in one step: renderFrame awaits image work, and
+  // drawing straight to the visible canvas would show half-finished frames.
+  let buffer = frameBuffers.get(canvas);
+  if (!buffer) frameBuffers.set(canvas, buffer = document.createElement("canvas"));
+  buffer.width = width;
+  buffer.height = height;
+  const bufferCtx = buffer.getContext("2d");
+  await renderFrame(buffer, bufferCtx, doc, options, elapsedMs, time ?? /* @__PURE__ */ new Date());
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  ctx.drawImage(buffer, 0, 0);
+}
 export {
-  renderWatchFace
+  renderWatchFace,
+  renderWatchFaceFrame
 };

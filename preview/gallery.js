@@ -1,27 +1,58 @@
-import { renderWatchFace } from './vendor/wff-web.js';
+import { renderWatchFaceFrame } from './vendor/wff-web.js';
 import { loadCatalog, loadFace, prepare } from './render.js';
 
 const root = './';
-const rendered = [];
+const thumbs = []; // { canvas, input, visible }
+const startedAt = performance.now();
+// Per-frame time budget shared by all thumbnails, so a full gallery keeps
+// scrolling smoothly: each frame draws as many on-screen faces as fit,
+// continuing round-robin from where the last frame stopped.
+const BUDGET_MS = 10;
+let cursor = 0;
+let looping = false;
 
-async function drawThumbnail(canvas, entry) {
+function draw(thumb) {
+  return renderWatchFaceFrame(thumb.canvas, { ...thumb.input, width: 450, height: 450 },
+    performance.now() - startedAt, new Date());
+}
+
+async function loop() {
+  looping = true;
+  const visible = thumbs.filter(t => t.visible);
+  const deadline = performance.now() + BUDGET_MS;
+  for (let drawn = 0; drawn < visible.length; drawn++) {
+    const thumb = visible[cursor++ % visible.length];
+    try { await draw(thumb); } catch (error) { console.warn(error); }
+    if (performance.now() > deadline) break;
+  }
+  looping = !document.hidden;
+  if (looping) requestAnimationFrame(loop);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !looping) requestAnimationFrame(loop);
+});
+
+const observer = new IntersectionObserver(entries => {
+  for (const { target, isIntersecting } of entries) {
+    const thumb = thumbs.find(t => t.canvas === target);
+    if (thumb) thumb.visible = isIntersecting;
+  }
+});
+
+const catalog = await loadCatalog(root);
+await Promise.all(catalog.filter(entry => entry.xml).map(async entry => {
+  const canvas = document.querySelector(`canvas[data-face="${entry.slug}"]`);
+  if (!canvas) return;
   try {
-    const face = await loadFace(root, entry);
-    const input = await prepare(face);
-    const draw = () => renderWatchFace(canvas, { ...input, width: 450, height: 450, time: new Date() });
-    await draw();
-    rendered.push(draw);
+    const thumb = { canvas, input: await prepare(await loadFace(root, entry)), visible: false };
+    thumbs.push(thumb);
+    observer.observe(canvas);
+    await draw(thumb);
   } catch (error) {
     canvas.closest('.thumb').classList.add('thumb-error');
     console.warn(`${entry.slug}: ${error.message}`);
   }
-}
-
-const catalog = await loadCatalog(root);
-await Promise.all(catalog.filter(entry => entry.xml).map(entry => {
-  const canvas = document.querySelector(`canvas[data-face="${entry.slug}"]`);
-  return canvas ? drawThumbnail(canvas, entry) : null;
 }));
-
-// Keep thumbnails at the current minute.
-setInterval(() => rendered.forEach(draw => draw()), 30000);
+looping = true;
+requestAnimationFrame(loop);

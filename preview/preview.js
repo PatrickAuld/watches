@@ -1,138 +1,163 @@
-import { renderWatchFace } from './vendor/wff-web.js';
-import { escapeHtml, faceUrl, loadCatalog, loadFace, prepare } from './render.js';
+import { renderWatchFaceFrame } from './vendor/wff-web.js';
+import { escapeHtml, loadCatalog, loadFace, prepare } from './render.js';
 
 const root = document.body.dataset.root;
 const slug = document.body.dataset.face;
 
-const canvas = document.getElementById('watch-canvas');
-const facePicker = document.getElementById('face-picker');
-const timeInput = document.getElementById('time-input');
-const timeModeSelect = document.getElementById('time-mode');
-const ambientToggle = document.getElementById('ambient-toggle');
-const styleCard = document.getElementById('style-card');
-const stylePicker = document.getElementById('style-picker');
-const paletteCard = document.getElementById('palette-card');
-const palettePicker = document.getElementById('palette-picker');
-const animateToggle = document.getElementById('animate-toggle');
-const quickBtns = document.querySelectorAll('[data-set-time]');
-const metaPanel = document.getElementById('meta-panel');
-const placeholder = document.getElementById('placeholder');
+const $ = id => document.getElementById(id);
+const canvas = $('watch-canvas');
+const placeholder = $('placeholder');
+const controls = $('controls');
+const timeChips = $('time-chips');
+const timeInput = $('time-input');
+const ambientToggle = $('ambient-toggle');
+const readout = $('readout');
+const clock = $('clock');
+const clockMode = $('clock-mode');
 
 let face = null;
-let renderResult = null;
-let renderVersion = 0;
-
-function optionsHtml(options) {
-  return options.map(o => `<option value="${escapeHtml(o.id)}">${escapeHtml(o.label)}</option>`).join('');
-}
+let style;
+let palette;
+// Milliseconds between the face's clock and real time; 0 means live.
+let offset = 0;
+let input = null;
+let looping = false;
+let paused = false;
+let prepareVersion = 0;
+const startedAt = performance.now();
 
 async function init() {
-  const catalog = await loadCatalog(root);
-  facePicker.innerHTML = catalog.map(f =>
-    `<option value="${escapeHtml(f.slug)}">${escapeHtml(f.name)} (${escapeHtml(f.status)})</option>`
-  ).join('');
-  facePicker.value = slug;
-  facePicker.addEventListener('change', () => { location.href = faceUrl(root, facePicker.value); });
-
   loadMetadata();
 
+  const catalog = await loadCatalog(root);
   const entry = catalog.find(f => f.slug === slug);
-  if (!entry || !entry.xml) {
-    showPlaceholder('In design — no watchface.xml yet');
-    for (const id of ['time-card', 'display-card']) document.getElementById(id).hidden = true;
-    return;
-  }
-
-  timeInput.value = '2026-03-13T10:10';
-  timeInput.addEventListener('input', () => { timeModeSelect.value = 'fixed'; render(); });
-  for (const el of [timeModeSelect, ambientToggle, stylePicker, palettePicker, animateToggle]) {
-    el.addEventListener('change', render);
-  }
-  quickBtns.forEach(btn => btn.addEventListener('click', () => {
-    timeInput.value = `2026-03-13T${btn.dataset.setTime}`;
-    timeModeSelect.value = 'fixed';
-    render();
-  }));
+  if (!entry || !entry.xml) return showPlaceholder('In design — no watchface.xml yet');
 
   try {
     face = await loadFace(root, entry);
   } catch (error) {
-    showPlaceholder(error.message);
-    return;
+    return showPlaceholder(error.message);
   }
 
-  styleCard.hidden = !face.style;
   if (face.style) {
-    stylePicker.closest('label').querySelector('span').textContent = face.style.label;
-    stylePicker.innerHTML = optionsHtml(face.style.options);
-    stylePicker.value = face.style.defaultValue;
+    $('style-label').textContent = face.style.label;
+    style = face.style.defaultValue;
+    buildChips($('style-chips'), face.style.options, style, value => { style = value; render(); });
+    $('style-group').hidden = false;
   }
-  paletteCard.hidden = !face.palette;
   if (face.palette) {
-    palettePicker.innerHTML = optionsHtml(face.palette.options);
-    palettePicker.value = face.palette.defaultValue;
+    palette = face.palette.defaultValue;
+    buildChips($('palette-chips'), face.palette.options, palette, value => { palette = value; render(); }, true);
+    $('palette-group').hidden = false;
   }
 
-  showCanvas();
+  timeChips.addEventListener('click', event => {
+    const button = event.target.closest('button[data-time]');
+    if (button) setTime(button.dataset.time);
+  });
+  timeInput.addEventListener('change', () => { if (timeInput.value) setTime(timeInput.value); });
+
+  controls.hidden = false;
+  readout.hidden = false;
+  tick();
+  setInterval(tick, 250);
   await render();
 }
 
-function showPlaceholder(message) {
-  canvas.style.display = 'none';
-  placeholder.style.display = 'block';
-  placeholder.textContent = message;
+function buildChips(container, options, selected, onSelect, swatches = false) {
+  container.innerHTML = options.map(o => {
+    const swatch = swatches && o.colors.length
+      ? `<i class="swatch" style="--a:${o.colors[0]};--b:${o.colors[1] || o.colors[0]}"></i>` : '';
+    return `<button type="button" data-value="${escapeHtml(o.id)}">${swatch}${escapeHtml(o.label)}</button>`;
+  }).join('');
+  const mark = value => container.querySelectorAll('button').forEach(b =>
+    b.classList.toggle('active', b.dataset.value === value));
+  mark(selected);
+  container.addEventListener('click', event => {
+    const button = event.target.closest('button');
+    if (!button) return;
+    mark(button.dataset.value);
+    onSelect(button.dataset.value);
+  });
 }
 
-function showCanvas() {
-  canvas.style.display = 'block';
-  placeholder.style.display = 'none';
-}
-
-function getTime() {
-  if (timeModeSelect.value === 'live') return new Date();
-  return new Date(timeInput.value || '2026-03-13T10:10');
-}
-
-async function render() {
-  if (!face) return;
-  const version = ++renderVersion;
-  if (renderResult && renderResult.stop) {
-    renderResult.stop();
-    renderResult = null;
+// "now", or "HH:MM" today; the face animates forward from there.
+function setTime(value) {
+  if (value === 'now') {
+    offset = 0;
+    timeInput.value = '';
+  } else {
+    const [h, m] = value.split(':').map(Number);
+    const target = new Date();
+    target.setHours(h, m, 0, 0);
+    offset = target - Date.now();
+    timeInput.value = value;
   }
-  const animate = animateToggle.checked;
+  timeChips.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.time === value));
+  tick();
+}
+
+function tick() {
+  const now = new Date(Date.now() + offset);
+  clock.textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+  clockMode.textContent = offset ? 'Simulated' : 'Live';
+  clockMode.classList.toggle('live', !offset);
+}
+
+// Re-resolve style and palette into renderer input; the loop picks it up.
+async function render() {
+  // Hold the frame loop while preparing: tinting palette images is slow when
+  // it has to compete with continuous rendering.
+  const version = ++prepareVersion;
+  paused = true;
   try {
-    const input = await prepare(face, {
-      style: face.style ? stylePicker.value : undefined,
-      palette: face.palette ? palettePicker.value : undefined,
-    });
-    if (version !== renderVersion) return;
-    renderResult = await renderWatchFace(canvas, {
-      ...input,
-      width: 450,
-      height: 450,
-      time: animate ? undefined : getTime(),
-      ambient: ambientToggle.checked,
-      animate,
-    });
+    const prepared = await prepare(face, { style, palette });
+    if (version !== prepareVersion) return;
+    input = prepared;
+    paused = false;
+    if (!looping) requestAnimationFrame(loop);
   } catch (error) {
     showPlaceholder(`Render error: ${error.message}`);
   }
 }
 
+async function loop() {
+  looping = !paused;
+  if (paused) return;
+  try {
+    await renderWatchFaceFrame(canvas, {
+      ...input,
+      width: 450,
+      height: 450,
+      ambient: ambientToggle.checked,
+    }, performance.now() - startedAt, new Date(Date.now() + offset));
+  } catch (error) {
+    looping = false;
+    return showPlaceholder(`Render error: ${error.message}`);
+  }
+  // requestAnimationFrame pauses on its own while the tab is hidden.
+  if (input) requestAnimationFrame(loop);
+  else looping = false;
+}
+
+function showPlaceholder(message) {
+  input = null;
+  canvas.hidden = true;
+  controls.hidden = true;
+  readout.hidden = true;
+  placeholder.hidden = false;
+  placeholder.textContent = message;
+}
+
 async function loadMetadata() {
+  const panel = $('meta-panel');
   try {
     const response = await fetch(`${root}faces/${slug}/face.yaml`);
     if (!response.ok) throw new Error('not found');
-    metaPanel.innerHTML = `<pre class="yaml">${escapeHtml(await response.text())}</pre>`;
+    panel.textContent = await response.text();
   } catch {
-    metaPanel.innerHTML = '<p class="muted">No metadata found</p>';
+    panel.textContent = 'No metadata found';
   }
 }
-
-// Live mode ticker
-setInterval(() => {
-  if (face && timeModeSelect.value === 'live' && !animateToggle.checked) render();
-}, 1000);
 
 init();

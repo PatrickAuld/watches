@@ -106,7 +106,13 @@ def summary(face):
     return face["meta"].get("description") or f"{face['meta']['name']} watch face."
 
 
-def face_page(face, base_url):
+def pager_link(face, rel, label):
+    if face is None:
+        return f'<span class="disabled">{label}</span>'
+    return f'<a rel="{rel}" href="../{face["slug"]}/" title="{html.escape(face["meta"]["name"])}">{label}</a>'
+
+
+def face_page(face, base_url, prev_face=None, next_face=None):
     url = f"{base_url}faces/{face['slug']}/"
     og_image = ""
     if face["previews"]:
@@ -115,7 +121,8 @@ def face_page(face, base_url):
         og_image = f'    <meta property="og:image" content="{html.escape(url)}previews/{html.escape(chosen)}" />'
     return render("face.html", name=html.escape(face["meta"]["name"]), slug=face["slug"],
                   status=html.escape(face["meta"]["status"]), description=html.escape(summary(face)),
-                  url=html.escape(url), og_image=og_image)
+                  url=html.escape(url), og_image=og_image,
+                  pager=pager_link(prev_face, "prev", "&lsaquo; Prev") + pager_link(next_face, "next", "Next &rsaquo;"))
 
 
 def gallery_card(face):
@@ -154,7 +161,7 @@ def main():
         shutil.rmtree(output)
     shutil.copytree(PREVIEW, output, ignore=shutil.ignore_patterns("templates"))
     catalog = []
-    for face in faces:
+    for index, face in enumerate(faces):
         directory, slug = face["dir"], face["slug"]
         target = output / "faces" / slug
         target.mkdir(parents=True)
@@ -169,9 +176,12 @@ def main():
         for preview in face["previews"]:
             (target / "previews").mkdir(exist_ok=True)
             shutil.copy2(preview, target / "previews" / preview.name)
-        (target / "index.html").write_text(face_page(face, base_url))
+        prev_face = faces[index - 1] if index > 0 else None
+        next_face = faces[index + 1] if index + 1 < len(faces) else None
+        (target / "index.html").write_text(face_page(face, base_url, prev_face, next_face))
         catalog.append({"slug": slug, "name": face["meta"]["name"], "status": face["meta"]["status"],
                         "xml": face["xml"], "description": summary(face),
+                        "strings": (directory / "strings.xml").exists(),
                         "assets": {name: asset.name for name, asset in face["assets"].items()}})
     (output / "faces.json").write_text(json.dumps(catalog, indent=2) + "\n")
     cards = "\n".join(gallery_card(face) for face in faces)

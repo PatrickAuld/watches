@@ -21,7 +21,10 @@ function parseXml(text) {
 function readOptions(config, tag, labels) {
   return [...config.querySelectorAll(`:scope > ${tag}`)].map(option => {
     const id = option.getAttribute('id');
-    return { id, label: labels.get(option.getAttribute('displayName')) || id };
+    // WFF colors are #AARRGGBB; CSS wants #RRGGBB.
+    const colors = (option.getAttribute('colors') || '').split(/\s+/).filter(Boolean)
+      .map(c => `#${c.slice(-6)}`);
+    return { id, label: labels.get(option.getAttribute('displayName')) || id, colors };
   });
 }
 
@@ -40,14 +43,14 @@ export async function loadFace(root, entry) {
   }));
 
   const labels = new Map();
-  try {
+  if (entry.strings) {
     const strings = await fetch(`${base}/strings.xml`);
     if (strings.ok) {
       for (const el of parseXml(await strings.text()).querySelectorAll('string[name]')) {
         labels.set(el.getAttribute('name'), el.textContent);
       }
     }
-  } catch { /* Not every face supplies its own strings. */ }
+  }
 
   const doc = parseXml(xml);
   let style = null;
