@@ -26,7 +26,9 @@ description: >
   pin to pin across a dark board, and where they bunch and cross they draw
   the hour over the minutes. When a digit changes its threads wind up,
   snap round the rim to their new pins, overshoot and wobble into place like
-  a cartoon, landing exactly as the minute turns.
+  a cartoon, landing exactly as the minute turns. Nine spools pair board,
+  pin and thread colours with a thread weight, from Ivory Silk to Red
+  String Theory and Neon Noodle.
 
 designNotes: >
   Constant thread count; every thread is a true chord of the pin circle.
@@ -43,3 +45,5 @@ implementationNotes: >
   on the slot value plus an eased step to the next value in the last ~2 s
   before it changes, so ambient always sees settled threads. Threads sit
   under a MASK of a dim disc plus cross-faded glyph glows.
+  A Spool ColorConfiguration colours the board, pins and three stroke
+  weights per thread (transparent strokes select the weight).

@@ -20,6 +20,32 @@ move between times.
   string art (uniform threads) was tried first: with a few hundred full-length
   chords the digits drowned in the crossings of the other slots.
 
+## Spools
+
+The watch editor offers one choice, **Spool**: a ColorConfiguration whose five
+colours are board, pins, fine thread, cord and yarn. Every thread carries
+three strokes (1.0, 2.0 and 3.6 px, widest drawn first). A spool picks its
+weight by leaving strokes transparent and can layer them for two-tone thread.
+
+| Spool | Board | Thread |
+| --- | --- | --- |
+| Ivory Silk (default) | charcoal felt, brass pins | fine ivory silk |
+| Red String Theory | corkboard, silver pins | red cord: the conspiracy board |
+| Neon Noodle | ink violet, hot pink pins | white fine core in a magenta yarn halo |
+| Blueprint | drafting blue | fine white line |
+| Midas Twine | near black, gold pins | gold cord |
+| Mint Floss | plum, pink pins | mint yarn |
+| Fishing Line | deep sea | fine pale monofilament |
+| Glow Worm | black green | bright fine core in a green cord glow |
+| Lumberjack Wool | forest green, bone pins | red yarn ribbed with a dark fine core |
+
+Thick strokes use lower alpha so crossings keep their thread texture instead
+of saturating into solid digits. The board is the spool colour under a
+neutral grain/vignette texture. Pins and the seconds highlight are white
+silhouettes tinted with the pin colour (tint replaces colour, keeps alpha)
+between untinted shadow and glint layers, so any pin colour keeps its shine.
+`strings.xml` (generated) supplies the editor labels.
+
 ## The move
 
 In the last ~1.9 s before a digit changes, its threads fly to the new chords
@@ -63,7 +89,8 @@ leaving the lit digits.
   each with two `pow`/`cos`/`sin` eases. If the watch stutters, cut thread
   counts in `solve.py` or switch the eases to `[SECOND]`-only outside the
   transition window.
-- 640 KB of XML, larger than any other face here.
+- 760 KB of XML, larger than any other face here; each thread now draws
+  three strokes, most of them transparent for a given spool.
 - `PartDraw` `y` transforms to fractional positions; if the platform rounds
   them, threads land within a pixel of their chord.
 - A Group `alpha` Transform and an AMBIENT Variant on the same element: the

@@ -1,0 +1,13 @@
+<resources>
+  <string name="watch_face_name">Thread Portrait</string>
+  <string name="spool">Spool</string>
+  <string name="spool_ivory_silk">Ivory Silk</string>
+  <string name="spool_red_string">Red String Theory</string>
+  <string name="spool_neon_noodle">Neon Noodle</string>
+  <string name="spool_blueprint">Blueprint</string>
+  <string name="spool_midas_twine">Midas Twine</string>
+  <string name="spool_mint_floss">Mint Floss</string>
+  <string name="spool_fishing_line">Fishing Line</string>
+  <string name="spool_glow_worm">Glow Worm</string>
+  <string name="spool_lumberjack">Lumberjack Wool</string>
+</resources>
