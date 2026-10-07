@@ -11,9 +11,9 @@
       <Image resource="scan_minute_print" />
     </PartImage>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_0">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 0 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 0 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_0">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -25,9 +25,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_1">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 1 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 1 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_1">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -39,9 +39,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_2">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 2 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 2 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_2">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -53,9 +53,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_3">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 3 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 3 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_3">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -67,9 +67,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_4">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 4 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 4 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_4">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -81,9 +81,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_5">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 5 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 5 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_5">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -95,9 +95,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_6">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 6 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 6 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_6">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -109,9 +109,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_7">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 7 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 7 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_7">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -123,9 +123,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_8">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 8 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 8 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_8">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -137,9 +137,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_9">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 9 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 9 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_9">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -151,9 +151,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_10">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 10 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 10 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_10">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -165,9 +165,9 @@
       </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_ink_11">
-      <Transform target="alpha" value="([HOUR_0_23] % 12) == 11 ? 255 : 0" />
+      <Transform target="alpha" value="floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) == 11 ? 255 : 0" />
       <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_hour_rules_11">
-        <Transform target="x" value="(-6 + ((([HOUR_0_23] % 12) + clamp(([MINUTE] * 60 + [SECOND] - 3000) / 600, 0, 1)) * 3) % 6)" />
+        <Transform target="x" value="(-6 + ((floor(((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) / 3600) + clamp((((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + 42930) % 43200) % 3600 - 3000) / 600, 0, 1)) * 3) % 6)" />
         <PartImage x="0" y="0" width="456" height="450">
           <Image resource="scan_sheet_hour" />
         </PartImage>
@@ -178,55 +178,11 @@
         </PartImage>
       </Group>
     </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_0">
-      <Variant mode="AMBIENT" target="alpha" value="170" />
-      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="minute_rules_0">
-        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_0">
-          <Transform target="x" value="(-6 + (([MINUTE] + clamp(([SECOND] + [MILLISECOND] / 1000 - 30) / 30, 0, 1)) * 3) % 6)" />
-          <PartImage x="0" y="0" width="456" height="450">
-            <Image resource="scan_sheet_minute" />
-          </PartImage>
-        </Group>
-        <Group x="-6" y="0" width="456" height="450" renderMode="MASK" name="minute_columns_0">
-          <Transform target="x" value="(-6 + ([MINUTE] % 2) * 3)" />
-          <PartImage x="0" y="0" width="456" height="450">
-            <Image resource="scan_minute_columns" />
-          </PartImage>
-        </Group>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_0">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_window_step_0">
-          <Transform target="angle" value="[MINUTE] * 6" />
-          <PartImage x="0" y="0" width="450" height="450">
-            <Image resource="scan_mask_minute" />
-          </PartImage>
-        </Group>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_1">
-      <Variant mode="AMBIENT" target="alpha" value="170" />
-      <Group x="0" y="0" width="450" height="450" renderMode="SOURCE" name="minute_rules_1">
-        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_1">
-          <Transform target="x" value="(-6 + (([MINUTE] + clamp(([SECOND] + [MILLISECOND] / 1000 - 30) / 30, 0, 1)) * 3) % 6)" />
-          <PartImage x="0" y="0" width="456" height="450">
-            <Image resource="scan_sheet_minute" />
-          </PartImage>
-        </Group>
-        <Group x="-6" y="0" width="456" height="450" renderMode="MASK" name="minute_columns_1">
-          <Transform target="x" value="(-6 + (([MINUTE] + 1) % 2) * 3)" />
-          <PartImage x="0" y="0" width="456" height="450">
-            <Image resource="scan_minute_columns" />
-          </PartImage>
-        </Group>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_1">
-        <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_window_step_1">
-          <Transform target="angle" value="([MINUTE] + 1) * 6" />
-          <PartImage x="0" y="0" width="450" height="450">
-            <Image resource="scan_mask_minute" />
-          </PartImage>
-        </Group>
-      </Group>
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_hand">
+      <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1)" />
+      <PartImage x="0" y="0" width="450" height="450">
+        <Image resource="scan_minute_hand" />
+      </PartImage>
     </Group>
   </Scene>
 </WatchFace>
