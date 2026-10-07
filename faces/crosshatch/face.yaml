@@ -22,23 +22,26 @@ style:
   accent: "#EDE4D3"
 
 description: >
-  A scratchboard engraving that shades itself in. The board is ruled in fine
-  single hatching; a perpendicular hatch follows the minute line round from 12,
-  so the passed part of the hour is crosshatched. Even hours shade in, odd
-  hours scrape back out. A lance cut from the board marks the hour, and a
-  glowing nib runs out along the minute line once a minute. Five inks.
+  A scratchboard engraving built around the half hour, for knowing at a
+  glance whether a meeting is about to start. The crosshatched wedge runs from
+  the minute line to the next :00 or :30 and narrows to nothing as it nears.
+  Over the last five minutes the board warms to an accent colour and pulses
+  faster; at :00 and :30 it flashes fully crosshatched and fades over two
+  minutes. A lance cut from the board marks the hour. Five inks.
 
 designNotes: >
-  Every mark is an engraved line: no fills, no numerals. Tone comes from line
-  density and weight, so the crosshatched sector reads brighter than the
-  single-hatched ground. The hour lance is a black reserve shaded with
-  swelling strokes along its axis; the minute is a carved hairline. Ambient
-  keeps only the lance, the hairline and dimmed indices.
+  Patrick's goal: give :00 and :30 energy so an upcoming meeting is obvious.
+  Every mark is an engraved line. Remaining time is the area of crosshatch
+  left; urgency is colour and pulse rate; the moment itself is a flash. 12
+  and 6 are enlarged gates, and the gate being approached glows. Ambient
+  keeps the lance, the hairline, a rim countdown arc that turns to the
+  accent colour in the last five minutes, and dimmed indices.
 
 implementationNotes: >
   Resource-only WFF v4 written by generate_xml.py, which also renders the
-  tintable PNG assets (analytic per-pixel hatching at 3x with hand wobble and
-  ragged rim ends). The sector is a SOURCE hatch image under a MASK Arc whose
-  startAngle/endAngle Transforms follow the minute, switching between fill and
-  scrape on hour parity. Hour and minute are rotating Groups; the nib is a
-  small tinted glow whose y follows seconds plus milliseconds.
+  tintable PNG assets. The countdown wedge and rim arc are Arcs from the
+  minute angle to 180 or 360 (MASK group for the wedge). Warm-up, run-up,
+  gate glow and flash are accent-tinted layers whose alpha is driven by
+  clamp/pow/sin expressions on the minutes left in the half hour; each sits
+  in a parent Group carrying the ambient Variant so the alpha Transform
+  cannot override it. The nib follows seconds plus milliseconds.

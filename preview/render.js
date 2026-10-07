@@ -96,13 +96,16 @@ export async function prepare(face, { style, palette } = {}) {
     configuration[face.palette.id] = selected;
     const option = [...doc.querySelectorAll('UserConfigurations > ColorConfiguration > ColorOption')]
       .find(el => el.getAttribute('id') === selected);
-    const ink = option.getAttribute('colors').split(/\s+/)[1];
+    const colors = option.getAttribute('colors').split(/\s+/);
     for (const part of doc.querySelectorAll('Scene PartImage[tintColor]')) {
       const image = part.querySelector(':scope > Image');
       const source = image.getAttribute('resource');
-      const tinted = `${source}_palette_${selected}`;
+      // Honour the colour index in [CONFIGURATION.<id>.<n>]; default to the ink (1).
+      const match = part.getAttribute('tintColor').match(/\[CONFIGURATION\.[^.\]]+\.(\d+)\]/);
+      const index = match ? Number(match[1]) : 1;
+      const tinted = `${source}_palette_${selected}_${index}`;
       if (!face.tinted.has(tinted)) {
-        face.tinted.set(tinted, await tintImage(face.assets.get(source), ink));
+        face.tinted.set(tinted, await tintImage(face.assets.get(source), colors[index] || colors[1]));
       }
       image.setAttribute('resource', tinted);
       assets.set(tinted, face.tinted.get(tinted));
