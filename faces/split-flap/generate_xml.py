@@ -70,6 +70,11 @@ WAKE_CELL_DELAY = 0.004       # shimmer within a slot, per (column + row)
 WAKE_RIPPLE = 0.014           # background fold delay per board diagonal step
 GAP = 6                       # board colour between cells and at the hinge
 
+# Board reset: every RESET_EVERY minutes, as the minute turns, the whole board
+# replays the wake shuffle (same asset) and lands on the new time.
+RESET_EVERY = 5
+RESET_GATE = f'clamp(1 - [MINUTE] % {RESET_EVERY}, 0, 1)'
+
 # Idle ripple (baked into assets/ripple.webp): a fold wave across the whole
 # board on pseudorandom seconds while the watch is awake.
 RIPPLE_STEP = 0.019           # fold delay per board diagonal step
@@ -225,6 +230,18 @@ def build():
     element(part, 'AnimationController', play='ON_NEXT_SECOND', beforePlaying='HIDE',
             afterPlaying='HIDE')
     element(part, 'AnimatedImage', resource='ripple', format='WEBP')
+    element(part, 'Thumbnail', resource='wake_thumbnail')
+
+    # Board reset: the wake shuffle again at every minute turn, shown only on
+    # every RESET_EVERY-th minute. It covers the minute flip underneath and
+    # uncovers the live cells once they have settled on the new time.
+    reset = group(scene, 'reset', alpha=0)
+    transform(reset, 'alpha', f'255 * {RESET_GATE}')
+    ambient(reset)
+    part = element(reset, 'PartAnimatedImage', x=0, y=0, width=SIZE, height=SIZE)
+    element(part, 'AnimationController', play='ON_NEXT_MINUTE', beforePlaying='HIDE',
+            afterPlaying='HIDE')
+    element(part, 'AnimatedImage', resource='wake', format='WEBP')
     element(part, 'Thumbnail', resource='wake_thumbnail')
 
     # Wake shuffle: hidden in ambient, so it plays again on every wake.

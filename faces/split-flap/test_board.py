@@ -115,6 +115,27 @@ class Wake(unittest.TestCase):
             self.assertTrue(all((b - a) % 10 == 1 for a, b in zip(glyphs, glyphs[1:])))
 
 
+class Reset(unittest.TestCase):
+    def setUp(self):
+        root = ET.parse(HERE / 'watchface.xml').getroot()
+        self.reset = next(g for g in root.find('Scene').findall('Group') if g.get('name') == 'reset')
+
+    def test_replays_the_shuffle_at_the_minute_turn(self):
+        controller = self.reset.find('PartAnimatedImage/AnimationController')
+        self.assertEqual(controller.get('play'), 'ON_NEXT_MINUTE')
+        self.assertEqual(controller.get('afterPlaying'), 'HIDE')
+        self.assertEqual(self.reset.find('PartAnimatedImage/AnimatedImage').get('resource'), 'wake')
+        self.assertEqual(self.reset.find('Variant').attrib, {'mode': 'AMBIENT', 'target': 'alpha', 'value': '0'})
+
+    def test_shown_every_reset_interval_for_the_whole_shuffle(self):
+        gate = self.reset.find('Transform').get('value')
+        self.assertLess(face.wake_duration(), 2)
+        for minute in range(1440):
+            shown = minute % face.RESET_EVERY == 0
+            for second in (0, 1):
+                self.assertEqual(evaluate(gate, minute, second), 255 if shown else 0, minute)
+
+
 class Ripple(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -126,7 +147,7 @@ class Ripple(unittest.TestCase):
         cls.hits = [s for s in range(86400) if evaluate(gate, s // 60, s % 60) > 0]
 
     def test_layered_under_the_wake_and_hidden_in_ambient(self):
-        self.assertEqual(self.names[-2:], ['ripple', 'wake'])
+        self.assertEqual(self.names[-3:], ['ripple', 'reset', 'wake'])
         self.assertEqual(self.ripple.get('alpha'), '0')
         self.assertEqual(self.ripple.find('Variant').attrib, {'mode': 'AMBIENT', 'target': 'alpha', 'value': '0'})
         controller = self.ripple.find('PartAnimatedImage/AnimationController')

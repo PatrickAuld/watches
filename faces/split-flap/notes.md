@@ -60,6 +60,19 @@ through the set and land on the current time.
   10:08 render; wff-web ignores `PartAnimatedImage`, so the site shows the
   settled face.
 
+## Board reset (October 2026)
+
+Feedback: every flap should flip at intervals to reset them all.
+
+- Every 5 minutes (`RESET_EVERY`), as the minute turns, the whole board
+  replays the wake shuffle: digit drums spin through the set, a fold runs
+  over every background flap, and each cell lands on the new time. It reuses
+  `wake.webp` in a second `PartAnimatedImage` that plays `ON_NEXT_MINUTE`
+  inside a group whose alpha is `[MINUTE] % 5 == 0`, so no new memory.
+- The shuffle (1.4 s) covers the minute flip underneath (done by 1.2 s), so
+  the reveal lands on settled cells. Hidden in ambient; layered between the
+  ripple and the wake overlay.
+
 ## Idle ripple (October 2026)
 
 Feedback: also ripple at pseudorandom intervals.
@@ -99,6 +112,8 @@ official WFF v4 XSD. Regenerate with `python3 faces/split-flap/generate_xml.py`.
   before the shuffle covers it; `beforePlaying="FIRST_FRAME"` would trade
   that for a scrambled board in system previews.
 
+- The reset relies on `ON_NEXT_MINUTE` replaying every minute, with the
+  group alpha gating it to every fifth.
 - The ripple relies on `ON_NEXT_SECOND` replaying each second and on the
   group's alpha gating it. If it only plays once, ripples stop after the
   first; if the gate is ignored, it ripples every second.

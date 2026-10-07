@@ -5496,6 +5496,15 @@
         <Thumbnail resource="wake_thumbnail" />
       </PartAnimatedImage>
     </Group>
+    <Group x="0" y="0" width="450" height="450" name="reset" alpha="0">
+      <Transform target="alpha" value="255 * clamp(1 - [MINUTE] % 5, 0, 1)" />
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartAnimatedImage x="0" y="0" width="450" height="450">
+        <AnimationController play="ON_NEXT_MINUTE" beforePlaying="HIDE" afterPlaying="HIDE" />
+        <AnimatedImage resource="wake" format="WEBP" />
+        <Thumbnail resource="wake_thumbnail" />
+      </PartAnimatedImage>
+    </Group>
     <Group x="0" y="0" width="450" height="450" name="wake">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <PartAnimatedImage x="0" y="0" width="450" height="450">
