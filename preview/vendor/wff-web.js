@@ -7,11 +7,17 @@
 //    loop (start from any time, share a frame budget across many canvases, no
 //    half-drawn frames).
 // 3. Expressions are tokenized and parsed once and cached by their text, and
-//    renderWatchFaceFrame parses each face's XML once and clones it per frame
-//    (transforms write into the DOM, so every frame needs a fresh copy). Faces
+//    renderWatchFaceFrame parses each face's XML once and reuses it, undoing
+//    the attribute writes each frame makes (transforms write into the DOM). Faces
 //    with hundreds of long expressions, like Thread Portrait, otherwise spend
 //    most of each frame re-parsing text that never changes. Groups whose
-//    alpha is 0 are skipped (they draw nothing).
+//    alpha is 0 are skipped (they draw nothing), and masking layers are pooled
+//    instead of allocated twice a frame.
+// 4. Decoded images are cached per face (per asset map), not globally by
+//    resource name: Book of Hours and Book of Hours II share 66 names, and the
+//    gallery showed one face's images in the other.
+// 5. Condition follows the WFF spec: an Expression's text is its expression,
+//    and a Compare's expression attribute names one of those Expressions.
 // Drop this file once wff-web publishes these.
 // src/color.ts
 function parseColor(value) {
@@ -133,6 +139,23 @@ function clampStop(value) {
   return Math.min(1, Math.max(0, value));
 }
 
+// Attribute writes made while rendering a frame are journaled on the document
+// and undone afterwards, so a parsed face can be reused frame after frame.
+function setAttr(el, name, value) {
+  const journal = el.ownerDocument.__journal;
+  if (journal) journal.push(el, name, el.getAttribute(name));
+  el.setAttribute(name, value);
+}
+function undoJournal(doc) {
+  const journal = doc.__journal;
+  doc.__journal = null;
+  for (let i = journal.length - 3; i >= 0; i -= 3) {
+    const value = journal[i + 2];
+    if (value === null) journal[i].removeAttribute(journal[i + 1]);
+    else journal[i].setAttribute(journal[i + 1], value);
+  }
+}
+
 // src/variants.ts
 function applyVariants(el, ambient) {
   for (const child of el.children) {
@@ -142,7 +165,7 @@ function applyVariants(el, ambient) {
         const target = child.getAttribute("target");
         const value = child.getAttribute("value");
         if (target !== null && value !== null) {
-          el.setAttribute(target, value);
+          setAttr(el, target, value);
         }
       }
     }
@@ -171,8 +194,28 @@ function hasMasking(el) {
   }
   return false;
 }
+// Masking layers are pooled: allocating 450x450 canvases twice a frame was a
+// large share of frame time for masked faces.
+const layerPool = [];
+function acquireLayer(width, height) {
+  const i = layerPool.findIndex(c => c.width === width && c.height === height);
+  const offscreen = i >= 0 ? layerPool.splice(i, 1)[0] : new OffscreenCanvas(width, height);
+  const offCtx = offscreen.getContext("2d");
+  offCtx.setTransform(1, 0, 0, 1, 0, 0);
+  offCtx.globalAlpha = 1;
+  offCtx.globalCompositeOperation = "source-over";
+  offCtx.clearRect(0, 0, width, height);
+  return offscreen;
+}
 async function renderWithMasking(ctx, el, width, height, renderChild, renderCtx) {
-  const offscreen = new OffscreenCanvas(width, height);
+  const offscreen = acquireLayer(width, height);
+  try {
+    await renderMaskedLayer(ctx, el, offscreen, renderChild, renderCtx);
+  } finally {
+    if (layerPool.length < 16) layerPool.push(offscreen);
+  }
+}
+async function renderMaskedLayer(ctx, el, offscreen, renderChild, renderCtx) {
   const offCtx = offscreen.getContext("2d");
   for (const child of el.children) {
     const rm = child.getAttribute("renderMode");
@@ -755,10 +798,10 @@ function applyTransforms(el, expressionCtx, elapsedMs) {
 }
 function applyValue(el, target, mode, value) {
   if (mode === "TO") {
-    el.setAttribute(target, String(value));
+    setAttr(el, target, String(value));
   } else if (mode === "BY") {
     const base = parseFloat(el.getAttribute(target) ?? "0");
-    el.setAttribute(target, String(base + value));
+    setAttr(el, target, String(base + value));
   }
 }
 
@@ -807,7 +850,7 @@ async function renderCondition(ctx, el, renderChild, renderCtx) {
     for (const exprEl of expressionsEl.children) {
       if (exprEl.tagName === "Expression") {
         const name = exprEl.getAttribute("name") ?? "";
-        const expr = exprEl.getAttribute("expression") ?? "0";
+        const expr = exprEl.getAttribute("expression") ?? (exprEl.textContent.trim() || "0");
         const augCtx2 = {
           sources: { ...renderCtx.expressionCtx.sources, ...namedResults }
         };
@@ -822,7 +865,7 @@ async function renderCondition(ctx, el, renderChild, renderCtx) {
   for (const child of el.children) {
     if (child.tagName === "Compare") {
       const expr = child.getAttribute("expression") ?? "0";
-      const result = evaluateExpression(expr, augCtx);
+      const result = expr in namedResults ? namedResults[expr] : evaluateExpression(expr, augCtx);
       if (result) {
         for (const grandchild of child.children) {
           await renderChild(ctx, grandchild, augRenderCtx);
@@ -1082,7 +1125,7 @@ function renderTimeText(ctx, el, parentWidth, parentHeight, renderCtx) {
 }
 
 // src/images.ts
-var imageCache = /* @__PURE__ */ new Map();
+var imageCaches = /* @__PURE__ */ new WeakMap();
 async function renderPartImage(ctx, el, renderCtx, assets) {
   applyVariants(el, renderCtx.ambient);
   const x = parseFloat(el.getAttribute("x") ?? "0");
@@ -1106,14 +1149,17 @@ function findImageChild(el) {
   return null;
 }
 async function getOrDecodeImage(resource, assets) {
-  if (imageCache.has(resource)) {
-    return imageCache.get(resource);
+  // Keyed by the face's asset map: faces may share resource names.
+  let cache = imageCaches.get(assets);
+  if (!cache) imageCaches.set(assets, cache = /* @__PURE__ */ new Map());
+  if (cache.has(resource)) {
+    return cache.get(resource);
   }
   const buffer = assets.get(resource);
   if (!buffer) return null;
   const blob = new Blob([buffer]);
   const bitmap = await createImageBitmap(blob);
-  imageCache.set(resource, bitmap);
+  cache.set(resource, bitmap);
   return bitmap;
 }
 
@@ -1213,7 +1259,7 @@ function resolveColorExprs(el, expressionCtx) {
       const val = expressionCtx.sources[name];
       return val !== void 0 ? String(val) : "#000000";
     });
-    child.setAttribute("color", resolved);
+    setAttr(child, "color", resolved);
   }
 }
 async function renderElement(ctx, el, renderCtx) {
@@ -1476,7 +1522,18 @@ async function renderWatchFaceFrame(canvas, options, elapsedMs, time) {
     parsedFaces.set(options.xml, template);
   }
   if (template.documentElement.tagName === "parsererror") return;
-  const doc = template.cloneNode(true);
+  // Render into the cached document and undo its attribute writes afterwards;
+  // only if that document is mid-frame already (overlapping calls) use a copy.
+  const reuse = !template.__journal;
+  const doc = reuse ? template : template.cloneNode(true);
+  if (reuse) template.__journal = [];
+  try {
+    await drawFrame(canvas, options, elapsedMs, time, doc);
+  } finally {
+    if (reuse) undoJournal(template);
+  }
+}
+async function drawFrame(canvas, options, elapsedMs, time, doc) {
   const width = options.width ?? 450;
   const height = options.height ?? 450;
   if (canvas.width !== width) canvas.width = width;

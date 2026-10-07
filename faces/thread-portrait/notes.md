@@ -75,23 +75,37 @@ leaving the lit digits.
   possible; each chord also picks the cheaper of its two (m, d)
   representations. Writes `solution.json`.
 - `generate_xml.py`: each thread is a full-dial Group rotated by m holding a
-  4 px PartDraw shifted by d with a long horizontal Line. The light mask (a
-  disc of the pin radius) trims the line to the pin circle. m and d are
-  balanced ternary lookups on the slot value plus an eased step to the next
-  value. The mask is a dim disc plus 28 glyph-glow PNGs switched by Group
-  alpha. Regenerate with `python3 solve.py && python3 generate_xml.py`.
+  thin PartDraw shifted by d with long horizontal Lines (one per stroke
+  weight). The light mask (a disc of the pin radius) trims the lines to the
+  pin circle. The mask is a dim disc plus 28 glyph-glow PNGs switched by
+  Group alpha. Regenerate with `python3 solve.py && python3 generate_xml.py`.
+- **Precomputed layouts, live animation only** (Patrick's suggestion). The
+  time has only 28 settled layouts, not 720: the hour, minute tens and minute
+  units slots are independent (12 + 6 + 10). Each slot is a `Condition`:
+  - `Default`: settled threads whose m and d are plain table lookups on the
+    slot's value. No easing math, about 58 s of every minute.
+  - `Compare` (`[SECOND]>=58`, plus `[MINUTE]%10==9` for tens and
+    `[MINUTE]==59` for hours): a second copy of that slot's threads carrying
+    the eased step to the next layout. Only the changing slot animates, so a
+    normal minute animates 100 threads and only the top of the hour all 340.
+  The eased branch starts at p = 0 (identical to the settled lookup) and ends
+  at the next layout exactly at :00, when the Default takes over, so the
+  handover is seamless. The XML carries both copies (1.2 MB).
+  Baked PNG layouts were considered: 28 layouts x 3 stroke weights is ~68 MB
+  of decoded full-dial bitmaps, well past what the other faces here use and
+  likely over the watch memory limits, so the layouts are tables instead.
 - The XML validates against the official WFF v4 XSD. The web preview was
   checked across 10:09:59.999 -> 10:10:00 and 12:59:59.999 -> 1:00:00 for
   continuity.
 
 ## Watch risks to check first
 
-- Cost: 680 expressions using `[MILLISECOND]` are evaluated every frame,
-  each with two `pow`/`cos`/`sin` eases. If the watch stutters, cut thread
-  counts in `solve.py` or switch the eases to `[SECOND]`-only outside the
-  transition window.
-- 760 KB of XML, larger than any other face here; each thread now draws
-  three strokes, most of them transparent for a given spool.
+- Cost: outside the 2 s windows each frame evaluates 680 short lookups; in a
+  window, 200-680 eased expressions. Each thread draws three strokes, most of
+  them transparent for a given spool. If the watch stutters, cut thread
+  counts in `solve.py`.
+- 1.2 MB of XML, much larger than any other face here (load time, parse).
+- `Condition` is used here for the first time in this repo.
 - `PartDraw` `y` transforms to fractional positions; if the platform rounds
   them, threads land within a pixel of their chord.
 - A Group `alpha` Transform and an AMBIENT Variant on the same element: the

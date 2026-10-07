@@ -77,7 +77,8 @@ AMBIENT_BOARD_DIM = 80            # ambient multiplies the board light by this /
 DUR = 1.25                      # seconds for one thread's move
 LAG = 0.14                      # d trails m by this much
 WAVE = 0.55                     # spread of start delays around the dial
-WINDOW = WAVE + LAG + DUR       # motion window before each change
+WINDOW = WAVE + LAG + DUR       # motion window before each change (< 2 s)
+assert WINDOW < 2
 GLOW_FADE = (0.35, 0.9)         # glyph cross-fade: start, length (s into window)
 
 DECAY = 0.03                    # pow(DECAY, p): wobble amplitude envelope
@@ -90,6 +91,13 @@ SLOT_TIME = {
     'hour': (f'([MINUTE]*60+{T})', 3600),
     'tens': (f'(([MINUTE]%10)*60+{T})', 600),
     'units': (T, 60),
+}
+# When each slot's threads are in flight: the last two seconds before it
+# changes (WINDOW < 2). Whole seconds only, so the test is cheap.
+SLOT_MOVING = {
+    'hour': '[MINUTE]==59&&[SECOND]>=58',
+    'tens': '[MINUTE]%10==9&&[SECOND]>=58',
+    'units': '[SECOND]>=58',
 }
 SLOT_VALUE = {
     'hour': ('[HOUR_1_12]', 1),           # expression, value of state 0
@@ -149,8 +157,10 @@ def image(parent, resource, x=0, y=0, w=SIZE, h=SIZE, **attrs):
     return part
 
 
-def thread(parent, name, slot, states, value_expr, base, delay):
-    """One thread: a rotor Group (m) holding a thin PartDraw shifted by d."""
+def thread(parent, name, slot, states, value_expr, base, delay, animated):
+    """One thread: a rotor Group (m) holding a thin PartDraw shifted by d.
+    Settled threads are pure lookups into the precomputed layouts; animated
+    ones add the eased step to the next layout."""
     n = len(states)
     m_now = [s[0] for s in states]
     d_now = [s[1] for s in states]
@@ -160,13 +170,13 @@ def thread(parent, name, slot, states, value_expr, base, delay):
     rotor = group(parent, name, pivotX=0.5, pivotY=0.5)
     m = lookup(value_expr, m_now, base)
     dm = lookup(value_expr, m_step, base)
-    angle = m if dm == '0' else f'{m}+{dm}*{ease(progress(slot, delay))}'
+    angle = m if dm == '0' or not animated else f'{m}+{dm}*{ease(progress(slot, delay))}'
     transform(rotor, 'angle', angle)
 
     draw = element(rotor, 'PartDraw', x=0, y=round(C - HALF - d_now[0]), width=SIZE, height=2 * HALF)
     d = lookup(value_expr, d_now, base)
     dd = lookup(value_expr, d_step, base)
-    offset = d if dd == '0' else f'clamp({d}+{dd}*{ease(progress(slot, delay + LAG))},-211,211)'
+    offset = d if dd == '0' or not animated else f'clamp({d}+{dd}*{ease(progress(slot, delay + LAG))},-211,211)'
     transform(draw, 'y', f'{num(C - HALF)}-({offset})')
     for i, (_, width) in reversed(list(enumerate(STRANDS))):
         line = element(draw, 'Line', startX=0, startY=HALF, endX=SIZE, endY=HALF)
@@ -323,11 +333,20 @@ def build():
         states = slot['states']
         n = len(states)
         count = len(states[0])
+        # Settled threads (Default) are lookups into the precomputed layouts.
+        # Only in the slot's last two seconds does the Compare branch, with the
+        # eased motion, replace them; outside it the motion is never evaluated.
+        cond = element(group(source, f'{name}Threads'), 'Condition')
+        exprs = element(cond, 'Expressions')
+        element(exprs, 'Expression', name=f'{name}Moving').text = SLOT_MOVING[name]
+        moving = element(cond, 'Compare', expression=f'{name}Moving')
+        settled = element(cond, 'Default')
         # start delays: a wave sweeping clockwise from 12, by each thread's current direction
         for j in range(count):
             per_value = [states[v][j] for v in range(n)]
             delay = WAVE * (per_value[0][0] % 360) / 360
-            thread(source, f'{name}Thread{j}', name, per_value, value_expr, base, delay)
+            thread(moving, f'{name}Flying{j}', name, per_value, value_expr, base, delay, True)
+            thread(settled, f'{name}Thread{j}', name, per_value, value_expr, base, delay, False)
         for k, label in enumerate(labels):
             img, (x0, y0, x1, y1) = glyph_bounds(label, box)
             res = f'glow_{name}_{label}'

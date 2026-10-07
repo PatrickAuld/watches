@@ -42,8 +42,9 @@ implementationNotes: >
   value, Hungarian assignment of chords to threads between consecutive
   values) and generate_xml.py. Each thread is a rotor Group (direction m)
   holding a thin PartDraw shifted by offset d; m and d are ternary lookups
-  on the slot value plus an eased step to the next value in the last ~2 s
-  before it changes, so ambient always sees settled threads. Threads sit
+  on the slot value (28 precomputed layouts). A per-slot Condition swaps in
+  an animated copy with an eased step to the next layout only in the last
+  2 s before that slot changes, so ambient always sees settled threads. Threads sit
   under a MASK of a dim disc plus cross-faded glyph glows.
   A Spool ColorConfiguration colours the board, pins and three stroke
   weights per thread (transparent strokes select the weight).
