@@ -5487,6 +5487,15 @@
         </PartDraw>
       </Group>
     </Group>
+    <Group x="0" y="0" width="450" height="450" name="ripple" alpha="0">
+      <Transform target="alpha" value="255 * clamp(3 - (((([HOUR_0_23] * 3600 + [MINUTE] * 60 + [SECOND]) % 251) * (([HOUR_0_23] * 3600 + [MINUTE] * 60 + [SECOND]) % 251) * 3 + (([HOUR_0_23] * 3600 + [MINUTE] * 60 + [SECOND]) % 127) * 17 + floor(([HOUR_0_23] * 3600 + [MINUTE] * 60 + [SECOND]) / 251) * 3) % 97), 0, 1) * clamp([SECOND] - 2, 0, 1)" />
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <PartAnimatedImage x="0" y="0" width="450" height="450">
+        <AnimationController play="ON_NEXT_SECOND" beforePlaying="HIDE" afterPlaying="HIDE" />
+        <AnimatedImage resource="ripple" format="WEBP" />
+        <Thumbnail resource="wake_thumbnail" />
+      </PartAnimatedImage>
+    </Group>
     <Group x="0" y="0" width="450" height="450" name="wake">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <PartAnimatedImage x="0" y="0" width="450" height="450">

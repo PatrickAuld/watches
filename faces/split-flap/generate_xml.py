@@ -70,6 +70,19 @@ WAKE_CELL_DELAY = 0.004       # shimmer within a slot, per (column + row)
 WAKE_RIPPLE = 0.014           # background fold delay per board diagonal step
 GAP = 6                       # board colour between cells and at the hinge
 
+# Idle ripple (baked into assets/ripple.webp): a fold wave across the whole
+# board on pseudorandom seconds while the watch is awake.
+RIPPLE_STEP = 0.019           # fold delay per board diagonal step
+RIPPLE_HITS = 3               # of every 97 hash values, how many ripple
+# A second ripples when this hash of the second of the day lands below
+# RIPPLE_HITS: about every 34 s on average, at irregular gaps, never in the
+# first three seconds of a minute (those belong to the minute flip). Every
+# intermediate is an integer below 2^18, so it is exact in any float precision.
+RIPPLE_X = '([HOUR_0_23] * 3600 + [MINUTE] * 60 + [SECOND])'
+RIPPLE_HASH = (f'((({RIPPLE_X} % 251) * ({RIPPLE_X} % 251) * 3 + ({RIPPLE_X} % 127) * 17'
+               f' + floor({RIPPLE_X} / 251) * 3) % 97)')
+RIPPLE_GATE = f'clamp({RIPPLE_HITS} - {RIPPLE_HASH}, 0, 1) * clamp([SECOND] - 2, 0, 1)'
+
 FONT = {
     0: ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
     1: ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
@@ -204,6 +217,16 @@ def build():
             for col in range(5):
                 cell(numerals, flaps, slot, row, col)
 
+    # Idle ripple: replays at every second, but only shown on gated seconds.
+    ripple = group(scene, 'ripple', alpha=0)
+    transform(ripple, 'alpha', f'255 * {RIPPLE_GATE}')
+    ambient(ripple)
+    part = element(ripple, 'PartAnimatedImage', x=0, y=0, width=SIZE, height=SIZE)
+    element(part, 'AnimationController', play='ON_NEXT_SECOND', beforePlaying='HIDE',
+            afterPlaying='HIDE')
+    element(part, 'AnimatedImage', resource='ripple', format='WEBP')
+    element(part, 'Thumbnail', resource='wake_thumbnail')
+
     # Wake shuffle: hidden in ambient, so it plays again on every wake.
     wake = group(scene, 'wake')
     ambient(wake)
@@ -310,6 +333,19 @@ class Frame:
         color = np.asarray(rgb, float) + (sheen * (1 - (yy - y0) / (y1 - y0)))[..., None]
         src = np.concatenate([np.clip(color, 0, 255) * np.ones_like(cover)[..., None],
                               np.full(cover.shape + (1,), 255.0)], -1) * cover[..., None]
+        dst = self.px[sl]
+        dst[:] = src + dst * (1 - cover[..., None])
+
+    def veil(self, x0, x1, y0, y1, rgb, alpha):
+        """A translucent unrounded rectangle, for light and shadow over live cells."""
+        if y1 - y0 <= 0.02 or alpha <= 0:
+            return
+        sl = (slice(int(y0 * OS), int(np.ceil(y1 * OS))), slice(int(x0 * OS), int(np.ceil(x1 * OS))))
+        yy = (np.arange(sl[0].start, sl[0].stop)[:, None] + 0.5) / OS
+        xx = (np.arange(sl[1].start, sl[1].stop)[None, :] + 0.5) / OS
+        cover = ((yy >= y0) * (yy < y1) * (xx >= x0) * (xx < x1)).astype(np.float32) * alpha
+        src = np.concatenate([np.broadcast_to(np.asarray(rgb, np.float32), cover.shape + (3,)),
+                              np.full(cover.shape + (1,), 255.0, np.float32)], -1) * cover[..., None]
         dst = self.px[sl]
         dst[:] = src + dst * (1 - cover[..., None])
 
@@ -429,10 +465,52 @@ def wake_frames():
     return [wake_frame(i / WAKE_FPS, wear) for i in range(count)]
 
 
+def ripple_fold(frame, cx, cy, f):
+    """A same-face fold drawn as light and shadow only, so it reads over lit
+    and dark cells alike: the falling top flap catches the light with its
+    leading edge in shadow, then the landing flap does the same below."""
+    x0, x1, span = cx - HALF, cx + HALF, HALF - 0.6
+    if f < 0.5:
+        p = f / 0.5
+        edge = cy - 0.6 - span * (1 - p)
+        frame.veil(x0, x1, edge, cy - 0.6, (255, 255, 255), 0.06 + 0.22 * p)
+        frame.veil(x0, x1, edge, edge + 0.9, (0, 0, 0), 0.6)
+    else:
+        q = (f - 0.5) / 0.5
+        edge = cy + 0.6 + span * q
+        frame.veil(x0, x1, cy + 0.6, edge, (255, 255, 255), 0.28 - 0.22 * q)
+        frame.veil(x0, x1, edge - 0.9, edge, (0, 0, 0), 0.6)
+
+
+def ripple_duration():
+    return RIPPLE_STEP * 40 + WAKE_STEP
+
+
+def ripple_frame(t):
+    frame = Frame()
+    for cx, cy in board_cells():
+        i, j = (cx - C) // PITCH + 10, (cy - C) // PITCH + 10
+        f = (t - RIPPLE_STEP * (i + j)) / WAKE_STEP
+        if 0 <= f < 1:
+            ripple_fold(frame, cx, cy, f)
+    return frame.image()
+
+
+def frame_durations(count):
+    """30 fps as whole milliseconds: 33, 33, 34, ..."""
+    return [round((i + 1) * 1000 / WAKE_FPS) - round(i * 1000 / WAKE_FPS) for i in range(count)]
+
+
+def ripple():
+    count = int(np.ceil(ripple_duration() * WAKE_FPS)) + 1
+    frames = [ripple_frame(i / WAKE_FPS) for i in range(count)]
+    frames[0].save(HERE / 'assets' / 'ripple.webp', save_all=True, append_images=frames[1:],
+                   duration=frame_durations(count), loop=0, lossless=True, quality=100, method=6)
+
+
 def wake():
     frames = wake_frames()
-    # 30 fps as whole milliseconds: 33, 33, 34, ...
-    durations = [round((i + 1) * 1000 / WAKE_FPS) - round(i * 1000 / WAKE_FPS) for i in range(len(frames))]
+    durations = frame_durations(len(frames))
     frames[0].save(HERE / 'assets' / 'wake.webp', save_all=True, append_images=frames[1:],
                    duration=durations, loop=0, lossless=True, quality=100, method=6)
     Image.new('RGBA', (SIZE, SIZE)).save(HERE / 'assets' / 'wake_thumbnail.png', optimize=True)
@@ -441,6 +519,7 @@ def wake():
 if __name__ == '__main__':
     board()
     wake()
+    ripple()
     root = build()
     ET.indent(root, space='  ')
     (HERE / 'watchface.xml').write_bytes(

@@ -115,5 +115,44 @@ class Wake(unittest.TestCase):
             self.assertTrue(all((b - a) % 10 == 1 for a, b in zip(glyphs, glyphs[1:])))
 
 
+class Ripple(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        root = ET.parse(HERE / 'watchface.xml').getroot()
+        groups = root.find('Scene').findall('Group')
+        cls.names = [g.get('name') for g in groups]
+        cls.ripple = groups[cls.names.index('ripple')]
+        gate = cls.ripple.find('Transform').get('value')
+        cls.hits = [s for s in range(86400) if evaluate(gate, s // 60, s % 60) > 0]
+
+    def test_layered_under_the_wake_and_hidden_in_ambient(self):
+        self.assertEqual(self.names[-2:], ['ripple', 'wake'])
+        self.assertEqual(self.ripple.get('alpha'), '0')
+        self.assertEqual(self.ripple.find('Variant').attrib, {'mode': 'AMBIENT', 'target': 'alpha', 'value': '0'})
+        controller = self.ripple.find('PartAnimatedImage/AnimationController')
+        self.assertEqual(controller.get('play'), 'ON_NEXT_SECOND')
+        self.assertEqual(self.ripple.find('PartAnimatedImage/AnimatedImage').get('resource'), 'ripple')
+
+    def test_gate_is_all_or_nothing_and_skips_the_minute_flip(self):
+        gate = self.ripple.find('Transform').get('value')
+        for s in range(0, 86400, 7):
+            self.assertIn(evaluate(gate, s // 60, s % 60), (0, 255))
+        self.assertFalse([s for s in self.hits if s % 60 < 3])
+
+    def test_pseudorandom_intervals(self):
+        gaps = [b - a for a, b in zip(self.hits, self.hits[1:])]
+        mean = sum(gaps) / len(gaps)
+        self.assertTrue(15 <= mean <= 60, mean)
+        self.assertGreater(len(set(gaps)), 20)
+
+    def test_ripple_fits_in_a_second_and_ends_clear(self):
+        from PIL import Image, ImageSequence
+        import numpy as np
+        self.assertLess(face.ripple_duration(), 1.0)
+        with Image.open(HERE / 'assets' / 'ripple.webp') as image:
+            last = [np.asarray(f.convert('RGBA'))[..., 3] for f in ImageSequence.Iterator(image)][-1]
+        self.assertEqual(last.max(), 0)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -60,6 +60,23 @@ through the set and land on the current time.
   10:08 render; wff-web ignores `PartAnimatedImage`, so the site shows the
   settled face.
 
+## Idle ripple (October 2026)
+
+Feedback: also ripple at pseudorandom intervals.
+
+- `assets/ripple.webp` (0.86 s, 4 KB) is a single fold wave across the whole
+  board from the top left (19 ms per diagonal), drawn only as light and
+  shadow (a glare on the moving flap, a dark leading edge), so it reads over
+  lit and dark cells without knowing which is which.
+- It plays `ON_NEXT_SECOND`, every second, in a group whose alpha is a gate:
+  a hash of the second of the day, `((x % 251)² · 3 + (x % 127) · 17 +
+  ⌊x / 251⌋ · 3) % 97 < 3`, and never in seconds 0–2 (the minute flip).
+  That is about 105 ripples an hour, on average every 34 s, at irregular
+  gaps (up to ~4½ min). All intermediates are small integers, so the hash
+  is exact on the watch.
+- Layered above the flaps and under the wake shuffle; hidden in ambient.
+  Memory: 27 frames ≈ 22 MB active, ~56 MB with the wake shuffle.
+
 `test_board.py` checks that the XML is regenerated, that every minute of the
 day spells the right digits, and that the top flaps start from the previous
 minute and have fallen two seconds later. Wake tests check the overlay is
@@ -81,6 +98,10 @@ official WFF v4 XSD. Regenerate with `python3 faces/split-flap/generate_xml.py`.
   reads correctly). If it plays late, the live time shows for a moment
   before the shuffle covers it; `beforePlaying="FIRST_FRAME"` would trade
   that for a scrambled board in system previews.
+
+- The ripple relies on `ON_NEXT_SECOND` replaying each second and on the
+  group's alpha gating it. If it only plays once, ripples stop after the
+  first; if the gate is ignored, it ripples every second.
 
 ## Preview caveat
 
