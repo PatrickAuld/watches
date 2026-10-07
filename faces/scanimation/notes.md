@@ -10,8 +10,10 @@ sideways under the mask to show the time.
   change into the next numeral takes ten minutes and is half and half at
   **:59:30**, so it runs from :54:30 to :04:30. At :59 the outgoing numeral
   is still slightly ahead.
-- **Minute**: a white analog hand with a black backing, sweeping smoothly over
-  sixty faint printed markings.
+- **Minute**: a white analog hand, also a Scanimation. Over every minute it
+  changes from minute m's position into m+1's through the barrier: whole on
+  the minute, two interleaved ghost hands at :30 seconds. Sixty faint
+  markings are printed around the ring.
 
 ## Mechanism
 
@@ -30,9 +32,13 @@ over ten minutes, so the numeral visibly changes into the next.
 - Twelve window images (`scan_window_k`), each its own SOURCE/MASK group,
   switched on by group alpha. Twelve images inside one MASK group would
   intersect (destination-in) rather than alternate.
-- The minute hand is one RGBA image (white hand, black backing and cap)
-  rotated by `[MINUTE] * 6 + [SECOND] * 0.1`. The backing cuts the numeral's
-  stripes so the hand reads cleanly over them.
+- The minute hand uses the same two-frame scheme. Sixty windows
+  (`scan_minute_m`) hold the hand at m and m+1, with hand m in column parity
+  m % 2. They are cropped to the hand's bounding box, so sixty decoded bitmaps
+  stay small. The white minute sheet slides continuously, offset
+  `3 * (minute + seconds / 60) mod 6`, so the change takes the whole minute.
+  Two black backings, rotated to m and m+1, cut the numeral's stripes under
+  the hand. A solid cap sits on top.
 
 ## History
 
@@ -56,6 +62,11 @@ over ten minutes, so the numeral visibly changes into the next.
    halfway point be just before the hour change"). The ten-minute change had
    finished by the hour, so at 9:59 it was mostly 10. It is now centred at
    :59:30. The striped minute markings were replaced by a smooth hand.
+6. **The hand is a Scanimation too** (Patrick: "The hand is still a
+   Scanimation", meaning it should be). The solid rotating hand became sixty
+   two-frame windows under a continuously sliding sheet. Hands near 12 and 6
+   run parallel to the columns and show as two or three stripes. That is
+   inherent to vertical barriers.
 
 Ambient: no Variants. A Variant alpha on the hour windows would override the
 per-window switch, so the face is the same in ambient.

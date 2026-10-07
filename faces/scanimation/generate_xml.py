@@ -26,9 +26,15 @@ Hours: two frames per window
     covers, so the switch is invisible. The window clock is therefore the
     time shifted back 4.5 minutes; offset = 3 * (window + change) mod 6.
 
-Minutes: an analog hand
-    A real minute hand, white with a black backing so it reads over the
-    striped numeral, sweeping smoothly over sixty faint printed markings.
+Minutes: an analog hand, also a Scanimation
+    Sixty minute windows, built the same way as the hours: window m
+    interleaves the hand at minute m and at minute m+1 in the same 3 px
+    columns. A white minute sheet of vertical rules slides 3 px every minute,
+    continuously, so over each minute the hand changes from m into m+1. It is
+    half and half at :30 seconds and reads like a sweeping hand, ghosted the
+    way a Scanimation in-between frame is. A black backing under both frames
+    separates it from the numeral, and a solid cap sits on top. Minute windows
+    are cropped to the hand's bounding box to keep decoded bitmaps small.
 """
 from pathlib import Path
 import math
@@ -52,9 +58,12 @@ CHANGE_SECONDS = 600        # the hour change lasts ten minutes...
 HALFWAY_BEFORE_HOUR = 30    # ...and is half done this many seconds before the hour
 WINDOW_LAG = CHANGE_SECONDS // 2 - HALFWAY_BEFORE_HOUR   # 270 s: window k runs to k+1:04:30
 
-HAND = (-26, 192, 10.0, 3.5)   # minute hand: tail r, tip r, base width, tip width
+HAND = (-26, 192, 15.0, 6.0)   # minute hand: tail r, tip r, base width, tip width
 HAND_BACKING = 3.0             # px of black around the hand
-CAP = (9.0, 3.0)               # centre cap radius, hole radius
+CAP = (10.0, 3.5)              # centre cap radius, hole radius
+MINUTE_PERIOD = 6              # px: same two-column barrier as the hours
+MINUTE_COLUMN = MINUTE_PERIOD / 2
+MINUTE_RULE = 2.5              # px
 
 RING_IN, RING_OUT = 180, 201                 # minute ring (safe inset 24 -> r <= 201)
 TICK = (RING_IN + 3, RING_OUT - 1, 1.6)      # printed minute marking: r0, r1, width
@@ -74,7 +83,8 @@ WINDOW_CLOCK = (f"((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + {4320
 WINDOW = f"floor({WINDOW_CLOCK} / 3600)"
 CHANGE = f"clamp(({WINDOW_CLOCK} % 3600 - {3600 - CHANGE_SECONDS}) / {CHANGE_SECONDS}, 0, 1)"
 HOUR_X = f"({-HOUR_PERIOD} + (({WINDOW} + {CHANGE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
-MINUTE_ANGLE = "([MINUTE] * 6 + [SECOND] * 0.1)"
+MINUTE_X = (f"({-MINUTE_PERIOD} + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60)"
+            f" * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})")
 
 
 def grid(width, height, x0=0.0):
@@ -138,23 +148,50 @@ def hour_windows():
     return windows
 
 
-def minute_hand():
-    """White tapered hand over a black backing, pointing at twelve; plus its cap."""
-    x, y = grid(SIZE, SIZE)
+def hand_shape(x, y, angle, grow=0.0):
+    """Tapered minute hand at `angle` degrees clockwise from twelve (no cap)."""
     tail, tip, base, end = HAND
-    along = -y
-    t = np.clip((along - 0) / tip, 0, 1)
+    a = math.radians(angle)
+    along = x * math.sin(a) - y * math.cos(a)
+    across = x * math.cos(a) + y * math.sin(a)
+    t = np.clip(along / tip, 0, 1)
     half = np.where(along >= 0, base / 2 + (end - base) / 2 * t, base / 2)
+    return (along >= tail - grow) & (along <= tip + grow) & (np.abs(across) <= half + grow)
+
+
+def minute_windows():
+    """Window m: the hand at m and at m+1 in alternating columns, cropped.
+
+    Returns (alpha, (x, y, w, h)) per minute.
+    """
+    x, y = grid(SIZE, SIZE)
+    column = np.floor((x % MINUTE_PERIOD) / MINUTE_COLUMN).astype(int)
+    hands = [hand_shape(x, y, m * 6) for m in range(60)]
+    windows = []
+    for m in range(60):
+        n = (m + 1) % 60
+        alpha = downsample(((column == m % 2) & hands[m]) | ((column == n % 2) & hands[n]))
+        ys, xs = np.nonzero(alpha > 0)
+        x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
+        windows.append((alpha[y0:y1, x0:x1], (int(x0), int(y0), int(x1 - x0), int(y1 - y0))))
+    return windows
+
+
+def hand_backing():
+    """Black backing for one hand frame at twelve; rotated per frame on the watch."""
+    x, y = grid(SIZE, SIZE)
+    return downsample(hand_shape(x, y, 0, HAND_BACKING) | (np.hypot(x, y) <= CAP[0] + HAND_BACKING))
+
+
+def hand_cap():
+    x, y = grid(SIZE, SIZE)
     r = np.hypot(x, y)
-    cap, hole = CAP
+    return downsample((r <= CAP[0]) & (r > CAP[1]))
 
-    def shape(grow):
-        bar = (along >= tail - grow) & (along <= tip + grow) & (np.abs(x) <= half + grow)
-        return bar | (r <= cap + grow)
 
-    white = shape(0) & ~(r <= hole)
-    black = shape(HAND_BACKING)
-    return downsample(white), downsample(black)
+def minute_sheet():
+    x, _ = grid(SIZE + MINUTE_PERIOD, SIZE, x0=-MINUTE_PERIOD)
+    return downsample(band(x, MINUTE_COLUMN / 2, MINUTE_RULE, MINUTE_PERIOD))
 
 
 def hour_sheet():
@@ -209,6 +246,12 @@ def hour_state(seconds):
     return ((window + change) * HOUR_COLUMN) % HOUR_PERIOD, int(window)
 
 
+def minute_state(seconds):
+    """Minute sheet offset in px and window index (mirrors MINUTE_X)."""
+    minute, into = divmod(seconds % 3600, 60)
+    return ((minute + into / 60) * MINUTE_COLUMN) % MINUTE_PERIOD, int(minute)
+
+
 def rotate(alpha, angle):
     """Rotate a centred layer clockwise by `angle` degrees."""
     img = Image.fromarray((alpha * 255).astype(np.uint8), "L")
@@ -227,16 +270,20 @@ def slide(sheet, shift, margin):
 
 def simulate(seconds, layers):
     """Composite the face at a time given as seconds past 12:00."""
-    windows, hsheet, plate, mprint, (hand_white, hand_black) = layers
+    windows, hsheet, plate, mprint, mwindows, msheet, backing, cap = layers
     offset, window = hour_state(seconds)
-    angle = (seconds % 3600) / 10
-    white, black = rotate(hand_white, angle), rotate(hand_black, angle)
+    moffset, minute = minute_state(seconds)
+    alpha, (x0, y0, w, h) = mwindows[minute]
+    mwin = np.zeros((SIZE, SIZE))
+    mwin[y0:y0 + h, x0:x0 + w] = alpha
+    black = np.maximum(rotate(backing, minute * 6), rotate(backing, minute * 6 + 6))
     out = np.zeros((SIZE, SIZE, 3))
     out += plate[..., None] * hex_rgb(PLATE_PRINT)
     out += mprint[..., None] * hex_rgb(MINUTE_PRINT)
     out += (slide(hsheet, offset, HOUR_PERIOD) * windows[window])[..., None] * hex_rgb(HOUR_INK)
     out *= (1 - black)[..., None]
-    out += white[..., None] * hex_rgb(MINUTE_INK)
+    out += (slide(msheet, moffset, MINUTE_PERIOD) * mwin)[..., None] * hex_rgb(MINUTE_INK)
+    out = out * (1 - cap[..., None]) + cap[..., None] * hex_rgb(MINUTE_INK)
     y, x = np.mgrid[:SIZE, :SIZE]
     out[np.hypot(x + 0.5 - C, y + 0.5 - C) > C] = 0
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8), "RGB")
@@ -264,7 +311,36 @@ def hour_ink(k):
     </Group>"""
 
 
-XML = f"""<?xml version="1.0" encoding="utf-8"?>
+def backing(n, minute):
+    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" pivotX="0.5" pivotY="0.5" name="minute_backing_{n}">
+      <Transform target="angle" value="{minute} * 6" />
+      <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
+        <Image resource="scan_hand_backing" />
+      </PartImage>
+    </Group>"""
+
+
+def minute_ink(m, box):
+    """Minute window m: the minute sheet masked by the hand at m and m+1."""
+    x, y, w, h = box
+    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_ink_{m}">
+      <Transform target="alpha" value="[MINUTE] == {m} ? 255 : 0" />
+      <Group x="{-MINUTE_PERIOD}" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}" renderMode="SOURCE" name="sheet_minute_rules_{m}">
+        <Transform target="x" value="{MINUTE_X}" />
+        <PartImage x="0" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}">
+          <Image resource="scan_sheet_minute" />
+        </PartImage>
+      </Group>
+      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="minute_window_{m}">
+        <PartImage x="{x}" y="{y}" width="{w}" height="{h}">
+          <Image resource="scan_minute_{m}" />
+        </PartImage>
+      </Group>
+    </Group>"""
+
+
+def xml(minute_boxes):
+    return f"""<?xml version="1.0" encoding="utf-8"?>
 <!-- Generated by generate_xml.py. Edit the generator, not this file. -->
 <WatchFace width="{SIZE}" height="{SIZE}">
   <Metadata key="CLOCK_TYPE" value="ANALOG" />
@@ -277,12 +353,12 @@ XML = f"""<?xml version="1.0" encoding="utf-8"?>
       <Image resource="scan_minute_print" />
     </PartImage>
 {chr(10).join(hour_ink(k) for k in range(12))}
-    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" pivotX="0.5" pivotY="0.5" name="minute_hand">
-      <Transform target="angle" value="{MINUTE_ANGLE}" />
-      <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
-        <Image resource="scan_minute_hand" />
-      </PartImage>
-    </Group>
+{backing(0, "[MINUTE]")}
+{backing(1, "([MINUTE] + 1)")}
+{chr(10).join(minute_ink(m, box) for m, box in enumerate(minute_boxes))}
+    <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_cap">
+      <Image resource="scan_hand_cap" />
+    </PartImage>
   </Scene>
 </WatchFace>
 """
@@ -292,6 +368,7 @@ PREVIEW_TIMES = {
     "03-30": 3 * 3600 + 30 * 60,
     "07-45": 7 * 3600 + 45 * 60,
     "12-05": 5 * 60,
+    "10-10-30": 10 * 3600 + 10 * 60 + 30,
     "08-55": 8 * 3600 + 55 * 60,
     "08-59-30": 8 * 3600 + 59 * 60 + 30,
     "09-02": 9 * 3600 + 2 * 60,
@@ -306,20 +383,21 @@ def main():
     windows = hour_windows()
     hsheet = hour_sheet()
     plate, mprint = plate_print(), minute_print()
-    hand_white, hand_black = minute_hand()
+    mwindows, msheet = minute_windows(), minute_sheet()
+    back, cap = hand_backing(), hand_cap()
     for k, window in enumerate(windows):
         save_alpha(window, f"scan_window_{k}")
-    hand = np.zeros((SIZE, SIZE, 4))
-    hand[..., :3] = (hand_white / np.maximum(hand_black, 1e-6))[..., None] * hex_rgb(MINUTE_INK)
-    hand[..., 3] = hand_black
-    Image.fromarray((np.clip(hand, 0, 1) * 255).round().astype(np.uint8), "RGBA").save(
-        ASSETS / "scan_minute_hand.png", optimize=True)
+    for m, (alpha, _) in enumerate(mwindows):
+        save_alpha(alpha, f"scan_minute_{m}")
+    save_alpha(msheet, "scan_sheet_minute", MINUTE_INK)
+    save_alpha(back, "scan_hand_backing", "#FF000000")
+    save_alpha(cap, "scan_hand_cap", MINUTE_INK)
     save_alpha(hsheet, "scan_sheet_hour", HOUR_INK)
     save_alpha(plate, "scan_plate", PLATE_PRINT)
     save_alpha(mprint, "scan_minute_print", MINUTE_PRINT)
-    (HERE / "watchface.xml").write_text(XML)
+    (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows]))
 
-    layers = (windows, hsheet, plate, mprint, (hand_white, hand_black))
+    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap)
     previews = HERE / "previews"
     previews.mkdir(exist_ok=True)
     for old in previews.glob("*.png"):
