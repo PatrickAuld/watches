@@ -41,5 +41,5 @@ implementationNotes: >
   of 24 stroked ellipses whose centres, aspect and scale are expressions of the
   minute of the day (periods divide 1440, so midnight is seamless). Disc
   rotation uses SECOND/MILLISECOND and MINUTE/SECOND. Palette is a
-  ColorConfiguration of six colours. Ambient shows outlined hour and minute
+  ColorConfiguration of five colours. Ambient shows outlined hour and minute
   beads and the twelve rim dots on black.

@@ -51,18 +51,18 @@ C = SIZE / 2
 TAU = 2 * math.pi
 
 CONFIG = 'imorph_palette'
-BG, GLOW_A, GLOW_B, LOWER, UPPER, HAND = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(6))
+BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
+HAND = '#FFFFF4EA'   # beads; the validator allows at most five colours per option
 
-# Palettes: background, colour field A, colour field B, lower disc, upper disc,
-# beads. Named for Eno's ambient records. The upper disc is SCREENed over the
+# Palettes: background, colour field A, colour field B, lower disc, upper disc. Named for Eno's ambient records. The upper disc is SCREENed over the
 # lower one, so their overlap is a lighter third colour.
 THEMES = [
-    ('theme_thursday', 'Thursday Afternoon', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9', '#FFF3E8']),
-    ('theme_apollo', 'Apollo', ['#04070F', '#13305E', '#3A1A4C', '#3D63F5', '#FFAE3D', '#FFF6E5']),
-    ('theme_neroli', 'Neroli', ['#160805', '#6A1F0E', '#503A08', '#D42A3C', '#F7B53B', '#FFF2DC']),
-    ('theme_discreet', 'Discreet Music', ['#05131A', '#0E3E3B', '#1B2A55', '#17B08A', '#8579FF', '#EEFBFF']),
-    ('theme_lux', 'Lux', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E', '#FFEFF7']),
-    ('theme_airports', 'Airports', ['#0E141A', '#2A3C4C', '#4C3E30', '#6F9CC4', '#D8988E', '#F4EFE8']),
+    ('theme_thursday', 'Thursday Afternoon', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
+    ('theme_apollo', 'Apollo', ['#04070F', '#13305E', '#3A1A4C', '#3D63F5', '#FFAE3D']),
+    ('theme_neroli', 'Neroli', ['#160805', '#6A1F0E', '#503A08', '#D42A3C', '#F7B53B']),
+    ('theme_discreet', 'Discreet Music', ['#05131A', '#0E3E3B', '#1B2A55', '#17B08A', '#8579FF']),
+    ('theme_lux', 'Lux', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E']),
+    ('theme_airports', 'Airports', ['#0E141A', '#2A3C4C', '#4C3E30', '#6F9CC4', '#D8988E']),
 ]
 
 # --- time ------------------------------------------------------------------

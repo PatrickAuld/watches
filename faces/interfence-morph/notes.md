@@ -56,8 +56,10 @@ pattern on 48–144 minute loops.
 
 There are six palettes, named for Eno ambient records: Thursday Afternoon
 (default), Apollo, Neroli, Discreet Music, Lux and Airports. Each
-ColorOption has six colours: ground, field A, field B, lower disc, upper
-disc, beads. Neroli is warm on warm, so its SCREEN overlap is the lowest
+ColorOption has five colours: ground, field A, field B, lower disc and upper
+disc. The validator rejects more than five per option
+(`userStyleColorOptionType` maxLength 5), so the beads are a fixed warm white.
+Neroli is warm on warm, so its SCREEN overlap is the lowest
 contrast of the set.
 
 ## Ambient
