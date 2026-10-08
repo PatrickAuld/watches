@@ -1,9 +1,9 @@
 <resources>
   <string name="watch_face_name">Radial Moiré</string>
   <string name="moire_style">Plate geometry</string>
-  <string name="moire_vertical">Eccentric vertical slits</string>
+  <string name="moire_pinwheel">Beat pinwheel</string>
   <string name="moire_petal">Opening petals</string>
-  <string name="moire_facet">Folding facets</string>
+  <string name="moire_poles">Twin poles</string>
   <string name="moire_palette">Dial palette</string>
   <string name="palette_graphite">Graphite</string>
   <string name="palette_sepia">Sepia</string>

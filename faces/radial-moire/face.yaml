@@ -22,19 +22,19 @@ style:
   accent: "#27221d"
 
 description: >
-  Three selectable kinetic plate geometries: an eccentric rotating vertical
-  slit disc over a fixed ruled substrate, opening petals, and folding facets.
-  Their shapes emerge from interference between registered transparent plates.
-  Four paper-and-ink palettes are independently selectable in the editor.
-  Ambient shows only the hour and minute hands on black.
+  Three selectable moiré mechanisms, each a fine fixed grating under one
+  slowly turning transparent grating with a near-matching frequency, so coarse
+  interference fringes race around the dial far faster than the plates move:
+  a three-armed beat pinwheel, petals that bloom and fold, and arcs streaming
+  between twin poles. Four paper-and-ink palettes are independently
+  selectable in the editor. Ambient shows only outline hands on black.
 
 implementationNotes: >
   The face is editable, with three placement flavors and independent Plate
-  geometry and Dial palette settings in the editor and web preview. The vertical
-  option moves only its off-center slit disc over stationary vertical rules.
-  The petal and facet options cross radial engravings with a second slow disc,
-  changing their apparent forms over minutes. Each moving plate rotates smoothly
-  using epoch seconds plus milliseconds, and its mask reveals the matching
-  stationary engraving inside both clock hands. Ambient hides all dial plates
-  and leaves static textured hands following the time. Generate assets with
-  generate_assets.py; strings.xml supplies watch editor option labels.
+  geometry and Dial palette settings in the editor and web preview. Every
+  plate is a full-opacity 50% duty grating at 5 px pitch inside an annular
+  window; only the top plate rotates (2 or 3 degrees per second, wrapped at a
+  symmetry period with epoch seconds plus milliseconds). Hands are clear paper
+  silhouettes with inked edges drawn above the moiré. Ambient hides paper,
+  plates and dial furniture. Generate assets with generate_assets.py;
+  strings.xml supplies watch editor option labels.
