@@ -1,9 +1,9 @@
 <resources>
   <string name="watch_face_name">Interfence-Morph</string>
   <string name="imorph_palette">Palette</string>
+  <string name="theme_black_white">Black on White</string>
   <string name="theme_thursday">Thursday Afternoon</string>
   <string name="theme_white_black">White on Black</string>
-  <string name="theme_black_white">Black on White</string>
   <string name="theme_apollo">Apollo</string>
   <string name="theme_neroli">Neroli</string>
   <string name="theme_discreet">Discreet Music</string>
