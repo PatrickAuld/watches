@@ -1,0 +1,30 @@
+name: Debug interfence validation
+on: workflow_dispatch
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [asis, noblend, noblend_noshape, noscale]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: |
+          curl --fail -sSL https://dl.google.com/dl/android/maven2/com/google/android/wearable/watchface/validator/validator-push-cli/1.1.0-alpha01/validator-push-cli-1.1.0-alpha01.jar -o v.jar
+          X=faces/interfence-morph/watchface.xml
+          case "${{ matrix.variant }}" in
+            noblend) sed -i 's/ blendMode="SCREEN"//' $X ;;
+            noblend_noshape) sed -i 's/ blendMode="SCREEN"//' $X; python3 - <<'PY'
+          import re; p='faces/interfence-morph/watchface.xml'; s=open(p).read()
+          s=re.sub(r'(<Ellipse [^>]*>)\s*(<Transform target="(x|y|width|height)"[^>]*/>\s*)+', r'\1', s); open(p,'w').write(s)
+          PY
+            ;;
+            noscale) sed -i '/target="scale[XY]"/d' $X ;;
+          esac
+          ./gradlew -q :watchface:assembleDebug -PfaceSlug=interfence-morph > build.txt 2>&1 || { tail -30 build.txt | sed 's/^/::error::BUILD /'; exit 1; }
+          python3 scripts/prepare-face-apk.py watchface/build/outputs/apk/debug/watchface-debug.apk f.apk
+          java -jar v.jar --apk_path=f.apk --package_name=com.patrickauld.watches.companion > out.txt 2>&1 || true
+          grep -v '^\s*$' out.txt | head -60 | sed 's/^/::error::${{ matrix.variant }} /'
