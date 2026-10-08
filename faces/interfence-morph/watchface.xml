@@ -4,12 +4,12 @@
   <Metadata key="PREVIEW_TIME" value="10:10:31" />
   <UserConfigurations>
     <ColorConfiguration id="imorph_palette" displayName="imorph_palette" defaultValue="0">
-      <ColorOption id="0" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #FF0D4A63 #FFE2337A #FF26C2D9 #FFFFF3E8" />
-      <ColorOption id="1" displayName="theme_apollo" colors="#FF04070F #FF13305E #FF3A1A4C #FF3D63F5 #FFFFAE3D #FFFFF6E5" />
-      <ColorOption id="2" displayName="theme_neroli" colors="#FF160805 #FF6A1F0E #FF503A08 #FFD42A3C #FFF7B53B #FFFFF2DC" />
-      <ColorOption id="3" displayName="theme_discreet" colors="#FF05131A #FF0E3E3B #FF1B2A55 #FF17B08A #FF8579FF #FFEEFBFF" />
-      <ColorOption id="4" displayName="theme_lux" colors="#FF110718 #FF5A1047 #FF10335A #FF9257FF #FFFF4D9E #FFFFEFF7" />
-      <ColorOption id="5" displayName="theme_airports" colors="#FF0E141A #FF2A3C4C #FF4C3E30 #FF6F9CC4 #FFD8988E #FFF4EFE8" />
+      <ColorOption id="0" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #FF0D4A63 #FFE2337A #FF26C2D9" />
+      <ColorOption id="1" displayName="theme_apollo" colors="#FF04070F #FF13305E #FF3A1A4C #FF3D63F5 #FFFFAE3D" />
+      <ColorOption id="2" displayName="theme_neroli" colors="#FF160805 #FF6A1F0E #FF503A08 #FFD42A3C #FFF7B53B" />
+      <ColorOption id="3" displayName="theme_discreet" colors="#FF05131A #FF0E3E3B #FF1B2A55 #FF17B08A #FF8579FF" />
+      <ColorOption id="4" displayName="theme_lux" colors="#FF110718 #FF5A1047 #FF10335A #FF9257FF #FFFF4D9E" />
+      <ColorOption id="5" displayName="theme_airports" colors="#FF0E141A #FF2A3C4C #FF4C3E30 #FF6F9CC4 #FFD8988E" />
     </ColorConfiguration>
   </UserConfigurations>
   <Scene backgroundColor="#000000">
@@ -401,7 +401,7 @@
       </PartDraw>
       <PartDraw x="0" y="0" width="450" height="450" alpha="70">
         <Ellipse x="22.0" y="22.0" width="406.0" height="406.0">
-          <Stroke color="[CONFIGURATION.imorph_palette.5]" thickness="1.2" />
+          <Stroke color="#FFFFF4EA" thickness="1.2" />
         </Ellipse>
       </PartDraw>
     </Group>
@@ -409,40 +409,40 @@
       <Variant mode="AMBIENT" target="alpha" value="90" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="222.9" y="8.9" width="4.2" height="4.2">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="330.5" y="38.171" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="408.829" y="116.5" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="436.9" y="222.9" width="4.2" height="4.2">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="408.829" y="330.5" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="330.5" y="408.829" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="222.9" y="436.9" width="4.2" height="4.2">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="116.5" y="408.829" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="38.171" y="330.5" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="8.9" y="222.9" width="4.2" height="4.2">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="38.171" y="116.5" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
         <Ellipse x="116.5" y="38.171" width="3" height="3">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
       </PartDraw>
     </Group>
@@ -460,7 +460,7 @@
       <Transform target="angle" value="(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="216.5" y="2.5" width="17" height="17">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
       </PartDraw>
     </Group>
@@ -478,7 +478,7 @@
       <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1 + [MILLISECOND] * 0.0001)" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="220.0" y="6.0" width="10" height="10">
-          <Fill color="[CONFIGURATION.imorph_palette.5]" />
+          <Fill color="#FFFFF4EA" />
         </Ellipse>
       </PartDraw>
     </Group>
