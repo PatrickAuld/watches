@@ -10,8 +10,10 @@ import html
 import json
 import re
 import shutil
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 from string import Template
 
@@ -21,7 +23,6 @@ PREVIEW = ROOT / "preview"
 TEMPLATES = PREVIEW / "templates"
 EXTENSIONS = (".png", ".webp", ".jpg", ".jpeg")
 BASE_URL = "https://patrickauld.github.io/watches/"
-STATUS_ORDER = {"promoted": 0, "draft": 1}
 
 
 def face_metadata(path):
@@ -62,6 +63,21 @@ def check_picker_preview(directory):
         raise ValueError(f"{preview}: must be a 450x450 PNG")
 
 
+def added_timestamp(directory):
+    """Unix time of the commit that first added this face, or 0 if unknown.
+
+    The gallery lists faces newest first, so CI must check out full history
+    (fetch-depth: 0); in a shallow clone every face would look equally old.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--follow", "--format=%at", "--", str(directory / "face.yaml")],
+            cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+    except (OSError, subprocess.CalledProcessError):
+        return 0
+    return int(out[-1]) if out else 0
+
+
 def discover():
     faces = []
     for directory in sorted(FACES.iterdir()):
@@ -93,8 +109,12 @@ def discover():
         previews = sorted(p for p in (directory / "previews").glob("*") if p.suffix.lower() in EXTENSIONS) \
             if (directory / "previews").is_dir() else []
         faces.append({"dir": directory, "slug": slug, "meta": metadata, "xml": xml_file.exists(),
-                      "assets": assets, "previews": previews})
-    faces.sort(key=lambda f: (not f["xml"], STATUS_ORDER.get(f["meta"]["status"], 9), f["meta"]["name"].lower()))
+                      "assets": assets, "previews": previews, "added": added_timestamp(directory)})
+    # Most recently added first; name breaks ties (and orders faces with no history).
+    faces.sort(key=lambda f: (-f["added"], f["meta"]["name"].lower()))
+    if len({f["added"] for f in faces}) == 1 and len(faces) > 1:
+        print("warning: no distinct git history for faces; checkout is probably shallow, "
+              "so the gallery falls back to name order", file=sys.stderr)
     return faces
 
 
@@ -104,6 +124,11 @@ def render(template, **values):
 
 def summary(face):
     return face["meta"].get("description") or f"{face['meta']['name']} watch face."
+
+
+def status_badge(face):
+    """Only drafts are tagged; promoted faces carry no badge."""
+    return '<span class="badge status-draft">draft</span>' if face["meta"]["status"] == "draft" else ""
 
 
 def pager_link(face, rel, label):
@@ -120,14 +145,13 @@ def face_page(face, base_url, prev_face=None, next_face=None):
         chosen = next((n for n in ("day.png", "default.png") if n in names), names[0])
         og_image = f'    <meta property="og:image" content="{html.escape(url)}previews/{html.escape(chosen)}" />'
     return render("face.html", name=html.escape(face["meta"]["name"]), slug=face["slug"],
-                  status=html.escape(face["meta"]["status"]), description=html.escape(summary(face)),
+                  badge=status_badge(face), description=html.escape(summary(face)),
                   url=html.escape(url), og_image=og_image,
                   pager=pager_link(prev_face, "prev", "&lsaquo; Prev") + pager_link(next_face, "next", "Next &rsaquo;"))
 
 
 def gallery_card(face):
     name = html.escape(face["meta"]["name"])
-    status = html.escape(face["meta"]["status"])
     if face["xml"]:
         thumb = f'<canvas data-face="{face["slug"]}" width="450" height="450" aria-label="{name} preview"></canvas>'
     else:
@@ -135,7 +159,7 @@ def gallery_card(face):
     return (f'        <a class="face-card" href="faces/{face["slug"]}/">\n'
             f'          <div class="thumb">{thumb}</div>\n'
             f'          <div>\n'
-            f'            <h2>{name}<span class="badge status-{status}">{status}</span></h2>\n'
+            f'            <h2>{name}{status_badge(face)}</h2>\n'
             f'            <p>{html.escape(summary(face))}</p>\n'
             f'          </div>\n'
             f'        </a>')
@@ -181,6 +205,7 @@ def main():
         (target / "index.html").write_text(face_page(face, base_url, prev_face, next_face))
         catalog.append({"slug": slug, "name": face["meta"]["name"], "status": face["meta"]["status"],
                         "xml": face["xml"], "description": summary(face),
+                        "added": datetime.fromtimestamp(face["added"], timezone.utc).strftime("%Y-%m-%d") if face["added"] else None,
                         "strings": (directory / "strings.xml").exists(),
                         "assets": {name: asset.name for name, asset in face["assets"].items()}})
     (output / "faces.json").write_text(json.dumps(catalog, indent=2) + "\n")
