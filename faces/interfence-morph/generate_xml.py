@@ -1,42 +1,32 @@
-"""Author Interfence-Morph: two identical ring patterns, one turning over the other.
+"""Author Interfence-Morph: two identical symmetric patterns, one turning over the other.
 
 Writes watchface.xml, strings.xml and assets/glow.png. Nothing here runs on the
-watch; every motion and every change of shape is a WFF expression.
+watch; every motion and every change of shape is a WFF expression. See
+notes.md for the design history.
 
 The mechanism (after the Humism dials)
 --------------------------------------
-Two discs carry the same printed pattern. The lower disc is the minute wheel:
-it turns once an hour and carries the minute bead on the rim. The upper disc is
-the seconds wheel: it turns once a minute (6 deg/s), and it is composited with
-SCREEN, so where its bands cross the lower disc's bands the light adds into a
-third, paler colour. The relative rotation sweeps interference fringes across
-the dial continuously; once a minute the two patterns line up and the dial
-briefly collapses into a single clean pattern before blooming apart again.
+Two discs carry the same pattern. The lower disc is the minute wheel: it turns
+once an hour and carries the minute bead. The upper disc is the seconds wheel
+(6 deg/s), composited with LIGHTEN, so where its bands cross the lower disc's
+the per-channel maximum glows as a third colour. With 6-fold discs the two
+come into register every 10 s.
 
 The pattern
 -----------
-Each disc is N stroked ellipses ("rings") with a 50% duty band. Ring n has
-radius (n - 0.5) * P0. Their centres are strung along a curved chain through
-the dial centre: each ring sits a step e from its neighbour, and the step turns
-by an angle phi per ring, so the rings nest like an opening flower when phi is
-small and curl into a shell when it is large. e < P0 keeps every ring nested
-inside the next, so a disc never crosses itself; all crossings are between the
-two discs. The chain is summed in closed form:
-
-  sum_{j=1..k} (cos j phi, sin j phi) = sin(k phi/2)/sin(phi/2) * (cos, sin)((k+1) phi/2)
+Each disc is N_RINGS nested regular SIDES-gons whose sides are circular arcs.
+The angle T each side subtends at its arc centre sets the look: T < 0 bows the
+sides in (stars), T = 0 is a straight polygon, T = 360/SIDES is the circle
+through the vertices, and larger T bulges into scalloped petals. Rings also
+twist (a spiral) and odd rings stagger, so straight sides weave into lattices.
 
 The morph (after Brian Eno's ambient paintings)
 -----------------------------------------------
-Four shape parameters drift: the step (eccentricity), the curl phi, the ring
-aspect, and an overall scale (pitch). Each is a sum of slow sines of the
-minute of the day whose periods are unequal, like Eno's tape loops of
-different lengths, so their combinations keep recombining into new faces.
-All periods divide 1440 minutes, so the face is continuous through midnight
-and each minute of the day has its own face. The fastest period is 32 minutes:
-a parameter moves well under 1% of its range per second (invisible against
-the 6 deg/s rotation, which the moire amplifies) but about a fifth of its
-range in three minutes. Two soft colour fields drift and breathe behind the
-pattern on their own slow loops, like the light boxes.
+Curvature follows a 96-minute loop that holds on stars, straight lines and
+petals and sweeps quickly past the circle. Spread, twist, stagger and scale
+drift on other unequal loops, so their combinations keep recombining. All
+periods divide 1440 minutes: midnight is seamless and each minute of the day
+has its own face. Two soft colour fields drift behind the pattern.
 """
 from pathlib import Path
 import math
@@ -54,12 +44,13 @@ CONFIG = 'imorph_palette'
 BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
 HAND = '#FFFFF4EA'   # beads; the validator allows at most five colours per option
 
-# Palettes: background, colour field A, colour field B, lower disc, upper disc. Named for Eno's ambient records. The upper disc is SCREENed over the
-# lower one, so their overlap is a lighter third colour.
+# Palettes: background, colour field A, colour field B, lower disc, upper disc.
+# Named for Eno's ambient records. The upper disc is LIGHTENed over the lower
+# one, so their overlap is a lighter third colour.
 THEMES = [
     ('theme_thursday', 'Thursday Afternoon', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
     ('theme_apollo', 'Apollo', ['#04070F', '#13305E', '#3A1A4C', '#3D63F5', '#FFAE3D']),
-    ('theme_neroli', 'Neroli', ['#160805', '#6A1F0E', '#503A08', '#D42A3C', '#F7B53B']),
+    ('theme_neroli', 'Neroli', ['#160805', '#6A1F0E', '#503A08', '#E0426E', '#FFBF33']),
     ('theme_discreet', 'Discreet Music', ['#05131A', '#0E3E3B', '#1B2A55', '#17B08A', '#8579FF']),
     ('theme_lux', 'Lux', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E']),
     ('theme_airports', 'Airports', ['#0E141A', '#2A3C4C', '#4C3E30', '#6F9CC4', '#D8988E']),
@@ -67,7 +58,7 @@ THEMES = [
 
 # --- time ------------------------------------------------------------------
 
-DAY_MIN = '([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60)'
+DAY_MIN = '([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)'
 SECONDS_WHEEL = '([SECOND] * 6 + [MILLISECOND] * 0.006)'
 MINUTE_WHEEL = '([MINUTE] * 6 + [SECOND] * 0.1 + [MILLISECOND] * 0.0001)'
 HOUR = '(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)'
@@ -76,7 +67,7 @@ MINUTE_AMBIENT = '([MINUTE] * 6)'
 
 def lfo(period_min, phase):
     assert 1440 % period_min == 0, 'periods must divide the day'
-    return f'sin({DAY_MIN} * {TAU / period_min:.7f} + {phase:.3f})'
+    return f'sin({DAY_MIN}*{TAU / period_min:.6f}+{phase:.2f})'
 
 
 def drift(base, *terms):
@@ -87,23 +78,40 @@ def drift(base, *terms):
 
 
 # Shape parameters. Periods (minutes) all divide 1440 and are mutually unequal.
-SCALE, SCALE_RANGE = drift(1.34, (0.24, 40, 0.3), (0.10, 160, 1.7))      # pitch 14 px * scale
-STEP, STEP_RANGE = drift(0.56, (0.16, 32, 2.1), (0.05, 288, 0.4))       # e / pitch
-CURL, CURL_RANGE = drift(0.17, (0.10, 45, 4.0), (0.045, 96, 2.6))       # radians per ring
-ASPECT, ASPECT_RANGE = drift(0.0, (0.085, 36, 5.2), (0.035, 72, 0.9))   # ellipse stretch
+# Curvature is the angle (degrees) each polygon side subtends at its own arc
+# centre: negative bows the side inward (a star), 0 is a straight side, 60 is
+# exactly the circle through the vertices, and beyond that the sides bulge
+# into scalloped petals.
+SCALE, SCALE_RANGE = drift(1.18, (0.13, 40, 0.3), (0.05, 160, 1.7))       # pitch 23 px * scale
 
-P0 = 14.0          # ring pitch in disc units (scale >= 1 multiplies it)
+# Mean curvature follows one 96-minute loop U through held states:
+#   U in [-1, -0.75]   concave stars, bowing in to -55 deg
+#   U in [-0.75, -0.05] hard straight lines
+#   U in [-0.05, 0.25] quick sweep through rounded polygons and the circle
+#                      point (60 deg)
+#   U in [0.25, 1]     scalloped petals deepening 150 -> 175 deg
+# A side only reads as a petal well past the circle point (at 110 deg it
+# bulges just 13% beyond the vertex circle; at 150, 25%), hence the high floor.
+_U = lfo(96, 4.4)
+BEND = (f'(0-55*clamp((0-{_U}-0.75)/0.25,0,1)+150*clamp(({_U}+0.05)/0.3,0,1)'
+        f'+25*clamp(({_U}-0.25)/0.75,0,1))')
+BEND_RANGE = (-55, 175)
+SPREAD, SPREAD_RANGE = drift(0.25, (0.12, 32, 2.0))                      # outer/inner curvature ratio spread
+TWIST, TWIST_RANGE = drift(0, (2.6, 36, 5.0), (1.2, 96, 1.3))             # deg per ring (spiral)
+STAGGER, STAGGER_RANGE = drift(15, (15, 90, 2.6))                          # odd rings turn, deg
+
+SIDES = 6          # symmetry order
+P0 = 23.0          # apothem spacing between rings, disc units
 DUTY = 0.5
-N_RINGS = 24
-CENTRE_RING = 5    # this ring is centred on the dial; the chain runs both ways
+N_RINGS = 13
+EPS = 0.02         # rad; |curvature| floor so a straight side stays a finite arc
 
 BAND_R = 214       # bead track
 BAND_W = 22
 WINDOW_R = BAND_R - BAND_W / 2
 
 assert SCALE_RANGE[0] >= 1.0, 'disc boxes must never shrink inside the dial'
-assert STEP_RANGE[1] < 1.0, 'rings must stay nested'
-assert CURL_RANGE[0] > 0.0, 'closed-form chain needs phi > 0'
+assert 0 <= STAGGER_RANGE[0] and STAGGER_RANGE[1] <= 180 / SIDES
 
 
 # --- XML helpers -----------------------------------------------------------
@@ -143,41 +151,59 @@ def dot(part, x, y, d, fill=None, stroke=None, thickness=2):
 
 # --- pattern ---------------------------------------------------------------
 
-def chain_centre(k):
-    """Expressions (dx, dy) for the centre of ring CENTRE_RING + k."""
-    if k == 0:
-        return '0', '0'
-    e = f'({STEP} * {P0:g})'
-    m = abs(k)
-    gain = f'(sin({m} * {CURL} / 2) / sin({CURL} / 2))'
-    if k > 0:   # steps j = 1..k
-        arg = f'({m + 1} * {CURL} / 2)'
-        return f'{e} * {gain} * cos{arg}', f'{e} * {gain} * sin{arg}'
-    arg = f'({m - 1} * {CURL} / 2)'      # steps j = 0..m-1, walked backwards
-    return f'(0 - {e} * {gain} * cos{arg})', f'{e} * {gain} * sin{arg}'
+def compact(expr):
+    return expr.replace(' ', '')
 
 
-def pattern(part, color):
-    for n in range(1, N_RINGS + 1):
-        r = (n - 0.5) * P0
-        dx, dy = chain_centre(n - CENTRE_RING)
-        e = element(part, 'Ellipse', x=C - r, y=C - r, width=2 * r, height=2 * r)
-        rx = f'({r:g} * (1 + {ASPECT}))'
-        ry = f'({r:g} * (1 - {ASPECT}))'
-        transform(e, 'x', f'{C:g} + {dx} - {rx}')
-        transform(e, 'y', f'{C:g} + {dy} - {ry}')
-        transform(e, 'width', f'2 * {rx}')
-        transform(e, 'height', f'2 * {ry}')
-        element(e, 'Stroke', color=color, thickness=f'{P0 * DUTY:g}')
+def ring_curvature(k):
+    """Signed curvature (radians) of ring k: mean bend scaled by the spread."""
+    f = (k - (N_RINGS + 1) / 2) / (N_RINGS - 1)  # -0.5 inner .. +0.5 outer
+    return compact(f'({BEND}*(1+{f:.4f}*{SPREAD})*0.0174533)')
+
+
+def side(parent, k, color, **part_attrs):
+    """One side of ring k, drawn at 12 o'clock; sector groups rotate copies.
+
+    With half-chord c and subtended angle |T|, the arc radius is
+    c / sin(|T|/2) and its centre sits c / tan(|T|/2) below the side's
+    midpoint, so the side bows outward. For T < 0 a group mirrors the arc
+    about the chord (scaleY = -1 pivoting on the chord line) so it bows
+    inward. |T| is floored at EPS, so a straight side is a very flat arc.
+    """
+    a = (k - 0.5) * P0                          # apothem
+    c = a * math.tan(math.pi / SIDES)            # half chord
+    x = ring_curvature(k)
+    mag = f'clamp(abs({x}),{EPS},3.1)'
+    mirror = group(parent, f'r{k}m', pivotX=0.5, pivotY=round((C - a) / SIZE, 6))
+    transform(mirror, 'scaleY', f'({x}>=0?2:0)-1')
+    part = draw(mirror, **part_attrs)
+    arc = element(part, 'Arc', centerX=C, centerY=round(C - a + c / EPS * 2, 2),
+                  width=round(4 * c / EPS, 1), height=round(4 * c / EPS, 1), startAngle=0, endAngle=0)
+    transform(arc, 'centerY', f'{C - a:g}+{c:.4f}/tan({mag}/2)')
+    transform(arc, 'width', f'{2 * c:.4f}/sin({mag}/2)')
+    transform(arc, 'height', f'{2 * c:.4f}/sin({mag}/2)')
+    transform(arc, 'startAngle', f'0-28.6479*{mag}')
+    transform(arc, 'endAngle', f'28.6479*{mag}')
+    element(arc, 'Stroke', color=color, thickness=f'{P0 * DUTY:g}', cap='ROUND')
+
+
+def pattern(parent, color, **part_attrs):
+    for k in range(1, N_RINGS + 1):
+        ring = group(parent, f'ring_{k}', pivotX=0.5, pivotY=0.5)
+        turn = f'{k} * {TWIST}' + (f' + {STAGGER}' if k % 2 else '')
+        transform(ring, 'angle', compact(turn))
+        for i in range(SIDES):
+            sector = group(ring, f'r{k}s{i}', pivotX=0.5, pivotY=0.5, angle=f'{360 * i / SIDES:g}')
+            side(sector, k, color, **part_attrs)
 
 
 def disc(parent, name, angle, color, **part_attrs):
     g = group(parent, name, pivotX=0.5, pivotY=0.5)
     ambient(g)
-    transform(g, 'angle', angle)
+    transform(g, 'angle', compact(angle))
     transform(g, 'scaleX', SCALE)
     transform(g, 'scaleY', SCALE)
-    pattern(draw(g, **part_attrs), color)
+    pattern(g, color, **part_attrs)
     return g
 
 
@@ -186,7 +212,7 @@ def disc(parent, name, angle, color, **part_attrs):
 def build():
     face = ET.Element('WatchFace', width=str(SIZE), height=str(SIZE))
     element(face, 'Metadata', key='CLOCK_TYPE', value='ANALOG')
-    element(face, 'Metadata', key='PREVIEW_TIME', value='10:10:31')
+    element(face, 'Metadata', key='PREVIEW_TIME', value='10:10:35')
 
     configs = element(face, 'UserConfigurations')
     palette = element(configs, 'ColorConfiguration', id=CONFIG, displayName=CONFIG, defaultValue=0)
@@ -215,7 +241,7 @@ def build():
 
     # Minute wheel below, seconds wheel above.
     disc(scene, 'minute_wheel', MINUTE_WHEEL, LOWER)
-    disc(scene, 'seconds_wheel', SECONDS_WHEEL, UPPER, blendMode='SCREEN')
+    disc(scene, 'seconds_wheel', SECONDS_WHEEL, UPPER, blendMode='LIGHTEN')
 
     # Bead track: a dark band that frames the pattern window.
     track = group(scene, 'track')
@@ -282,5 +308,5 @@ if __name__ == '__main__':
     (HERE / 'watchface.xml').write_text(xml)
     glow_asset()
     strings()
-    print(f'watchface.xml {len(xml) // 1024} KiB; scale {SCALE_RANGE}, step {STEP_RANGE}, '
-          f'curl {CURL_RANGE}, aspect {ASPECT_RANGE}')
+    print(f'watchface.xml {len(xml) // 1024} KiB; scale {SCALE_RANGE}, bend {BEND_RANGE}, '
+          f'spread {SPREAD_RANGE}, twist {TWIST_RANGE}, stagger {STAGGER_RANGE}')
