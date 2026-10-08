@@ -61,12 +61,12 @@ BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in ran
 # Beads and rim marks use the upper disc colour, so they read on any ground.
 THEMES = [
     ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
-    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#940D4A63', '#FF3D86', '#2ED8F0']),
+    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#0D4A63', '#94FF3D86', '#942ED8F0']),
     ('theme_white_black', 'White on Black', 'same', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
     ('theme_apollo', 'Apollo', 'same', ['#0B1C46', '#1E3F82', '#2C1F63', '#FFE6B8', '#FFE6B8']),
     ('theme_neroli', 'Neroli', 'same', ['#F0A030', '#F8C45C', '#E2742A', '#4A0B16', '#4A0B16']),
     ('theme_discreet', 'Discreet Music', 'same', ['#0F5B52', '#1F7C6B', '#0B435A', '#F3EAD3', '#F3EAD3']),
-    ('theme_lux', 'Lux', 'film', ['#160622', '#3E0C4C', '#800E2150', '#FF4FB0', '#FF4FB0']),
+    ('theme_lux', 'Lux', 'film', ['#160622', '#3E0C4C', '#0E2150', '#80FF4FB0', '#80FF4FB0']),
     ('theme_airports', 'Airports', 'same', ['#EDE6DA', '#E2D2BC', '#D2DDE6', '#1F3A6B', '#1F3A6B']),
 ]
 
@@ -79,9 +79,10 @@ def _argb(c):
 
 for _key, _label, _kind, _colors in THEMES:
     _lo, _up = _argb(_colors[3]), _argb(_colors[4])
-    assert _lo[0] == _up[0] == 255, f'{_label}: disc colours are opaque; disc alpha lives in field B'
-    assert (_lo == _up) == (_kind != 'dual'), f'{_label}: only the dual palette has two disc colours'
-    assert (_argb(_colors[2])[0] < 255) == (_kind != 'same'), f'{_label}: dual and film palettes are see-through'
+    assert (_lo[1:] == _up[1:]) == (_kind != 'dual'), f'{_label}: only the dual palette has two disc colours'
+    assert _lo[0] == _up[0], f'{_label}: both discs share one transparency'
+    assert (_up[0] < 255) == (_kind != 'same'), f'{_label}: dual and film discs are see-through, same are opaque'
+    assert all(_argb(c)[0] == 255 for c in _colors[:3]), f'{_label}: ground and fields are opaque'
     _bg = _argb(_colors[0])[1:]
     assert sum(abs(a - b) for a, b in zip(_up[1:], _bg)) > 200, f'{_label}: discs too close to ground'
 
@@ -135,8 +136,10 @@ DUTY = 0.5
 N_RINGS = 13
 EPS = 0.02         # rad; |curvature| floor so a straight side stays a finite arc
 
-BAND_R = 214       # bead track
-BAND_W = 22
+BAND_R = 212       # bead track
+BAND_W = 26
+AMBIENT_DISC = '#FF4A4A4A'   # stationary pattern in ambient: dim grey, both discs
+AMBIENT_BEAD = '#FFFFFFFF'
 WINDOW_R = BAND_R - BAND_W / 2
 
 assert SCALE_RANGE[0] >= 1.0, 'disc boxes must never shrink inside the dial'
@@ -269,16 +272,26 @@ def build():
 
     # Minute wheel below, seconds wheel above.
     # Both wheels share one masked layer clipped to the pattern window.
-    # Each wheel is flattened in its own masked layer whose mask takes field
-    # B's alpha: see-through for dual and film palettes, opaque otherwise.
+    # Each wheel is a colour fill seen through its own pattern: the wheel
+    # layer's SOURCE is a disc of colour (the palette colour, whose alpha makes
+    # dual and film discs see-through; dim grey in ambient) and its MASK is the
+    # rotating pattern drawn opaque white, flattened in a masked group of its
+    # own so overlapping round caps can't double. The masks are opaque white,
+    # so alpha or luminance masking give the same result. In ambient the
+    # pattern stays: the wheels freeze at the minute and recolour to grey.
     discs = group(scene, 'discs')
-    ambient(discs)
     for name, angle, color in (('minute_wheel', MINUTE_WHEEL, LOWER),
                                ('seconds_wheel', SECONDS_WHEEL, UPPER)):
         layer = group(discs, name + '_layer', renderMode='SOURCE')
-        disc(layer, name, angle, color)
-        film = draw(layer, renderMode='MASK')
-        dot(film, C, C, 2 * WINDOW_R + 2, fill=GLOW_B)
+        live = group(layer, name + '_colour', renderMode='SOURCE')
+        ambient(live)
+        dot(draw(live), C, C, 2 * WINDOW_R + 2, fill=color)
+        dim = group(layer, name + '_ambient', renderMode='SOURCE', alpha=0)
+        element(dim, 'Variant', mode='AMBIENT', target='alpha', value=255)
+        dot(draw(dim), C, C, 2 * WINDOW_R + 2, fill=AMBIENT_DISC)
+        shape = group(layer, name + '_shape', renderMode='MASK')
+        disc(shape, name, angle, '#FFFFFFFF')
+        dot(draw(shape, renderMode='MASK'), C, C, 2 * WINDOW_R + 2, fill='#FFFFFFFF')
     window = draw(discs, renderMode='MASK')
     dot(window, C, C, 2 * WINDOW_R + 2, fill='#FFFFFFFF')
 
@@ -299,24 +312,28 @@ def build():
     element(ticks, 'Variant', mode='AMBIENT', target='alpha', value=90)
     part = draw(ticks)
     for i in range(12):
-        dot(part, *polar(BAND_R, i * 30), 4.2 if i % 3 == 0 else 3, fill=UPPER)
+        dot(part, *polar(BAND_R, i * 30), 4.6 if i % 3 == 0 else 3.2, fill=UPPER)
 
     # Beads: hour (large), minute (rides the minute wheel), second (rides the
     # seconds wheel).
-    def bead(name, angle, d, color, ambient_angle=None, ambient_d=None):
+    def bead(name, angle, d, ambient_angle=None):
         g = group(scene, name, pivotX=0.5, pivotY=0.5)
         ambient(g)
         transform(g, 'angle', angle)
-        dot(draw(g), C, C - BAND_R, d, fill=color)
+        part = draw(g)
+        # Stacked three times so see-through palettes still get a near-solid
+        # bead; opaque palettes are unchanged.
+        for _ in range(3):
+            dot(part, C, C - BAND_R, d, fill=UPPER)
         if ambient_angle:
             a = group(scene, name + '_ambient', pivotX=0.5, pivotY=0.5, alpha=0)
             element(a, 'Variant', mode='AMBIENT', target='alpha', value=255)
             transform(a, 'angle', ambient_angle)
-            dot(draw(a), C, C - BAND_R, ambient_d, stroke='#FFC9C2B6', thickness=2)
+            dot(draw(a), C, C - BAND_R, d, fill=AMBIENT_BEAD)
 
-    bead('second_bead', SECONDS_WHEEL, 5, UPPER)
-    bead('hour_bead', HOUR, 17, UPPER, HOUR, 15)
-    bead('minute_bead', MINUTE_WHEEL, 10, UPPER, MINUTE_AMBIENT, 9)
+    bead('second_bead', SECONDS_WHEEL, 6)
+    bead('hour_bead', HOUR, 23, HOUR)
+    bead('minute_bead', MINUTE_WHEEL, 14, MINUTE_AMBIENT)
     return face
 
 

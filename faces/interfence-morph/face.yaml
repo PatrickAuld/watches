@@ -36,9 +36,9 @@ description: >
 
 designNotes: >
   Hour bead (large) and minute bead ride a dark rim track; a small seconds
-  bead rides the seconds wheel. Each wheel is flattened in its own masked
-  layer whose alpha comes from the palette, so discs are opaque or
-  see-through per palette. Two soft colour fields drift behind the pattern.
+  bead rides the seconds wheel. Each wheel is a colour fill masked by its
+  pattern, so discs are opaque or see-through per palette and turn grey in
+  ambient. Two soft colour fields drift behind the pattern.
   No numerals or hands.
 
 implementationNotes: >
@@ -48,5 +48,6 @@ implementationNotes: >
   1440, so midnight is seamless). Concave sides are mirrored by a scaleY sign
   group. Ring groups carry twist and stagger. Disc rotation uses
   SECOND/MILLISECOND and MINUTE/SECOND. Palette is a ColorConfiguration of
-  eight five-colour palettes; field B's alpha sets disc transparency. Ambient
-  shows outlined hour and minute beads and the twelve rim dots on black.
+  eight five-colour palettes; disc-colour alpha sets transparency. Ambient
+  freezes both wheels at the minute in dim grey on black, with solid white
+  hour and minute beads.

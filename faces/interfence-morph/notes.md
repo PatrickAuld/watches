@@ -25,13 +25,15 @@ does the same:
   clean pattern six times a minute.
 - **Hour bead** (large) rides the dark rim track with twelve dots.
 
-Compositing: each wheel is flattened in its own masked layer
-(`renderMode="SOURCE"` wheel plus a `renderMode="MASK"` disc filled with colour
-field B), and both layers sit inside an outer masked group clipped to the
-pattern window. Only the mask's alpha matters, so field B's alpha sets how
-see-through each whole disc is. Flattening first applies that transparency
-once per disc, so the round caps where polygon sides meet never stack into
-knots. No blend modes are used:
+Compositing: each wheel is a colour fill seen through its own pattern. The
+wheel layer's `renderMode="SOURCE"` is a disc of the palette colour (dim grey
+in ambient), and its `renderMode="MASK"` is the rotating pattern drawn in
+opaque white. The pattern is flattened in a masked group of its own, so
+overlapping round caps where polygon sides meet can't double. Both wheel
+layers sit inside an outer masked group clipped to the pattern window. The
+disc colour's alpha makes dual and film discs see-through once per disc. All
+masks are opaque white, so masking by alpha or by luminance gives the same
+result. No blend modes are used:
 
 - SCREEN, and colour alpha on the arcs themselves, doubled at the overlapping
   caps.
@@ -126,18 +128,30 @@ The kinds:
 - **Dual:** the cyan disc shows the rose through it at every crossing.
 
 `generate_xml.py` asserts each palette's kind and that the disc colour stands
-well clear of the ground. The disc colours are always opaque, and the
-transparency lives only in field B's alpha (which also slightly dims that
-palette's second colour field). The mono palettes set both colour fields to
+well clear of the ground. transparency is the disc colours' alpha. Both discs share one alpha, and the
+ground and fields stay opaque. The mono palettes set both colour fields to
 the ground, so the drifting light disappears. Beads, rim dots and the window
 line use the upper disc colour, so they read on light grounds. Each
 ColorOption has five colours (the validator's maximum): ground, field A,
-field B (+ disc alpha), lower disc and upper disc.
+field B, lower disc and upper disc. The beads are drawn three times
+over in the upper colour, so the see-through palettes still get near-solid
+beads.
 
-## Ambient
+## Ambient and markers (2026-10-08)
 
-Only outlined hour and minute beads (the minute bead steps once a minute) and
-dim rim dots show on black.
+Feedback: ambient should be the stationary current pattern, and the hour and
+minute markers needed to be more visible in both modes.
+
+- **Ambient** keeps both wheels at their current positions, recoloured to
+  dim grey (#4A4A4A) on black. The morph continues at each ambient update.
+  The ground, colour fields, rim track and seconds bead are hidden. The hour
+  and minute beads are solid white, and the minute bead steps once a minute.
+  This lights far more pixels than Google's roughly 15% ambient guidance, so
+  watch battery use and burn-in. The grey can be lowered in
+  `generate_xml.py` (`AMBIENT_DISC`).
+- **Markers**: the rim track widened from 22 to 26 px (r 199–225). The hour
+  bead grew from 17 to 23 px and the minute bead from 10 to 14 px, the rim
+  dots are slightly larger, and the seconds bead is 6 px.
 
 ## Files
 
@@ -149,10 +163,11 @@ eight palettes at assorted times.
 
 ## Device checks still needed
 
-- Confirm that nested masked layers (each wheel inside the window layer) render,
-  and that Thursday Afternoon and Lux show see-through discs. On the watch,
-  masks may use luminance rather than alpha; if so, the same palettes would
-  turn opaque.
+- Confirm that the nested masked layers render (each pattern mask inside a
+  wheel layer inside the window layer), and that Thursday Afternoon and Lux
+  show see-through discs.
+- Confirm that the ambient pattern updates each minute and that its lit-pixel
+  load is acceptable.
 - Confirm that the scaled groups keep their stroke widths.
 - Check that 156 expression-driven arcs hold the frame rate while the seconds
   wheel turns, and that the XML loads promptly. At about 500 KB it is larger
