@@ -44,23 +44,22 @@ CONFIG = 'imorph_palette'
 BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
 # Palettes: ground, colour field A, colour field B, lower disc, upper disc.
 #
-# Both discs are drawn into one masked layer and the upper disc is LIGHTENed
-# onto the lower disc only, never onto the ground, so crossings depend on the
-# disc colours alone, on any background. Three kinds:
-#   dual   two different disc colours; the channel maxima glow as a third
-#          colour at every crossing (the one two-colour palette)
+# Each disc is flattened in its own masked layer, and the mask's alpha is
+# colour field B's alpha channel, so a palette sets how see-through each
+# whole disc is. Flattening first means the transparency applies once per
+# disc: the round caps where polygon sides meet never double up into knots.
+# No blend modes are used (the validator rejects blendMode on Group, and
+# per-PartDraw blending would double at the caps). Three kinds:
+#   dual   two disc colours, both see-through, so the upper disc shows the
+#          lower through it at every crossing (the one two-colour palette)
 #   same   both discs one opaque colour; crossings merge into a single bold
 #          figure against a contrasting ground (the Humism look)
-#   film   both discs one colour seen as two sheets of tinted film: each disc
-#          alone lets the ground through, and where they cross the alpha
-#          stacks and the colour deepens. Each disc is flattened in its own
-#          masked layer first, so the transparency is applied once per disc
-#          and the round caps where sides meet never double up into knots.
-#          The film alpha rides in colour field B's alpha channel (the disc
-#          masks use only alpha); every other palette keeps it opaque.
+#   film   both discs one see-through colour, like two sheets of tinted
+#          film: each alone lets the ground through, and where they cross
+#          the alpha stacks and the colour deepens
 # Beads and rim marks use the upper disc colour, so they read on any ground.
 THEMES = [
-    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
+    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#940D4A63', '#FF3D86', '#2ED8F0']),
     ('theme_white_black', 'White on Black', 'same', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
     ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
     ('theme_apollo', 'Apollo', 'same', ['#0B1C46', '#1E3F82', '#2C1F63', '#FFE6B8', '#FFE6B8']),
@@ -79,15 +78,9 @@ def _argb(c):
 
 for _key, _label, _kind, _colors in THEMES:
     _lo, _up = _argb(_colors[3]), _argb(_colors[4])
-    if _kind == 'dual':
-        _cross = [max(l, u) for l, u in zip(_lo[1:], _up[1:])]
-        assert sum(abs(c - u) for c, u in zip(_cross, _up[1:])) > 60, f'{_label}: crossing too close to upper'
-        assert sum(abs(c - l) for c, l in zip(_cross, _lo[1:])) > 60, f'{_label}: crossing too close to lower'
-    else:
-        assert _lo == _up, f'{_label}: {_kind} palettes use one disc colour'
-    assert _lo[0] == _up[0] == 255, f'{_label}: disc colours are opaque; film alpha lives in field B'
-    assert (_argb(_colors[2])[0] < 255) == (_kind == 'film'), f'{_label}: only film palettes carry alpha in field B'
-    # A disc colour must stand well clear of its ground.
+    assert _lo[0] == _up[0] == 255, f'{_label}: disc colours are opaque; disc alpha lives in field B'
+    assert (_lo == _up) == (_kind != 'dual'), f'{_label}: only the dual palette has two disc colours'
+    assert (_argb(_colors[2])[0] < 255) == (_kind != 'same'), f'{_label}: dual and film palettes are see-through'
     _bg = _argb(_colors[0])[1:]
     assert sum(abs(a - b) for a, b in zip(_up[1:], _bg)) > 200, f'{_label}: discs too close to ground'
 
@@ -278,13 +271,12 @@ def build():
     # only the lower disc (transparent elsewhere), never the ground. The mask
     # is the pattern window.
     # Each wheel is flattened in its own masked layer whose mask takes field
-    # B's alpha (the film alpha; opaque for every other palette), then the
-    # upper layer is LIGHTENed onto the lower.
+    # B's alpha: see-through for dual and film palettes, opaque otherwise.
     discs = group(scene, 'discs')
     ambient(discs)
-    for name, angle, color, blend in (('minute_wheel', MINUTE_WHEEL, LOWER, None),
-                                      ('seconds_wheel', SECONDS_WHEEL, UPPER, 'LIGHTEN')):
-        layer = group(discs, name + '_layer', renderMode='SOURCE', **({'blendMode': blend} if blend else {}))
+    for name, angle, color in (('minute_wheel', MINUTE_WHEEL, LOWER),
+                               ('seconds_wheel', SECONDS_WHEEL, UPPER)):
+        layer = group(discs, name + '_layer', renderMode='SOURCE')
         disc(layer, name, angle, color)
         film = draw(layer, renderMode='MASK')
         dot(film, C, C, 2 * WINDOW_R + 2, fill=GLOW_B)

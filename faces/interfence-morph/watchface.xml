@@ -4,7 +4,7 @@
   <Metadata key="PREVIEW_TIME" value="10:10:35" />
   <UserConfigurations>
     <ColorConfiguration id="imorph_palette" displayName="imorph_palette" defaultValue="0">
-      <ColorOption id="0" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #FF0D4A63 #FFE2337A #FF26C2D9" />
+      <ColorOption id="0" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #940D4A63 #FFFF3D86 #FF2ED8F0" />
       <ColorOption id="1" displayName="theme_white_black" colors="#FF000000 #FF000000 #FF000000 #FFFFFFFF #FFFFFFFF" />
       <ColorOption id="2" displayName="theme_black_white" colors="#FFFFFFFF #FFFFFFFF #FFFFFFFF #FF000000 #FF000000" />
       <ColorOption id="3" displayName="theme_apollo" colors="#FF0B1C46 #FF1E3F82 #FF2C1F63 #FFFFE6B8 #FFFFE6B8" />
@@ -1262,7 +1262,7 @@
           </Ellipse>
         </PartDraw>
       </Group>
-      <Group x="0" y="0" width="450" height="450" name="seconds_wheel_layer" renderMode="SOURCE" blendMode="LIGHTEN">
+      <Group x="0" y="0" width="450" height="450" name="seconds_wheel_layer" renderMode="SOURCE">
         <Group x="0" y="0" width="450" height="450" name="seconds_wheel" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
           <Transform target="angle" value="([SECOND]*6+[MILLISECOND]*0.006)" />
           <Transform target="scaleX" value="(1.18 + 0.13 * sin(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)*0.157080+0.30) + 0.05 * sin(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)*0.039270+1.70))" />
