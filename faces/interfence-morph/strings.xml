@@ -1,0 +1,10 @@
+<resources>
+  <string name="watch_face_name">Interfence-Morph</string>
+  <string name="imorph_palette">Palette</string>
+  <string name="theme_thursday">Thursday Afternoon</string>
+  <string name="theme_apollo">Apollo</string>
+  <string name="theme_neroli">Neroli</string>
+  <string name="theme_discreet">Discreet Music</string>
+  <string name="theme_lux">Lux</string>
+  <string name="theme_airports">Airports</string>
+</resources>
