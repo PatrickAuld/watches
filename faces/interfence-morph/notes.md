@@ -25,11 +25,14 @@ does the same:
   clean pattern six times a minute.
 - **Hour bead** (large) rides the dark rim track with twelve dots.
 
-The upper disc's PartDraws use `blendMode="LIGHTEN"`, so where bands cross the
-per-channel maximum glows as a third, paler colour. SCREEN was tried first, but
-it doubles wherever one disc's round stroke caps overlap at polygon vertices,
-leaving bright dots. LIGHTEN of a colour over itself is unchanged. If the
-device ignores the blend, the upper disc simply covers the lower one.
+Both wheels are drawn into one masked layer (`renderMode="SOURCE"` wheels with
+a `renderMode="MASK"` window disc), and the upper disc's PartDraws use
+`blendMode="LIGHTEN"`. The blend therefore sees only the lower disc, with
+transparency elsewhere, never the ground, and each crossing is
+max(lower, upper) per channel on any background. SCREEN was tried first, but it
+doubled wherever round stroke caps overlap at polygon vertices. LIGHTEN of a
+colour over itself is unchanged. If the device ignores the blend, the upper
+disc simply covers the lower one, which is the solid look below.
 
 ## Pattern (revision 2)
 
@@ -90,12 +93,34 @@ concentric circles that shift.
 
 ## Palettes
 
-There are six palettes, named for Eno ambient records: Thursday Afternoon
-(default), Apollo, Neroli, Discreet Music, Lux and Airports. Each ColorOption
-has five colours: ground, field A, field B, lower disc and upper disc. The
-validator rejects more than five per option (`userStyleColorOptionType`
-maxLength 5), so the beads are a fixed warm white. Neroli's lower disc is rose
-(#E0426E) so that its LIGHTEN overlap still differs from the gold upper disc.
+Feedback (2026-10-08): add white-on-black and black-on-white, and don't put
+the see-through overlap on every palette. The blend mode is fixed in the XML,
+but because the ground is never blended, the palette colours alone choose
+how crossings look:
+
+- **Solid**: upper ≥ lower in every channel, so the crossing equals the upper
+  colour. The upper disc covers the lower one, as on the Humism dials.
+- **Glow**: the channel maxima mix into a third colour at every crossing.
+
+`generate_xml.py` asserts each palette's declared kind. Glow crossings must
+differ from both disc colours by more than 60 summed RGB levels.
+
+| palette | kind | ground | lower → upper | crossing |
+|---|---|---|---|---|
+| Thursday Afternoon (default) | glow | indigo | rose → cyan | pale lilac |
+| White on Black | solid | black | white → white | union |
+| Black on White | solid | white | black → black | union |
+| Apollo | solid | night | cobalt → moon cream | cream covers |
+| Neroli | glow | umber | rose → saffron | peach |
+| Discreet Music | solid | deep teal | jade → mint | mint covers |
+| Lux | glow | plum | violet → hot pink | magenta |
+| Airports | glow | paper | ink blue → rust | mauve |
+
+The mono palettes set both colour fields to the ground, so the drifting light
+disappears and only the bold pattern remains. Beads, rim dots and the window
+line use the upper disc colour, so they read on the white and paper grounds.
+Each ColorOption has five colours (the validator's maximum): ground, field A,
+field B, lower disc and upper disc.
 
 ## Ambient
 
@@ -107,11 +132,14 @@ dim rim dots show on black.
 Run `python3 faces/interfence-morph/generate_xml.py` to write
 `watchface.xml`, `strings.xml` and `assets/glow.png`. `preview.png` and
 `previews/` are wff-web renders of the canonical XML. The thumbnail is
-10:10:35, about 26° out of 6-fold register.
+10:10:35, about 26° out of 6-fold register. `previews/themes.png` shows all
+eight palettes at assorted times.
 
 ## Device checks still needed
 
-- Confirm that `blendMode="LIGHTEN"` on PartDraw takes effect.
+- Confirm that `blendMode="LIGHTEN"` inside the masked disc layer takes effect
+  (the glow palettes depend on it; solid and mono palettes look right either
+  way).
 - Confirm that the scaled groups keep their stroke widths.
 - Check that 156 expression-driven arcs hold the frame rate while the seconds
   wheel turns, and that the XML loads promptly. At about 500 KB it is larger

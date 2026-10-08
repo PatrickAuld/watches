@@ -29,12 +29,15 @@ description: >
   from concave stars to hard straight lines to scalloped petals, while it
   twists and staggers, in the manner of Brian Eno's ambient paintings. The
   bending is too slow to watch, but the face is different a few minutes later.
-  Six luminous palettes; time is read from beads on the rim.
+  Eight palettes, white on black and black on white among them; some let the
+  crossings glow in a third colour, others lay one disc solidly over the
+  other. Time is read from beads on the rim.
 
 designNotes: >
   Hour bead (large) and minute bead ride a dark rim track; a small seconds
-  bead rides the seconds wheel. The upper disc is composited with LIGHTEN so
-  where the bands cross they glow in a third colour. Two soft colour fields
+  bead rides the seconds wheel. Both wheels share a masked layer and the
+  upper disc is LIGHTENed onto the lower only, so palette colours decide
+  whether crossings glow or one disc solidly covers the other. Two soft colour fields
   drift behind the pattern. No numerals or hands.
 
 implementationNotes: >
@@ -44,5 +47,6 @@ implementationNotes: >
   1440, so midnight is seamless). Concave sides are mirrored by a scaleY sign
   group. Ring groups carry twist and stagger. Disc rotation uses
   SECOND/MILLISECOND and MINUTE/SECOND. Palette is a ColorConfiguration of
-  five colours. Ambient shows outlined hour and minute beads and the twelve
+  eight five-colour palettes. Ambient shows outlined hour and minute beads
+  and the twelve
   rim dots on black.

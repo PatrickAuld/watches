@@ -42,19 +42,41 @@ TAU = 2 * math.pi
 
 CONFIG = 'imorph_palette'
 BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
-HAND = '#FFFFF4EA'   # beads; the validator allows at most five colours per option
-
-# Palettes: background, colour field A, colour field B, lower disc, upper disc.
-# Named for Eno's ambient records. The upper disc is LIGHTENed over the lower
-# one, so their overlap is a lighter third colour.
+# Palettes: ground, colour field A, colour field B, lower disc, upper disc.
+#
+# Both discs are drawn into one masked layer and the upper disc is LIGHTENed
+# onto the lower disc only, never onto the ground, so the crossing colour is
+# max(lower, upper) per channel whatever the background. Each palette picks
+# its crossing by its colours:
+#   solid  upper >= lower in every channel, so the upper disc simply covers
+#          the lower one (the Humism look; mono palettes are this)
+#   glow   the channel maxima mix into a third colour at every crossing
+# Mono palettes set both colour fields to the ground so they vanish. Beads
+# and rim marks use the upper disc colour, so they read on light grounds.
 THEMES = [
-    ('theme_thursday', 'Thursday Afternoon', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
-    ('theme_apollo', 'Apollo', ['#04070F', '#13305E', '#3A1A4C', '#3D63F5', '#FFAE3D']),
-    ('theme_neroli', 'Neroli', ['#160805', '#6A1F0E', '#503A08', '#E0426E', '#FFBF33']),
-    ('theme_discreet', 'Discreet Music', ['#05131A', '#0E3E3B', '#1B2A55', '#17B08A', '#8579FF']),
-    ('theme_lux', 'Lux', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E']),
-    ('theme_airports', 'Airports', ['#0E141A', '#2A3C4C', '#4C3E30', '#6F9CC4', '#D8988E']),
+    ('theme_thursday', 'Thursday Afternoon', 'glow', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
+    ('theme_white_black', 'White on Black', 'solid', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
+    ('theme_black_white', 'Black on White', 'solid', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
+    ('theme_apollo', 'Apollo', 'solid', ['#04070F', '#13305E', '#3A1A4C', '#3450BC', '#FFE0C4']),
+    ('theme_neroli', 'Neroli', 'glow', ['#160805', '#6A1F0E', '#503A08', '#E0447A', '#F7B020']),
+    ('theme_discreet', 'Discreet Music', 'solid', ['#05131A', '#0E3E3B', '#1B2A55', '#1A9A82', '#A8EEDA']),
+    ('theme_lux', 'Lux', 'glow', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E']),
+    ('theme_airports', 'Airports', 'glow', ['#EDE8E0', '#E0CDB6', '#CFDCE6', '#2E4A8E', '#B0563F']),
 ]
+
+
+def _rgb(c):
+    return [int(c[i:i + 2], 16) for i in (1, 3, 5)]
+
+
+for _key, _label, _kind, _colors in THEMES:
+    _lo, _up = _rgb(_colors[3]), _rgb(_colors[4])
+    _cross = [max(l, u) for l, u in zip(_lo, _up)]
+    if _kind == 'solid':
+        assert _cross == _up, f'{_label}: solid needs upper >= lower per channel'
+    else:
+        assert sum(abs(c - u) for c, u in zip(_cross, _up)) > 60, f'{_label}: crossing too close to upper'
+        assert sum(abs(c - l) for c, l in zip(_cross, _lo)) > 60, f'{_label}: crossing too close to lower'
 
 # --- time ------------------------------------------------------------------
 
@@ -198,8 +220,7 @@ def pattern(parent, color, **part_attrs):
 
 
 def disc(parent, name, angle, color, **part_attrs):
-    g = group(parent, name, pivotX=0.5, pivotY=0.5)
-    ambient(g)
+    g = group(parent, name, pivotX=0.5, pivotY=0.5, renderMode='SOURCE')
     transform(g, 'angle', compact(angle))
     transform(g, 'scaleX', SCALE)
     transform(g, 'scaleY', SCALE)
@@ -216,7 +237,7 @@ def build():
 
     configs = element(face, 'UserConfigurations')
     palette = element(configs, 'ColorConfiguration', id=CONFIG, displayName=CONFIG, defaultValue=0)
-    for i, (key, _, colors) in enumerate(THEMES):
+    for i, (key, _, _, colors) in enumerate(THEMES):
         element(palette, 'ColorOption', id=i, displayName=key,
                 colors=' '.join('#FF' + c[1:].upper() for c in colors))
 
@@ -240,8 +261,15 @@ def build():
         element(part, 'Image', resource='glow')
 
     # Minute wheel below, seconds wheel above.
-    disc(scene, 'minute_wheel', MINUTE_WHEEL, LOWER)
-    disc(scene, 'seconds_wheel', SECONDS_WHEEL, UPPER, blendMode='LIGHTEN')
+    # Both wheels share one masked layer, so the upper disc's LIGHTEN sees
+    # only the lower disc (transparent elsewhere), never the ground. The mask
+    # is the pattern window.
+    discs = group(scene, 'discs')
+    ambient(discs)
+    disc(discs, 'minute_wheel', MINUTE_WHEEL, LOWER)
+    disc(discs, 'seconds_wheel', SECONDS_WHEEL, UPPER, blendMode='LIGHTEN')
+    window = draw(discs, renderMode='MASK')
+    dot(window, C, C, 2 * WINDOW_R + 2, fill='#FFFFFFFF')
 
     # Bead track: a dark band that frames the pattern window.
     track = group(scene, 'track')
@@ -254,13 +282,13 @@ def build():
     element(e, 'Stroke', color='#FF000000', thickness=100)
     rim = draw(track, alpha=70)
     e = element(rim, 'Ellipse', x=C - WINDOW_R, y=C - WINDOW_R, width=2 * WINDOW_R, height=2 * WINDOW_R)
-    element(e, 'Stroke', color=HAND, thickness=1.2)
+    element(e, 'Stroke', color=UPPER, thickness=1.2)
 
     ticks = group(scene, 'ticks', alpha=120)
     element(ticks, 'Variant', mode='AMBIENT', target='alpha', value=90)
     part = draw(ticks)
     for i in range(12):
-        dot(part, *polar(BAND_R, i * 30), 4.2 if i % 3 == 0 else 3, fill=HAND)
+        dot(part, *polar(BAND_R, i * 30), 4.2 if i % 3 == 0 else 3, fill=UPPER)
 
     # Beads: hour (large), minute (rides the minute wheel), second (rides the
     # seconds wheel).
@@ -276,8 +304,8 @@ def build():
             dot(draw(a), C, C - BAND_R, ambient_d, stroke='#FFC9C2B6', thickness=2)
 
     bead('second_bead', SECONDS_WHEEL, 5, UPPER)
-    bead('hour_bead', HOUR, 17, HAND, HOUR, 15)
-    bead('minute_bead', MINUTE_WHEEL, 10, HAND, MINUTE_AMBIENT, 9)
+    bead('hour_bead', HOUR, 17, UPPER, HOUR, 15)
+    bead('minute_bead', MINUTE_WHEEL, 10, UPPER, MINUTE_AMBIENT, 9)
     return face
 
 
@@ -295,7 +323,7 @@ def glow_asset():
 def strings():
     root = ET.Element('resources')
     for name, text in [('watch_face_name', 'Interfence-Morph'), (CONFIG, 'Palette')] + \
-            [(key, label) for key, label, _ in THEMES]:
+            [(key, label) for key, label, _, _ in THEMES]:
         element(root, 'string', name=name).text = text
     ET.indent(root, '  ')
     (HERE / 'strings.xml').write_text(ET.tostring(root, encoding='unicode') + '\n')
