@@ -1,5 +1,7 @@
 name: Debug interfence validation
-on: workflow_dispatch
+on:
+  push:
+    branches: [ci-debug-interfence]
 jobs:
   validate:
     runs-on: ubuntu-latest
