@@ -25,14 +25,20 @@ does the same:
   clean pattern six times a minute.
 - **Hour bead** (large) rides the dark rim track with twelve dots.
 
-Both wheels are drawn into one masked layer (`renderMode="SOURCE"` wheels with
-a `renderMode="MASK"` window disc), and the upper disc's PartDraws use
-`blendMode="LIGHTEN"`. The blend therefore sees only the lower disc, with
-transparency elsewhere, never the ground, and each crossing is
-max(lower, upper) per channel on any background. SCREEN was tried first, but it
-doubled wherever round stroke caps overlap at polygon vertices. LIGHTEN of a
-colour over itself is unchanged. If the device ignores the blend, the upper
-disc simply covers the lower one, which is the solid look below.
+Compositing: each wheel is flattened in its own masked layer
+(`renderMode="SOURCE"` wheel plus a `renderMode="MASK"` disc filled with colour
+field B), and both layers sit inside an outer masked group clipped to the
+pattern window. Only the mask's alpha matters, so field B's alpha sets how
+see-through each whole disc is. Flattening first applies that transparency
+once per disc, so the round caps where polygon sides meet never stack into
+knots. No blend modes are used:
+
+- SCREEN, and colour alpha on the arcs themselves, doubled at the overlapping
+  caps.
+- LIGHTEN on PartDraws worked, but it cannot sit on a flattened layer: the
+  validator rejects `blendMode` on `Group`
+  (`cvc-complex-type.3.2.2`).
+- Plain alpha compositing is also the most dependable choice on the watch.
 
 ## Pattern (revision 2)
 
@@ -94,33 +100,39 @@ concentric circles that shift.
 ## Palettes
 
 Feedback (2026-10-08): add white-on-black and black-on-white, and don't put
-the see-through overlap on every palette. The blend mode is fixed in the XML,
-but because the ground is never blended, the palette colours alone choose
-how crossings look:
+the see-through overlap on every palette. A second round of feedback: the
+face is much more interesting when both patterns are the same colour over a
+different background. So the face keeps one two-colour palette with
+transparency, and every other palette uses one disc colour. One of those, Lux,
+keeps the transparency.
 
-- **Solid**: upper ≥ lower in every channel, so the crossing equals the upper
-  colour. The upper disc covers the lower one, as on the Humism dials.
-- **Glow**: the channel maxima mix into a third colour at every crossing.
-
-`generate_xml.py` asserts each palette's declared kind. Glow crossings must
-differ from both disc colours by more than 60 summed RGB levels.
-
-| palette | kind | ground | lower → upper | crossing |
+| palette | kind | ground | discs | crossing |
 |---|---|---|---|---|
-| Thursday Afternoon (default) | glow | indigo | rose → cyan | pale lilac |
-| White on Black | solid | black | white → white | union |
-| Black on White | solid | white | black → black | union |
-| Apollo | solid | night | cobalt → moon cream | cream covers |
-| Neroli | glow | umber | rose → saffron | peach |
-| Discreet Music | solid | deep teal | jade → mint | mint covers |
-| Lux | glow | plum | violet → hot pink | magenta |
-| Airports | glow | paper | ink blue → rust | mauve |
+| Thursday Afternoon (default) | dual, 58% | indigo | rose below, cyan above | cyan over rose: periwinkle |
+| White on Black | same | black | white | merges |
+| Black on White | same | white | black | merges |
+| Apollo | same | night navy | moon cream | merges |
+| Neroli | same | saffron | oxblood | merges |
+| Discreet Music | same | sea teal | bone | merges |
+| Lux | film, 50% | plum | hot pink | deepens to full pink |
+| Airports | same | paper | ink blue | merges |
 
-The mono palettes set both colour fields to the ground, so the drifting light
-disappears and only the bold pattern remains. Beads, rim dots and the window
-line use the upper disc colour, so they read on the white and paper grounds.
-Each ColorOption has five colours (the validator's maximum): ground, field A,
-field B, lower disc and upper disc.
+The kinds:
+
+- **Same:** the crossings merge into one bold figure against the ground, the
+  Humism look.
+- **Film:** each disc alone lets the ground through, like tinted film, and the
+  alpha stacks where they cross.
+- **Dual:** the cyan disc shows the rose through it at every crossing.
+
+`generate_xml.py` asserts each palette's kind and that the disc colour stands
+well clear of the ground. The disc colours are always opaque, and the
+transparency lives only in field B's alpha (which also slightly dims that
+palette's second colour field). The mono palettes set both colour fields to
+the ground, so the drifting light disappears. Beads, rim dots and the window
+line use the upper disc colour, so they read on light grounds. Each
+ColorOption has five colours (the validator's maximum): ground, field A,
+field B (+ disc alpha), lower disc and upper disc.
 
 ## Ambient
 
@@ -137,9 +149,10 @@ eight palettes at assorted times.
 
 ## Device checks still needed
 
-- Confirm that `blendMode="LIGHTEN"` inside the masked disc layer takes effect
-  (the glow palettes depend on it; solid and mono palettes look right either
-  way).
+- Confirm that nested masked layers (each wheel inside the window layer) render,
+  and that Thursday Afternoon and Lux show see-through discs. On the watch,
+  masks may use luminance rather than alpha; if so, the same palettes would
+  turn opaque.
 - Confirm that the scaled groups keep their stroke widths.
 - Check that 156 expression-driven arcs hold the frame rate while the seconds
   wheel turns, and that the XML loads promptly. At about 500 KB it is larger

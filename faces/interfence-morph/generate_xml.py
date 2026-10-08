@@ -8,9 +8,10 @@ The mechanism (after the Humism dials)
 --------------------------------------
 Two discs carry the same pattern. The lower disc is the minute wheel: it turns
 once an hour and carries the minute bead. The upper disc is the seconds wheel
-(6 deg/s), composited with LIGHTEN, so where its bands cross the lower disc's
-the per-channel maximum glows as a third colour. With 6-fold discs the two
-come into register every 10 s.
+(6 deg/s). Each disc is flattened in its own masked layer whose alpha comes
+from the palette, so a palette can make both discs one bold opaque colour or
+see-through films whose crossings deepen. With 6-fold discs the two come into
+register every 10 s.
 
 The pattern
 -----------
@@ -44,39 +45,45 @@ CONFIG = 'imorph_palette'
 BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
 # Palettes: ground, colour field A, colour field B, lower disc, upper disc.
 #
-# Both discs are drawn into one masked layer and the upper disc is LIGHTENed
-# onto the lower disc only, never onto the ground, so the crossing colour is
-# max(lower, upper) per channel whatever the background. Each palette picks
-# its crossing by its colours:
-#   solid  upper >= lower in every channel, so the upper disc simply covers
-#          the lower one (the Humism look; mono palettes are this)
-#   glow   the channel maxima mix into a third colour at every crossing
-# Mono palettes set both colour fields to the ground so they vanish. Beads
-# and rim marks use the upper disc colour, so they read on light grounds.
+# Each disc is flattened in its own masked layer, and the mask's alpha is
+# colour field B's alpha channel, so a palette sets how see-through each
+# whole disc is. Flattening first means the transparency applies once per
+# disc: the round caps where polygon sides meet never double up into knots.
+# No blend modes are used (the validator rejects blendMode on Group, and
+# per-PartDraw blending would double at the caps). Three kinds:
+#   dual   two disc colours, both see-through, so the upper disc shows the
+#          lower through it at every crossing (the one two-colour palette)
+#   same   both discs one opaque colour; crossings merge into a single bold
+#          figure against a contrasting ground (the Humism look)
+#   film   both discs one see-through colour, like two sheets of tinted
+#          film: each alone lets the ground through, and where they cross
+#          the alpha stacks and the colour deepens
+# Beads and rim marks use the upper disc colour, so they read on any ground.
 THEMES = [
-    ('theme_thursday', 'Thursday Afternoon', 'glow', ['#0B0A1F', '#3B1C70', '#0D4A63', '#E2337A', '#26C2D9']),
-    ('theme_white_black', 'White on Black', 'solid', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
-    ('theme_black_white', 'Black on White', 'solid', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
-    ('theme_apollo', 'Apollo', 'solid', ['#04070F', '#13305E', '#3A1A4C', '#3450BC', '#FFE0C4']),
-    ('theme_neroli', 'Neroli', 'glow', ['#160805', '#6A1F0E', '#503A08', '#E0447A', '#F7B020']),
-    ('theme_discreet', 'Discreet Music', 'solid', ['#05131A', '#0E3E3B', '#1B2A55', '#1A9A82', '#A8EEDA']),
-    ('theme_lux', 'Lux', 'glow', ['#110718', '#5A1047', '#10335A', '#9257FF', '#FF4D9E']),
-    ('theme_airports', 'Airports', 'glow', ['#EDE8E0', '#E0CDB6', '#CFDCE6', '#2E4A8E', '#B0563F']),
+    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#940D4A63', '#FF3D86', '#2ED8F0']),
+    ('theme_white_black', 'White on Black', 'same', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
+    ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
+    ('theme_apollo', 'Apollo', 'same', ['#0B1C46', '#1E3F82', '#2C1F63', '#FFE6B8', '#FFE6B8']),
+    ('theme_neroli', 'Neroli', 'same', ['#F0A030', '#F8C45C', '#E2742A', '#4A0B16', '#4A0B16']),
+    ('theme_discreet', 'Discreet Music', 'same', ['#0F5B52', '#1F7C6B', '#0B435A', '#F3EAD3', '#F3EAD3']),
+    ('theme_lux', 'Lux', 'film', ['#160622', '#3E0C4C', '#800E2150', '#FF4FB0', '#FF4FB0']),
+    ('theme_airports', 'Airports', 'same', ['#EDE6DA', '#E2D2BC', '#D2DDE6', '#1F3A6B', '#1F3A6B']),
 ]
 
 
-def _rgb(c):
-    return [int(c[i:i + 2], 16) for i in (1, 3, 5)]
+def _argb(c):
+    c = c.lstrip('#')
+    c = c if len(c) == 8 else 'FF' + c
+    return [int(c[i:i + 2], 16) for i in (0, 2, 4, 6)]
 
 
 for _key, _label, _kind, _colors in THEMES:
-    _lo, _up = _rgb(_colors[3]), _rgb(_colors[4])
-    _cross = [max(l, u) for l, u in zip(_lo, _up)]
-    if _kind == 'solid':
-        assert _cross == _up, f'{_label}: solid needs upper >= lower per channel'
-    else:
-        assert sum(abs(c - u) for c, u in zip(_cross, _up)) > 60, f'{_label}: crossing too close to upper'
-        assert sum(abs(c - l) for c, l in zip(_cross, _lo)) > 60, f'{_label}: crossing too close to lower'
+    _lo, _up = _argb(_colors[3]), _argb(_colors[4])
+    assert _lo[0] == _up[0] == 255, f'{_label}: disc colours are opaque; disc alpha lives in field B'
+    assert (_lo == _up) == (_kind != 'dual'), f'{_label}: only the dual palette has two disc colours'
+    assert (_argb(_colors[2])[0] < 255) == (_kind != 'same'), f'{_label}: dual and film palettes are see-through'
+    _bg = _argb(_colors[0])[1:]
+    assert sum(abs(a - b) for a, b in zip(_up[1:], _bg)) > 200, f'{_label}: discs too close to ground'
 
 # --- time ------------------------------------------------------------------
 
@@ -239,7 +246,7 @@ def build():
     palette = element(configs, 'ColorConfiguration', id=CONFIG, displayName=CONFIG, defaultValue=0)
     for i, (key, _, _, colors) in enumerate(THEMES):
         element(palette, 'ColorOption', id=i, displayName=key,
-                colors=' '.join('#FF' + c[1:].upper() for c in colors))
+                colors=' '.join('#' + ('FF' if len(c) == 7 else '') + c[1:].upper() for c in colors))
 
     scene = element(face, 'Scene', backgroundColor='#000000')
 
@@ -261,13 +268,17 @@ def build():
         element(part, 'Image', resource='glow')
 
     # Minute wheel below, seconds wheel above.
-    # Both wheels share one masked layer, so the upper disc's LIGHTEN sees
-    # only the lower disc (transparent elsewhere), never the ground. The mask
-    # is the pattern window.
+    # Both wheels share one masked layer clipped to the pattern window.
+    # Each wheel is flattened in its own masked layer whose mask takes field
+    # B's alpha: see-through for dual and film palettes, opaque otherwise.
     discs = group(scene, 'discs')
     ambient(discs)
-    disc(discs, 'minute_wheel', MINUTE_WHEEL, LOWER)
-    disc(discs, 'seconds_wheel', SECONDS_WHEEL, UPPER, blendMode='LIGHTEN')
+    for name, angle, color in (('minute_wheel', MINUTE_WHEEL, LOWER),
+                               ('seconds_wheel', SECONDS_WHEEL, UPPER)):
+        layer = group(discs, name + '_layer', renderMode='SOURCE')
+        disc(layer, name, angle, color)
+        film = draw(layer, renderMode='MASK')
+        dot(film, C, C, 2 * WINDOW_R + 2, fill=GLOW_B)
     window = draw(discs, renderMode='MASK')
     dot(window, C, C, 2 * WINDOW_R + 2, fill='#FFFFFFFF')
 
