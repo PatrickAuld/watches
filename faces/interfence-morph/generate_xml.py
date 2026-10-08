@@ -138,7 +138,7 @@ EPS = 0.02         # rad; |curvature| floor so a straight side stays a finite ar
 
 BAND_R = 212       # bead track
 BAND_W = 26
-AMBIENT_DISC = '#FF4A4A4A'   # stationary pattern in ambient: dim grey, both discs
+AMBIENT_DISC = '#FF2E2E2E'   # stationary pattern in ambient: dim grey, seconds wheel only
 AMBIENT_BEAD = '#FFFFFFFF'
 WINDOW_R = BAND_R - BAND_W / 2
 
@@ -277,8 +277,10 @@ def build():
     # dual and film discs see-through; dim grey in ambient) and its MASK is the
     # rotating pattern drawn opaque white, flattened in a masked group of its
     # own so overlapping round caps can't double. The masks are opaque white,
-    # so alpha or luminance masking give the same result. In ambient the
-    # pattern stays: the wheels freeze at the minute and recolour to grey.
+    # so alpha or luminance masking give the same result. In ambient only
+    # the seconds wheel remains, in dim grey. Ambient renders on the minute,
+    # when [SECOND] is 0, so that disc sits at 0 deg every update and does
+    # not turn; only the slow morph changes it.
     discs = group(scene, 'discs')
     for name, angle, color in (('minute_wheel', MINUTE_WHEEL, LOWER),
                                ('seconds_wheel', SECONDS_WHEEL, UPPER)):
@@ -286,9 +288,10 @@ def build():
         live = group(layer, name + '_colour', renderMode='SOURCE')
         ambient(live)
         dot(draw(live), C, C, 2 * WINDOW_R + 2, fill=color)
-        dim = group(layer, name + '_ambient', renderMode='SOURCE', alpha=0)
-        element(dim, 'Variant', mode='AMBIENT', target='alpha', value=255)
-        dot(draw(dim), C, C, 2 * WINDOW_R + 2, fill=AMBIENT_DISC)
+        if name == 'seconds_wheel':     # ambient shows this disc only
+            dim = group(layer, name + '_ambient', renderMode='SOURCE', alpha=0)
+            element(dim, 'Variant', mode='AMBIENT', target='alpha', value=255)
+            dot(draw(dim), C, C, 2 * WINDOW_R + 2, fill=AMBIENT_DISC)
         shape = group(layer, name + '_shape', renderMode='MASK')
         disc(shape, name, angle, '#FFFFFFFF')
         dot(draw(shape, renderMode='MASK'), C, C, 2 * WINDOW_R + 2, fill='#FFFFFFFF')

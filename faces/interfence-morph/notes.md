@@ -142,13 +142,14 @@ beads.
 Feedback: ambient should be the stationary current pattern, and the hour and
 minute markers needed to be more visible in both modes.
 
-- **Ambient** keeps both wheels at their current positions, recoloured to
-  dim grey (#4A4A4A) on black. The morph continues at each ambient update.
-  The ground, colour fields, rim track and seconds bead are hidden. The hour
-  and minute beads are solid white, and the minute bead steps once a minute.
-  This lights far more pixels than Google's roughly 15% ambient guidance, so
-  watch battery use and burn-in. The grey can be lowered in
-  `generate_xml.py` (`AMBIENT_DISC`).
+- **Ambient** shows only the seconds wheel's pattern, in dim grey (#2E2E2E) on
+  black. Ambient renders on the minute, when `[SECOND]` is 0, so that disc
+  sits at 0° on every update and never turns; only the slow morph changes it.
+  (The minute wheel would step 6° each minute.) Both wheels at #4A4A4A were
+  tried first and lit too much. The ground, colour fields, rim track, minute
+  wheel and seconds bead are hidden. The hour and minute beads are solid
+  white, and the minute bead steps once a minute. Adjust `AMBIENT_DISC` in
+  `generate_xml.py` if needed.
 - **Markers**: the rim track widened from 22 to 26 px (r 199–225). The hour
   bead grew from 17 to 23 px and the minute bead from 10 to 14 px, the rim
   dots are slightly larger, and the seconds bead is 6 px.
@@ -166,8 +167,8 @@ eight palettes at assorted times.
 - Confirm that the nested masked layers render (each pattern mask inside a
   wheel layer inside the window layer), and that Thursday Afternoon and Lux
   show see-through discs.
-- Confirm that the ambient pattern updates each minute and that its lit-pixel
-  load is acceptable.
+- Confirm that the ambient disc holds still (it relies on ambient updates
+  landing at second 0) and that its lit-pixel load is acceptable.
 - Confirm that the scaled groups keep their stroke widths.
 - Check that 156 expression-driven arcs hold the frame rate while the seconds
   wheel turns, and that the XML loads promptly. At about 500 KB it is larger

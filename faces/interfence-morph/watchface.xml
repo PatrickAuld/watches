@@ -49,14 +49,6 @@
             </Ellipse>
           </PartDraw>
         </Group>
-        <Group x="0" y="0" width="450" height="450" name="minute_wheel_ambient" renderMode="SOURCE" alpha="0">
-          <Variant mode="AMBIENT" target="alpha" value="255" />
-          <PartDraw x="0" y="0" width="450" height="450">
-            <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
-              <Fill color="#FF4A4A4A" />
-            </Ellipse>
-          </PartDraw>
-        </Group>
         <Group x="0" y="0" width="450" height="450" name="minute_wheel_shape" renderMode="MASK">
           <Group x="0" y="0" width="450" height="450" name="minute_wheel" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
             <Transform target="angle" value="([MINUTE]*6+[SECOND]*0.1+[MILLISECOND]*0.0001)" />
@@ -1292,7 +1284,7 @@
           <Variant mode="AMBIENT" target="alpha" value="255" />
           <PartDraw x="0" y="0" width="450" height="450">
             <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
-              <Fill color="#FF4A4A4A" />
+              <Fill color="#FF2E2E2E" />
             </Ellipse>
           </PartDraw>
         </Group>
