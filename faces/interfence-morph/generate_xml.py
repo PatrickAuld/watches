@@ -60,9 +60,9 @@ BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in ran
 #          the alpha stacks and the colour deepens
 # Beads and rim marks use the upper disc colour, so they read on any ground.
 THEMES = [
+    ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
     ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#940D4A63', '#FF3D86', '#2ED8F0']),
     ('theme_white_black', 'White on Black', 'same', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
-    ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
     ('theme_apollo', 'Apollo', 'same', ['#0B1C46', '#1E3F82', '#2C1F63', '#FFE6B8', '#FFE6B8']),
     ('theme_neroli', 'Neroli', 'same', ['#F0A030', '#F8C45C', '#E2742A', '#4A0B16', '#4A0B16']),
     ('theme_discreet', 'Discreet Music', 'same', ['#0F5B52', '#1F7C6B', '#0B435A', '#F3EAD3', '#F3EAD3']),

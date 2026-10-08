@@ -18,8 +18,8 @@ features:
 
 style:
   family: kinetic-interference
-  background: "#0b0a1f"
-  accent: "#26c2d9"
+  background: "#ffffff"
+  accent: "#000000"
 
 description: >
   After the Humism kinetic dials: two discs carry the same bold 6-fold pattern,
@@ -29,8 +29,8 @@ description: >
   from concave stars to hard straight lines to scalloped petals, while it
   twists and staggers, in the manner of Brian Eno's ambient paintings. The
   bending is too slow to watch, but the face is different a few minutes later.
-  Eight palettes: mostly both discs in one bold colour on a contrasting
-  ground (white on black, black on white among them), one see-through film
+  Eight palettes, black patterns on white by default: mostly both discs in
+  one bold colour on a contrasting ground, one see-through film
   whose crossings deepen, and one two-colour palette with transparent discs.
   Time is read from beads on the rim.
 

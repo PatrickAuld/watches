@@ -4,9 +4,9 @@
   <Metadata key="PREVIEW_TIME" value="10:10:35" />
   <UserConfigurations>
     <ColorConfiguration id="imorph_palette" displayName="imorph_palette" defaultValue="0">
-      <ColorOption id="0" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #940D4A63 #FFFF3D86 #FF2ED8F0" />
-      <ColorOption id="1" displayName="theme_white_black" colors="#FF000000 #FF000000 #FF000000 #FFFFFFFF #FFFFFFFF" />
-      <ColorOption id="2" displayName="theme_black_white" colors="#FFFFFFFF #FFFFFFFF #FFFFFFFF #FF000000 #FF000000" />
+      <ColorOption id="0" displayName="theme_black_white" colors="#FFFFFFFF #FFFFFFFF #FFFFFFFF #FF000000 #FF000000" />
+      <ColorOption id="1" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #940D4A63 #FFFF3D86 #FF2ED8F0" />
+      <ColorOption id="2" displayName="theme_white_black" colors="#FF000000 #FF000000 #FF000000 #FFFFFFFF #FFFFFFFF" />
       <ColorOption id="3" displayName="theme_apollo" colors="#FF0B1C46 #FF1E3F82 #FF2C1F63 #FFFFE6B8 #FFFFE6B8" />
       <ColorOption id="4" displayName="theme_neroli" colors="#FFF0A030 #FFF8C45C #FFE2742A #FF4A0B16 #FF4A0B16" />
       <ColorOption id="5" displayName="theme_discreet" colors="#FF0F5B52 #FF1F7C6B #FF0B435A #FFF3EAD3 #FFF3EAD3" />

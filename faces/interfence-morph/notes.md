@@ -108,9 +108,9 @@ keeps the transparency.
 
 | palette | kind | ground | discs | crossing |
 |---|---|---|---|---|
-| Thursday Afternoon (default) | dual, 58% | indigo | rose below, cyan above | cyan over rose: periwinkle |
+| Black on White (default) | same | white | black | merges |
+| Thursday Afternoon | dual, 58% | indigo | rose below, cyan above | cyan over rose: periwinkle |
 | White on Black | same | black | white | merges |
-| Black on White | same | white | black | merges |
 | Apollo | same | night navy | moon cream | merges |
 | Neroli | same | saffron | oxblood | merges |
 | Discreet Music | same | sea teal | bone | merges |
@@ -157,3 +157,6 @@ eight palettes at assorted times.
 - Check that 156 expression-driven arcs hold the frame rate while the seconds
   wheel turns, and that the XML loads promptly. At about 500 KB it is larger
   than the other promoted faces.
+
+The default palette became Black on White on 2026-10-08, after Patrick's
+review; it is option 0, so the picker thumbnail shows it.
