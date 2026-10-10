@@ -15,7 +15,7 @@ rerun this script to move a boundary; every angle, ramp and label follows.
     Evening   20:30 - 23:00       (kids asleep)
 
   Weekends (Saturday, Sunday):
-    Sleep     23:00 - 6:15        Awake    6:15 - 23:00
+    Sleep     23:00 - 6:15        Live     6:15 - 23:00
 
 Sleep is shared by both, so Friday and Sunday nights cross midnight without a
 seam. Every weekday-only element (chapters, commutes, lozenges, roads) is
@@ -71,7 +71,7 @@ SCHEDULE = [
     ('work', 'Work', hm(9, 30), hm(17, 20), '#10B57E', '#93F7CF', '#04563B', 'weekday'),
     ('hearth', 'Family', hm(18, 30), hm(20, 30), '#F2662A', '#FFC9A1', '#782409', 'weekday'),
     ('evening', 'Evening', hm(20, 30), hm(23), '#A04BE6', '#E2B9FF', '#3E1466', 'weekday'),
-    ('awake', 'Awake', hm(6, 15), hm(23), '#D62839', '#FFB3B8', '#5E0A14', 'weekend'),
+    ('live', 'Live', hm(6, 15), hm(23), '#D62839', '#FFB3B8', '#5E0A14', 'weekend'),
 ]
 # Commutes are weekday-only.
 # key, start, end, subtitle
@@ -444,7 +444,7 @@ def graduations(parent):
             transform(part, 'alpha', outside_fade(t, 230))
             radial_line(part, 180.5, 185, GOLD, 1.2)
     # Five-minute graduations appear inside the zoomed chapter. One mark serves
-    # every chapter that contains it (Work and Awake overlap); at most one of
+    # every chapter that contains it (Work and Live overlap); at most one of
     # their zooms is non-zero.
     for t in range(0, 1440, 5):
         if t % 30 == 0:

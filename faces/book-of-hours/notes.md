@@ -22,14 +22,14 @@ Weekends (Saturday and Sunday, added 2026-10-10) have only two chapters:
 
 | Time | Event | Chapter |
 |---|---|---|
-| 6:15 | wake up | Awake (ruby, full sun) |
+| 6:15 | wake up | Live (ruby, full sun) |
 | 11:00 | sleep | Sleep (lapis, crescent) |
 
 Each `SCHEDULE` row says whether it is `daily`, `weekday` or `weekend`;
 commutes are weekday-only. `[DAY_OF_WEEK]` (Sunday = 1, Saturday = 7) drives
 `WEEKEND = clamp(abs(d − 4) − 2, 0, 1)`, and every weekday-only element is
 multiplied by `1 − WEEKEND`, every weekend one by `WEEKEND`. Sleep is shared,
-so Friday and Sunday nights cross midnight without a jump. Awake runs 16:45,
+so Friday and Sunday nights cross midnight without a jump. Live runs 16:45,
 so the countdown grows an hours-tens digit, and the fleuron under the
 subtitle was pulled out to clear it. Ruby rather than saffron: a gold enamel
 disappeared into the gilt bezel.

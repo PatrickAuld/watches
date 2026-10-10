@@ -20,7 +20,7 @@ The day (edit SCHEDULE / COMMUTES and rerun):
     Evening   20:30 - 23:00
 
   Weekends (Saturday, Sunday):
-    Sleep     23:00 - 6:15        Awake    6:15 - 23:00
+    Sleep     23:00 - 6:15        Live     6:15 - 23:00
 
 Sleep is shared, so Friday and Sunday nights cross midnight without a seam.
 Weekday-only elements are multiplied by WEEKDAY and weekend-only ones by
@@ -70,7 +70,7 @@ SCHEDULE = [
     ('work', 'Work', hm(9, 30), hm(17, 20), '#10B57E', '#93F7CF', '#04563B', 'weekday'),
     ('hearth', 'Family', hm(18, 30), hm(20, 30), '#F2662A', '#FFC9A1', '#782409', 'weekday'),
     ('evening', 'Evening', hm(20, 30), hm(23), '#A04BE6', '#E2B9FF', '#3E1466', 'weekday'),
-    ('awake', 'Awake', hm(6, 15), hm(23), '#D62839', '#FFB3B8', '#5E0A14', 'weekend'),
+    ('live', 'Live', hm(6, 15), hm(23), '#D62839', '#FFB3B8', '#5E0A14', 'weekend'),
 ]
 # Commutes are weekday-only.
 # key, start, end, subtitle

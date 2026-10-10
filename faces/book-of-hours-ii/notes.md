@@ -12,10 +12,10 @@ minute, midnight at the bottom, noon at the top. Only the camera moves.
 ## Weekends
 
 Saturday and Sunday (added 2026-10-10) have two chapters: Sleep 11:00–6:15
-and Awake 6:15–11:00 (ruby, full sun). The `SCHEDULE` rows are tagged `daily`,
+and Live 6:15–11:00 (ruby, full sun). The `SCHEDULE` rows are tagged `daily`,
 `weekday` or `weekend` and commutes are weekday-only, gated as in
 [Book of Hours](../book-of-hours/notes.md) by `[DAY_OF_WEEK]`. Sleep is
-shared, so the day change at midnight never moves the camera. Awake is long,
+shared, so the day change at midnight never moves the camera. Live is long,
 so it barely magnifies (1.26×), like Work. The countdown gains an
 hours-tens digit for it.
 

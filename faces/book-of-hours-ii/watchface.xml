@@ -75,11 +75,11 @@
           </PartImage>
         </Group>
       </Group>
-      <Group x="0" y="0" width="450" height="450" name="awakeEmblemAt" pivotX="0.5" pivotY="0.5" angle="39.375">
-        <Group x="209" y="89" width="32" height="32" name="awakeEmblem" alpha="90">
+      <Group x="0" y="0" width="450" height="450" name="liveEmblemAt" pivotX="0.5" pivotY="0.5" angle="39.375">
+        <Group x="209" y="89" width="32" height="32" name="liveEmblem" alpha="90">
           <Transform target="alpha" value="clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1) * (90 + 0.6 * 255 * clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1) * clamp((502.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 502.5)) / 3, 0, 1)) * clamp(1 - 2 * (clamp((217.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 60) % 1440) - 217.5)) / 10, 0, 1) + (1 - clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1)) * clamp((62.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 62.5)) / 10, 0, 1) + (1 - clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1)) * clamp((235 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 870) % 1440) - 235)) / 10, 0, 1) + (1 - clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1)) * clamp((60 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 330) % 1440) - 60)) / 10, 0, 1) + (1 - clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1)) * clamp((75 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 210) % 1440) - 75)) / 10, 0, 1) + clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1) * clamp((502.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 502.5)) / 10, 0, 1)), 0, 1)" />
           <PartImage x="0" y="0" width="32" height="32">
-            <Image resource="emblem_awake" />
+            <Image resource="emblem_live" />
           </PartImage>
         </Group>
       </Group>
@@ -1183,13 +1183,13 @@
         <Image resource="subtitle_evening" />
       </PartImage>
     </Group>
-    <Group x="0" y="0" width="450" height="450" name="awakeLettering" alpha="0">
+    <Group x="0" y="0" width="450" height="450" name="liveLettering" alpha="0">
       <Transform target="alpha" value="255 * clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1) * clamp((502.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 502.5)) / 3, 0, 1)" />
       <PartImage x="100" y="201" width="250" height="50">
-        <Image resource="title_awake" />
+        <Image resource="title_live" />
       </PartImage>
       <PartImage x="100" y="309" width="250" height="22">
-        <Image resource="subtitle_awake" />
+        <Image resource="subtitle_live" />
       </PartImage>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="to_workLettering" alpha="0">

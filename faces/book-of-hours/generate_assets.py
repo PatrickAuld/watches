@@ -347,7 +347,7 @@ def emblem_evening(ch):
     finish(sk, layers, f'emblem_{ch.key}')
 
 
-def emblem_awake(ch):
+def emblem_live(ch):
     """A whole sun at its height: the weekend has no sections, only daylight."""
     sk = Sketch(60, 60)
     layers = [(hexrgb(ch.pigment), sk.glow(30, 30, 27) * 0.5)]
@@ -650,7 +650,7 @@ def lettering():
                 tracking=1.5, fill=IVORY, outline=0.9)
 
     emblems = {'sleep': emblem_sleep, 'dawn': emblem_dawn, 'work': emblem_work,
-               'hearth': emblem_hearth, 'evening': emblem_evening, 'awake': emblem_awake}
+               'hearth': emblem_hearth, 'evening': emblem_evening, 'live': emblem_live}
     for ch in face.CHAPTERS:
         emblems[ch.key](ch)
     emblem_to_work('to_work')

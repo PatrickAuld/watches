@@ -3432,19 +3432,19 @@
         <Image resource="subtitle_evening" />
       </PartImage>
     </Group>
-    <Group x="0" y="0" width="450" height="450" name="awakeLettering" alpha="0">
+    <Group x="0" y="0" width="450" height="450" name="liveLettering" alpha="0">
       <Transform target="alpha" value="255 * clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1) * clamp((502.5 - abs(((([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60) + 1065) % 1440) - 502.5)) / 3, 0, 1)" />
-      <Group x="0" y="0" width="450" height="450" name="awakeEmblem">
+      <Group x="0" y="0" width="450" height="450" name="liveEmblem">
         <Variant mode="AMBIENT" target="alpha" value="0" />
         <PartImage x="195" y="88" width="60" height="60">
-          <Image resource="emblem_awake" />
+          <Image resource="emblem_live" />
         </PartImage>
       </Group>
       <PartImage x="100" y="145" width="250" height="50">
-        <Image resource="title_awake" />
+        <Image resource="title_live" />
       </PartImage>
       <PartImage x="100" y="266" width="250" height="22">
-        <Image resource="subtitle_awake" />
+        <Image resource="subtitle_live" />
       </PartImage>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="to_workLettering" alpha="0">
