@@ -10,9 +10,12 @@ sideways under the mask to show the time.
   change into the next numeral takes ten minutes and is half and half at
   **:59:30**, so it runs from :54:30 to :04:30. At :59 the outgoing numeral
   is still slightly ahead.
-- **Dance**: live, the numeral dances between changes: sway left, sway
-  right, crouch, jump, back to rest between each (a 6 s loop, 0.75 s a
-  step). It stops at rest for the hour change. Ambient shows it still.
+- **Dance**: live, between changes, the numeral dances like a rubber-hose
+  cartoon: feet planted, the body bends into a sway from the hips, it
+  squashes down (waist widening) on each beat, and the head lags behind.
+  Two-digit hours dance in step like a chorus line. A smooth two-second loop
+  of twelve frames. It comes back to rest for the hour change. Ambient shows
+  it still.
 - **Minute**: a white analog hand, also a Scanimation. Over every minute it
   changes from minute m's position into m+1's through the barrier: whole on
   the minute, two interleaved ghost hands at :30 seconds. Sixty faint
@@ -35,16 +38,19 @@ over ten minutes, so the numeral visibly changes into the next.
 - Twelve window images (`scan_window_k`), each its own SOURCE/MASK group,
   switched on by group alpha. Twelve images inside one MASK group would
   intersect (destination-in) rather than alternate.
-- **Dance windows** (`scan_dance_k_j`): numeral k at rest in parity k % 2
-  and numeral k in move j in the other parity. The hour sheet slides 3 px a
-  step, rest -> move -> rest, so one window covers each round trip and every
-  switch happens over the rest frame, where all of hour k's windows agree.
-  Each step holds 20 % at each end and eases across the middle 60 %. The
-  dance fills the first 3000 s of each window (4000 steps, a whole number of
-  loops), so it ends at rest exactly when the change begins. Moves stay near
-  the dial centre (sways rotate about it) so they don't leave the window.
-  Live/ambient are two wrapper groups with AMBIENT Variants; the ambient one
-  holds the plain hour chain.
+- **Dance windows** (`scan_dance_k_p`): numeral k in frame p (parity
+  (k + p) % 2) and frame p + 1 (the other parity), chained exactly like the
+  hour windows. The hour sheet slides 3 px a frame, continuously, at six
+  frames a second, so every switch happens over the frame both windows
+  share, and between frames the stripes show the neighbours interleaved, the
+  printed-Scanimation look. Frames are drawn by inverse-mapping each digit:
+  squash about the feet with area-keeping widening, a sway that grows as
+  height^1.7, and a head flick at twice the rate. All terms are zero at frame
+  0, so frame 0 is the rest numeral. The dance fills the first 3000 s of
+  each window (1500 loops), so it ends at rest exactly when the change
+  begins. Live/ambient are two wrapper groups with AMBIENT Variants; the
+  ambient one holds the plain hour chain. Mirroring the pair was tried and
+  dropped: leaning together, the 1 of 12 ran into the 2.
 - The minute hand uses the same two-frame scheme. Sixty windows
   (`scan_minute_m`) hold the hand at m and m+1, with hand m in column parity
   m % 2. They are cropped to the hand's bounding box, so sixty decoded bitmaps
@@ -83,8 +89,10 @@ over ten minutes, so the numeral visibly changes into the next.
 
 7. **The numbers dance** (Patrick: "show more actual animation when live. I
    want the numbers to dance a little and still transition. We can have
-   multiple scanimation sets"). Four extra two-frame windows per hour,
-   chained through the rest frame.
+   multiple scanimation sets"). First pass: four rigid moves (sways, crouch,
+   jump) through a rest frame. Patrick: "That looks cheap." Rigid tilts with
+   a snap back to rest read as clip art. Now a twelve-frame loop of
+   bending, squashing, rubber-hose motion with a continuous slide.
 
 Ambient: a Variant alpha directly on the hour windows would override the
 per-window switch, so Variants sit on two wrapper groups instead: live

@@ -27,16 +27,24 @@ Hours: two frames per window
     time shifted back 4.5 minutes; offset = 3 * (window + change) mod 6.
 
 Hours dance between changes
-    Live, the numeral never sits still. Each hour has DANCE_MOVES more
-    two-frame windows: dance window (k, j) interleaves numeral k at rest and
-    numeral k in move j (sway left, sway right, crouch, jump), rest in parity
-    k % 2 and the move in the other parity. The hour sheet keeps sliding 3 px
-    per DANCE_STEP: rest, move 0, rest, move 1, rest ... A rest -> move -> rest
-    round trip is 6 px, so it stays in one window, and every switch happens
-    with the sheet over the rest frame, where all windows of hour k agree.
-    Each step holds, then eases across, so poses read crisply. The dance stops
-    at rest for the ten-minute hour change, which then runs as before. In
-    ambient the dance windows are hidden and the plain hour chain shows.
+    Live, the numeral dances like a rubber-hose cartoon: feet planted on the
+    baseline, its body bends into a sway from the hips, it squashes down on
+    each beat with its waist widening, and its head lags behind the sway. In
+    two-digit hours both digits dance in step, like a chorus line, each bending
+    from its own feet (mirrored, they would collide leaning together). That is
+    DANCE_FRAMES drawn frames of one smooth loop, and frame 0 is the numeral
+    at rest.
+
+    The frames are chained like the hour windows: dance window (k, p)
+    interleaves numeral k in frame p (parity (k + p) % 2) and frame p + 1 (the
+    other parity), and the hour sheet keeps sliding 3 px a frame (DANCE_RATE a second), so
+    each window switch happens where the sheet sits over the frame both
+    windows share. The slide is continuous, as in a printed Scanimation, so
+    between frames the stripes show the two neighbours interleaved, which
+    reads as motion. The dance fills the first 3000 s of each window, a
+    whole number of loops, so it arrives back at rest just as the ten-minute
+    hour change begins. In ambient the dance windows are hidden and the
+    plain hour chain shows.
 
 Minutes: an analog hand, also a Scanimation
     Sixty minute windows, built the same way as the hours: window m
@@ -53,6 +61,7 @@ import math
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+from scipy.ndimage import map_coordinates
 
 HERE = Path(__file__).parent
 ASSETS = HERE / "assets"
@@ -70,18 +79,15 @@ CHANGE_SECONDS = 600        # the hour change lasts ten minutes...
 HALFWAY_BEFORE_HOUR = 30    # ...and is half done this many seconds before the hour
 WINDOW_LAG = CHANGE_SECONDS // 2 - HALFWAY_BEFORE_HOUR   # 270 s: window k runs to k+1:04:30
 
-DANCE_STEP = 0.75           # s per rest -> move or move -> rest step
-DANCE_EASE = 0.6            # fraction of each step spent sliding; the rest holds the pose
+DANCE_FRAMES = 12           # drawn frames per loop
+DANCE_RATE = 6              # frames a second: a two-second loop, a beat every second
 DANCE_SECONDS = 3600 - CHANGE_SECONDS   # the dance fills each window up to its change
-# Moves: (angle deg clockwise, scale x, scale y, dy px, anchor y px from centre).
-DANCE_MOVES = [
-    (-8.0, 1.0, 1.0, 0.0, 0.0),     # sway left (about the centre, so nothing leaves the window)
-    (8.0, 1.0, 1.0, 0.0, 0.0),      # sway right
-    (0.0, 1.04, 0.86, 0.0, 112.0),  # crouch, feet planted
-    (0.0, 0.94, 1.03, -10.0, 0.0),  # jump
-]
-DANCE_CYCLE = 2 * len(DANCE_MOVES)  # steps per loop
-assert (DANCE_SECONDS / DANCE_STEP) % DANCE_CYCLE == 0, "the dance must end at rest"
+assert DANCE_SECONDS * DANCE_RATE % DANCE_FRAMES == 0, "the dance must end at rest"
+SWAY = 21.0                 # px: how far the top of a digit sways
+SWAY_BEND = 1.7             # the sway curves: offset grows as height ** SWAY_BEND
+HEAD = 6.0                  # px: the head's lagging flick, twice a loop
+SQUASH = 0.09               # fraction of height lost at the bottom of each beat
+FEET = 112                  # px below centre: the numerals' baseline
 
 HAND = (-26, 192, 15.0, 6.0)   # minute hand: tail r, tip r, base width, tip width
 HAND_BACKING = 3.0             # px of black around the hand
@@ -110,12 +116,8 @@ CHANGE = f"clamp(({WINDOW_CLOCK} % 3600 - {3600 - CHANGE_SECONDS}) / {CHANGE_SEC
 # Seconds into the current window (its dance, then its change), with milliseconds.
 INTO = (f"(([MINUTE] * 60 + [SECOND] + {3600 - WINDOW_LAG % 3600}) % 3600"
         f" + [MILLISECOND] / 1000)")
-DANCE_S = f"(clamp({INTO}, 0, {DANCE_SECONDS}) / {DANCE_STEP:g})"   # steps danced so far
-DANCE_N = f"floor({DANCE_S})"
-DANCE_F = (f"clamp(({DANCE_S} - {DANCE_N} - {(1 - DANCE_EASE) / 2:g}) / {DANCE_EASE:g},"
-           f" 0, 1)")
-DANCE = f"({DANCE_N} + {DANCE_F} * {DANCE_F} * (3 - 2 * {DANCE_F}))"   # smoothstep within a step
-DANCE_MOVE = f"(floor({DANCE_N} / 2) % {len(DANCE_MOVES)})"
+DANCE = f"(clamp({INTO}, 0, {DANCE_SECONDS}) * {DANCE_RATE})"   # frames danced
+DANCE_FRAME = f"(floor({DANCE}) % {DANCE_FRAMES})"
 DANCING = f"{INTO} < {DANCE_SECONDS}"
 HOUR_X = f"({-HOUR_PERIOD} + (({WINDOW} + {CHANGE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
 DANCE_X = f"({-HOUR_PERIOD} + (({WINDOW} + {DANCE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
@@ -149,46 +151,73 @@ def radial_bar(x, y, angle, r0, r1, width):
     return (along >= r0) & (along <= r1) & (np.abs(across) <= width / 2)
 
 
-def numeral_layers():
-    """Supersampled coverage of each hour numeral, centred on the dial."""
-    big = SIZE * SS
+def numeral_font():
     font_size = 10
     while True:
         font = ImageFont.truetype(str(FONT), font_size)
         top, bottom = font.getbbox("0")[1], font.getbbox("0")[3]
         if bottom - top >= NUMERAL_HEIGHT * SS:
-            break
+            return font, top, bottom
         font_size += 4
-    layers = []
-    for label in HOUR_LABELS:
+
+
+def numeral_digits(label):
+    """Each digit of an hour numeral as (supersampled coverage, centre x px from dial centre)."""
+    font, top, bottom = numeral_font()
+    big = SIZE * SS
+    probe = ImageDraw.Draw(Image.new("L", (1, 1)))
+    left, _, right, _ = probe.textbbox((0, 0), label, font=font)
+    x = big / 2 - (left + right) / 2
+    y = big / 2 - (top + bottom) / 2
+    digits = []
+    for i, ch in enumerate(label):
         img = Image.new("L", (big, big), 0)
         draw = ImageDraw.Draw(img)
-        left, _, right, _ = draw.textbbox((0, 0), label, font=font)
-        draw.text((big / 2 - (left + right) / 2, big / 2 - (top + bottom) / 2),
-                  label, font=font, fill=255)
-        layers.append(img)
-    return layers
+        dx = x + font.getlength(label[:i])
+        draw.text((dx, y), ch, font=font, fill=255)
+        l, _, r, _ = draw.textbbox((dx, y), ch, font=font)
+        digits.append((np.asarray(img, np.float32) / 255, ((l + r) / 2 - big / 2) / SS))
+    return digits
 
 
-def pose(img, move):
-    """A numeral image posed by a dance move, as supersampled coverage."""
-    angle, sx, sy, dy, anchor = move
+def numeral_layers():
+    """Supersampled coverage of each hour numeral at rest, centred on the dial."""
+    return [np.maximum.reduce([d for d, _ in numeral_digits(label)]) > 0.5
+            for label in HOUR_LABELS]
+
+
+def dance_pose(digit, cx, t):
+    """A digit in frame t (0..1) of the dance loop.
+
+    Inverse-maps each output pixel to the rest glyph: squash about the feet
+    (widening to keep the area), then a bending sway plus a lagging head flick.
+    Every term is zero at t = 0, so frame 0 is the rest pose.
+    """
     big = SIZE * SS
-    c = big / 2
-    ay = c + anchor * SS
-    a = math.radians(angle)
-    # Forward map about (c, ay): scale, rotate clockwise, then shift by dy.
-    # Image.transform wants the inverse: output (u, v) -> input (x, y).
-    ca, sa = math.cos(a), math.sin(a)
-    def inverse(u, v):
-        u, v = u - c, v - ay - dy * SS
-        x, y = ca * u + sa * v, -sa * u + ca * v
-        return x / sx + c, y / sy + ay
-    x0, y0 = inverse(0, 0)
-    (xu, yu), (xv, yv) = inverse(1, 0), inverse(0, 1)
-    coeffs = (xu - x0, xv - x0, x0, yu - y0, yv - y0, y0)
-    out = img.transform(img.size, Image.AFFINE, coeffs, resample=Image.BICUBIC)
-    return np.asarray(out) > 127
+    v, u = np.mgrid[0:big, 0:big].astype(np.float32)
+    u = (u + 0.5) / SS - C
+    v = (v + 0.5) / SS - C
+    beat = (1 - math.cos(4 * math.pi * t)) / 2          # 0 at rest, 1 at each beat
+    squash = 1 - SQUASH * beat
+    h = np.clip((FEET - v) / NUMERAL_HEIGHT, 0, None)   # height above the feet, 0..1
+    sway = SWAY * math.sin(2 * math.pi * t) * h ** SWAY_BEND
+    head = HEAD * math.sin(4 * math.pi * t) * h ** 3
+    src_v = FEET - (FEET - v) / squash
+    src_u = cx + (u - cx - sway - head) * math.sqrt(squash)
+    coords = [(src_v + C) * SS - 0.5, (src_u + C) * SS - 0.5]
+    return map_coordinates(digit, coords, order=1, mode="constant") > 0.5
+
+
+def dance_frames(label):
+    """The numeral in every frame of the loop (supersampled masks); frame 0 is at rest."""
+    digits = numeral_digits(label)
+    frames = []
+    for p in range(DANCE_FRAMES):
+        frame = np.zeros((SIZE * SS, SIZE * SS), bool)
+        for digit, cx in digits:
+            frame |= dance_pose(digit, cx, p / DANCE_FRAMES) if p else digit > 0.5
+        frames.append(frame)
+    return frames
 
 
 def hour_windows():
@@ -196,7 +225,7 @@ def hour_windows():
     x, y = grid(SIZE, SIZE)
     column = np.floor((x % HOUR_PERIOD) / HOUR_COLUMN).astype(int)   # 0 or 1
     inside = np.hypot(x, y) < RING_IN - 6
-    numerals = [np.asarray(img) > 127 for img in numeral_layers()]
+    numerals = numeral_layers()
     windows = []
     for k in range(12):
         nxt = (k + 1) % 12
@@ -206,20 +235,20 @@ def hour_windows():
 
 
 def dance_windows():
-    """Dance window (k, j): numeral k at rest and in move j, cropped.
+    """Dance window (k, p): numeral k in frame p and frame p + 1, cropped.
 
-    Returns [[(alpha, box) per move] per hour].
+    Returns [[(alpha, box) per frame] per hour].
     """
     x, y = grid(SIZE, SIZE)
     column = np.floor((x % HOUR_PERIOD) / HOUR_COLUMN).astype(int)
     inside = np.hypot(x, y) < RING_IN - 6
     out = []
-    for k, img in enumerate(numeral_layers()):
-        rest = np.asarray(img) > 127
+    for k, label in enumerate(HOUR_LABELS):
+        frames = dance_frames(label)
         row = []
-        for move in DANCE_MOVES:
-            moved = pose(img, move)
-            window = ((column == k % 2) & rest) | ((column != k % 2) & moved)
+        for p in range(DANCE_FRAMES):
+            nxt = frames[(p + 1) % DANCE_FRAMES]
+            window = ((column == (k + p) % 2) & frames[p]) | ((column != (k + p) % 2) & nxt)
             row.append(crop(downsample(window & inside)))
         out.append(row)
     return out
@@ -322,16 +351,13 @@ def save_alpha(alpha, name, color="#FFFFFFFF"):
 
 
 def hour_state(seconds):
-    """Hour sheet offset in px, window index and dance move or None (mirrors the XML)."""
+    """Hour sheet offset in px, window index and dance frame or None (mirrors the XML)."""
     clock = (seconds - WINDOW_LAG) % 43200
     window, into = divmod(clock, 3600)
     change = min(max((into - DANCE_SECONDS) / CHANGE_SECONDS, 0), 1)
-    steps = min(max(into, 0), DANCE_SECONDS) / DANCE_STEP
-    n = math.floor(steps)
-    f = min(max((steps - n - (1 - DANCE_EASE) / 2) / DANCE_EASE, 0), 1)
-    dance = n + f * f * (3 - 2 * f)
-    move = (n // 2) % len(DANCE_MOVES) if into < DANCE_SECONDS else None
-    return ((window + change + dance) * HOUR_COLUMN) % HOUR_PERIOD, int(window), move
+    dance = min(max(into, 0), DANCE_SECONDS) * DANCE_RATE
+    frame = math.floor(dance) % DANCE_FRAMES if into < DANCE_SECONDS else None
+    return ((window + change + dance) * HOUR_COLUMN) % HOUR_PERIOD, int(window), frame
 
 
 def minute_state(seconds):
@@ -360,11 +386,11 @@ def slide(sheet, shift, margin):
 def simulate(seconds, layers):
     """Composite the face at a time given as seconds past 12:00."""
     windows, hsheet, plate, mprint, mwindows, msheet, backing, cap, dances = layers
-    offset, window, move = hour_state(seconds)
-    if move is None:
+    offset, window, frame = hour_state(seconds)
+    if frame is None:
         hwin = windows[window]
     else:
-        dalpha, (dx, dy, dw, dh) = dances[window][move]
+        dalpha, (dx, dy, dw, dh) = dances[window][frame]
         hwin = np.zeros((SIZE, SIZE))
         hwin[dy:dy + dh, dx:dx + dw] = dalpha
     moffset, minute = minute_state(seconds)
@@ -415,10 +441,10 @@ def hour_layers(dance_boxes):
     """Live: dance windows, then the change window. Ambient: the plain hour chain."""
     live, still = [], []
     for k in range(12):
-        for j, box in enumerate(dance_boxes[k]):
-            live.append(hour_ink(f"hour_dance_{k}_{j}",
-                                 f"{WINDOW} == {k} && {DANCING} && {DANCE_MOVE} == {j}",
-                                 DANCE_X, f"scan_dance_{k}_{j}", box))
+        for p, box in enumerate(dance_boxes[k]):
+            live.append(hour_ink(f"hour_dance_{k}_{p}",
+                                 f"{WINDOW} == {k} && {DANCING} && {DANCE_FRAME} == {p}",
+                                 DANCE_X, f"scan_dance_{k}_{p}", box))
         live.append(hour_ink(f"hour_change_{k}", f"{WINDOW} == {k} && !({DANCING})",
                              HOUR_X, f"scan_window_{k}"))
         still.append(hour_ink(f"hour_still_{k}", f"{WINDOW} == {k}", HOUR_X, f"scan_window_{k}"))
@@ -519,8 +545,8 @@ def main():
     save_alpha(mprint, "scan_minute_print", MINUTE_PRINT)
     dances = dance_windows()
     for k, row in enumerate(dances):
-        for j, (alpha, _) in enumerate(row):
-            save_alpha(alpha, f"scan_dance_{k}_{j}")
+        for p, (alpha, _) in enumerate(row):
+            save_alpha(alpha, f"scan_dance_{k}_{p}")
     (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows],
                                             [[box for _, box in row] for row in dances]))
 
@@ -532,9 +558,9 @@ def main():
     for label, seconds in PREVIEW_TIMES.items():
         simulate(seconds, layers).save(previews / f"{label}.png", optimize=True)
     simulate(PREVIEW_TIMES["10-10"], layers).save(HERE / "preview.png", optimize=True)
-    for j in range(len(DANCE_MOVES)):     # each dance move, held (live only)
-        held = PREVIEW_TIMES["10-10"] + (2 * j + 1.05) * DANCE_STEP
-        simulate(held, layers).save(previews / f"10-10-dance-{j}.png", optimize=True)
+    for p in (3, 6, 9):                   # a few dance frames (live only)
+        held = PREVIEW_TIMES["10-10"] + (p + 0.01) / DANCE_RATE
+        simulate(held, layers).save(previews / f"10-10-dance-{p}.png", optimize=True)
 
 
 if __name__ == "__main__":
