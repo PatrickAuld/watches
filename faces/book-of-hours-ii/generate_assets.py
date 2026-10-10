@@ -353,6 +353,19 @@ def emblem_evening(ch):
     finish(sk, layers, f'emblem_{ch.key}')
 
 
+def emblem_awake(ch):
+    """A whole sun at its height: the weekend has no sections, only daylight."""
+    sk = Sketch(60, 60)
+    layers = [(hexrgb(ch.pigment), sk.glow(30, 30, 27) * 0.5)]
+    layers += faceted_star(sk, 30, 30, 12, 28, 14, G_LIGHT, G_DARK, rot=-90)
+    layers += faceted_star(sk, 30, 30, 12, 21, 13, hexrgb(ch.light), hexrgb(ch.deep), rot=-75)
+    layers.append(gold_layer(sk.circle(30, 30, 13.4)))
+    disc = sk.circle(30, 30, 11.4)
+    layers.append((pigment_fill(disc, ch.light, ch.pigment, ch.deep), disc))
+    layers.append(((255, 250, 232), sk.glow(26, 25.5, 3.4) * 0.8 * disc))
+    finish(sk, layers, f'emblem_{ch.key}')
+
+
 def teardrop_mask(sk, cx, top, bottom, half):
     """Flame: pointed at the top, round at the bottom."""
     pts = []
@@ -599,7 +612,7 @@ def lettering():
                 tracking=1.5, fill=IVORY, outline=0.9)
 
     emblems = {'sleep': emblem_sleep, 'dawn': emblem_dawn, 'work': emblem_work,
-               'hearth': emblem_hearth, 'evening': emblem_evening}
+               'hearth': emblem_hearth, 'evening': emblem_evening, 'awake': emblem_awake}
     for ch in face.CHAPTERS:
         hires(emblems[ch.key], ch)
     hires(emblem_to_work, 'to_work')

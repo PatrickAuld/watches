@@ -9,6 +9,16 @@ Book of Hours stretches the current chapter to 270° and folds the rest of
 the day into the bottom quarter. Here the dial is a fixed world: a quarter degree per
 minute, midnight at the bottom, noon at the top. Only the camera moves.
 
+## Weekends
+
+Saturday and Sunday (added 2026-10-10) have two chapters: Sleep 11:00–6:15
+and Awake 6:15–11:00 (ruby, full sun). The `SCHEDULE` rows are tagged `daily`,
+`weekday` or `weekend` and commutes are weekday-only, gated as in
+[Book of Hours](../book-of-hours/notes.md) by `[DAY_OF_WEEK]`. Sleep is
+shared, so the day change at midnight never moves the camera. Awake is long,
+so it barely magnifies (1.26×), like Work. The countdown gains an
+hours-tens digit for it.
+
 ## Reading it
 
 - **Commuting (and at chapter boundaries)**: the camera is pulled back and the
@@ -43,7 +53,7 @@ inside the bezel on the whole path. A straight-line pan showed the black beyond 
 Only five expressions move the whole dial: `x`, `y`, `angle`, `scaleX` and `scaleY` on one Group.
 The XML is ~110 KB, a third of the original.
 
-`test_camera.py` runs every minute and checks:
+`test_camera.py` runs every minute of a weekday and a weekend day and checks:
 - at most one chapter is zoomed;
 - commutes use the identity camera;
 - each zoomed chapter is centred at (225, 60), level, and no wider than 380 units;
@@ -60,10 +70,12 @@ The XML validates against the WFF v4 XSD.
 - WFF might apply Group translation, rotation and scale in a different order
   than wff-web. If it does, the zoomed chapter will be off-centre.
 - `dashIntervals` on `Arc` draws every graduation. Watch for misaligned ticks.
+- `[DAY_OF_WEEK]` selects the weekend chapters. If the watch numbers days
+  differently from wff-web (Sunday = 1), weekends will show weekday chapters.
 
 ## Preview caveat
 
 wff-web 0.1.1 has no `MILLISECOND`, so the rosettes, beads and twinkles are
 frozen in the site preview. `previews/` and `preview.png` were rendered from
-the canonical XML. Regenerate everything with
+the canonical XML (`previews/weekend.png` on 2026-10-10). Regenerate everything with
 `python3 faces/book-of-hours-ii/generate_xml.py`.

@@ -14,9 +14,18 @@ graduations and numerals are drawn once; only the camera moves.
 
 The day (edit SCHEDULE / COMMUTES and rerun):
 
+  Weekdays (Monday - Friday):
     Sleep     23:00 - 6:15        Family   6:15 - 8:20     (commute 8:20 - 9:30)
     Work       9:30 - 17:20       (commute 17:20 - 18:30)  Family  18:30 - 20:30
     Evening   20:30 - 23:00
+
+  Weekends (Saturday, Sunday):
+    Sleep     23:00 - 6:15        Awake    6:15 - 23:00
+
+Sleep is shared, so Friday and Sunday nights cross midnight without a seam.
+Weekday-only elements are multiplied by WEEKDAY and weekend-only ones by
+WEEKEND (0 or 1 from [DAY_OF_WEEK]), so a chapter from the other kind of day
+has zero zoom and the camera still sees at most one chapter at a time.
 
 Camera
 ------
@@ -54,14 +63,16 @@ def hm(h, m=0):
     return h * 60 + m
 
 
-# key, title, start, end, pigment, light, deep
+# key, title, start, end, pigment, light, deep, days
 SCHEDULE = [
-    ('sleep', 'Sleep', hm(23), hm(6, 15), '#2E57F0', '#A9BDFF', '#101D63'),
-    ('dawn', 'Family', hm(6, 15), hm(8, 20), '#F04F7C', '#FFB8C9', '#6E1231'),
-    ('work', 'Work', hm(9, 30), hm(17, 20), '#10B57E', '#93F7CF', '#04563B'),
-    ('hearth', 'Family', hm(18, 30), hm(20, 30), '#F2662A', '#FFC9A1', '#782409'),
-    ('evening', 'Evening', hm(20, 30), hm(23), '#A04BE6', '#E2B9FF', '#3E1466'),
+    ('sleep', 'Sleep', hm(23), hm(6, 15), '#2E57F0', '#A9BDFF', '#101D63', 'daily'),
+    ('dawn', 'Family', hm(6, 15), hm(8, 20), '#F04F7C', '#FFB8C9', '#6E1231', 'weekday'),
+    ('work', 'Work', hm(9, 30), hm(17, 20), '#10B57E', '#93F7CF', '#04563B', 'weekday'),
+    ('hearth', 'Family', hm(18, 30), hm(20, 30), '#F2662A', '#FFC9A1', '#782409', 'weekday'),
+    ('evening', 'Evening', hm(20, 30), hm(23), '#A04BE6', '#E2B9FF', '#3E1466', 'weekday'),
+    ('awake', 'Awake', hm(6, 15), hm(23), '#D62839', '#FFB3B8', '#5E0A14', 'weekend'),
 ]
+# Commutes are weekday-only.
 # key, start, end, subtitle
 COMMUTES = [
     ('to_work', hm(8, 20), hm(9, 30), 'to work'),
@@ -90,6 +101,23 @@ M = '([HOUR_0_23] * 60 + [MINUTE] + [SECOND] / 60)'
 M_AMBIENT = '([HOUR_0_23] * 60 + [MINUTE])'
 SMOOTH_SECONDS = '([SECOND] + [MILLISECOND] / 1000)'
 
+# [DAY_OF_WEEK] runs Sunday = 1 ... Saturday = 7.
+WEEKEND = 'clamp(abs([DAY_OF_WEEK] - 4) - 2, 0, 1)'
+WEEKDAY = f'(1 - {WEEKEND})'
+GATES = {'daily': None, 'weekday': WEEKDAY, 'weekend': WEEKEND}
+
+
+def gated(expr, days):
+    """expr on the days given, 0 on the others."""
+    gate = GATES[days]
+    return expr if gate is None else f'{gate} * {expr}'
+
+
+def gate_alpha(parent, days, peak=255):
+    """Hide a static element on the days it does not belong to."""
+    if GATES[days] is not None:
+        transform(parent, 'alpha', f'{peak} * {GATES[days]}')
+
 
 def overview(t):
     """Dial bearing of minute t, in [180, 540)."""
@@ -101,8 +129,8 @@ def wrap180(a):
 
 
 class Chapter:
-    def __init__(self, key, title, start, end, pigment, light, deep):
-        self.key, self.title = key, title
+    def __init__(self, key, title, start, end, pigment, light, deep, days):
+        self.key, self.title, self.days = key, title, days
         self.start, self.end = start, end
         self.pigment, self.light, self.deep = pigment, light, deep
         self.length = (end - start) % 1440
@@ -115,10 +143,10 @@ class Chapter:
         return since(self.start)
 
     def zoom(self):
-        return trapezoid(self.start, self.length, RAMP)
+        return gated(trapezoid(self.start, self.length, RAMP), self.days)
 
     def lettering(self):
-        return f'255 * {trapezoid(self.start, self.length, FADE)}'
+        return f'255 * {gated(trapezoid(self.start, self.length, FADE), self.days)}'
 
     # Camera terms; each is zero when this chapter's zoom is zero.
     def scale_term(self):
@@ -143,6 +171,24 @@ class Chapter:
 
 
 CHAPTERS = [Chapter(*row) for row in SCHEDULE]
+
+
+def spans(days):
+    """(start, length) of every chapter and commute on those days; they tile the day."""
+    out = [(ch.start, ch.length) for ch in CHAPTERS if ch.days in ('daily', days)]
+    if days == 'weekday':
+        out += [(start, (end - start) % 1440) for _, start, end, _ in COMMUTES]
+    return sorted(out)
+
+
+def boundaries(days):
+    return {start for start, _ in spans(days)}
+
+
+for _days in ('weekday', 'weekend'):
+    _tiles = spans(_days)
+    assert sum(length for _, length in _tiles) == 1440, _days
+    assert all((s + l) % 1440 == _tiles[(i + 1) % len(_tiles)][0] for i, (s, l) in enumerate(_tiles)), _days
 
 
 def since(start, clock=M):
@@ -280,9 +326,9 @@ def world_dial(world):
     graduation(enamel, 2, 174.6, 175.8, 1.1, '#B0E7BE6A')
 
     for ch in CHAPTERS:
-        emblem(world, ch.key, ch.centre, ch.lettering())
+        emblem(world, ch.key, ch.centre, ch.lettering(), ch.days)
     for key, start, end, _ in COMMUTES:
-        emblem(world, key, start + ((end - start) % 1440) / 2, commute_lettering(start, end))
+        emblem(world, key, start + ((end - start) % 1440) / 2, commute_lettering(start, end), 'weekday')
 
     a = rotor(world, 'rosetteA', 0, f'(([MINUTE] % 4) * 60 + {SMOOTH_SECONDS}) * 1.5')
     centred_image(a, 'rosette_a', C, C, 280, 280)
@@ -298,13 +344,13 @@ def world_dial(world):
     graduation(outer, 60, 206.5, 215.5, 1.1, GOLD)
 
 
-def emblem(world, key, minute, alpha):
+def emblem(world, key, minute, alpha, days):
     """Each chapter's emblem sits in the medallion at its place in the day,
     brightest for the current span. They are a zoomed-out ornament: magnified
     they would sit under the lettering, so they fade as the camera closes in."""
     holder = rotor(world, f'{key}EmblemAt', overview(minute))
     shown = group(holder, f'{key}Emblem', C - 16, C - R_EMBLEM - 16, 32, 32, alpha=90)
-    transform(shown, 'alpha', f'(90 + 0.6 * {alpha}) * clamp(1 - 2 * {all_zoom()}, 0, 1)')
+    transform(shown, 'alpha', gated(f'(90 + 0.6 * {alpha}) * clamp(1 - 2 * {all_zoom()}, 0, 1)', days))
     image(shown, f'emblem_{key}', 0, 0, 32, 32)
 
 
@@ -313,9 +359,12 @@ def band(world):
     ring(groove, R_BAND, '#FF07050E', BAND + 3)
     for ch in CHAPTERS:
         s0 = overview(ch.start)
-        arc(draw(world), R_BAND, ch.pigment, BAND, s0, s0 + ch.length / 4)
+        enamel = draw(world)
+        gate_alpha(enamel, ch.days)
+        arc(enamel, R_BAND, ch.pigment, BAND, s0, s0 + ch.length / 4)
     for key, start, end, _ in COMMUTES:
         road = draw(world)
+        gate_alpha(road, 'weekday')
         s0, s1 = overview(start), overview(start) + ((end - start) % 1440) / 4
         arc(road, R_BAND, COMMUTE_GOLD, 2.4, s0, s1)
         arc(road, R_BAND - 6, '#66E9BE55', 1, s0, s1)
@@ -359,9 +408,10 @@ def ornaments(world):
         transform(twinkle, 'alpha', f'255 * (0.6 + 0.4 * sin({SMOOTH_SECONDS} * 1.3 + {k * 2.1:.2f}))')
         transform(twinkle, 'angle', f'{SMOOTH_SECONDS} * {(8 + k * 3) * (1 if k % 2 else -1)}')
         image(twinkle, 'star', 0, 0, 12, 12)
-    boundaries = sorted({ch.start for ch in CHAPTERS} | {c[1] for c in COMMUTES} | {c[2] for c in COMMUTES})
-    for t in boundaries:
+    weekday, weekend = boundaries('weekday'), boundaries('weekend')
+    for t in sorted(weekday | weekend):
         jewel = rotor(world, f'lozenge{t}', overview(t))
+        gate_alpha(jewel, 'daily' if t in weekday and t in weekend else 'weekday' if t in weekday else 'weekend')
         centred_image(jewel, 'lozenge', C, C - R_BAND, 16, 22)
 
 
@@ -378,11 +428,11 @@ def progress(world):
 
 
 def commute_lettering(start, end):
-    return f'255 * {trapezoid(start, (end - start) % 1440, FADE)}'
+    return f'255 * {gated(trapezoid(start, (end - start) % 1440, FADE), "weekday")}'
 
 
 def journey(world):
-    hide = f'clamp(1 - {all_zoom()}, 0, 1)'
+    hide = f'clamp(1 - {all_zoom()}, 0, 1) * {WEEKDAY}'
     for key, start, end, _ in COMMUTES:
         length = (end - start) % 1440
         shown = commute_lettering(start, end)
@@ -504,21 +554,25 @@ SMALL_W, SMALL_H, SMALL_COLON, WORD_W = 11, 20, 5, 40
 
 
 def remaining():
-    """Whole minutes left in the current chapter or commute (the spans tile the day)."""
-    spans = [(ch.start, ch.length) for ch in CHAPTERS]
-    spans += [(start, (end - start) % 1440) for _, start, end, _ in COMMUTES]
-    return '(' + ' + '.join(f'clamp({length:g} - {since(start, M_AMBIENT)}, 0, 1440)'
-                            for start, length in spans) + ')'
+    """Whole minutes left in the current chapter or commute (each day's spans tile it)."""
+    def left(days):
+        return '(' + ' + '.join(f'clamp({length:g} - {since(start, M_AMBIENT)}, 0, 1440)'
+                                for start, length in spans(days)) + ')'
+    return f'({gated(left("weekday"), "weekday")} + {gated(left("weekend"), "weekend")})'
 
 
 def countdown(parent):
-    wrapper = group(parent, 'countdown')
-    ambient(wrapper, 190)
+    outer = group(parent, 'countdown')
+    ambient(outer, 190)
     left = remaining()
+    # Weekend chapters run past ten hours; centre whichever width is showing.
+    wrapper = group(outer, 'countdownDigits')
+    transform(wrapper, 'x', f'{SMALL_W / 2:g} * clamp(floor({left} / 600), 0, 1)')
     width = 3 * SMALL_W + SMALL_COLON + 6 + WORD_W
-    x = C - width / 2
+    x = C - width / 2 - SMALL_W     # the tens cell sits left of the usual layout
     y = REMAIN_Y - SMALL_H / 2
-    cells = [('remainHours', f'floor({left} / 60)', range(8)), None,
+    cells = [('remainHourTens', f'floor({left} / 600)', [1]),
+             ('remainHours', f'(floor({left} / 60) % 10)', range(10)), None,
              ('remainTens', f'floor(({left} % 60) / 10)', range(6)),
              ('remainUnits', f'({left} % 10)', range(10))]
     for cell in cells:
@@ -538,13 +592,15 @@ def countdown(parent):
 def ambient_dial(parent):
     aod = group(parent, 'ambientDial', alpha=0)
     ambient(aod, 255)
-    rings = draw(aod)
+    rings = {days: draw(aod) for days in GATES}
+    for days, part in rings.items():
+        gate_alpha(part, days)
     for ch in CHAPTERS:
         s0 = overview(ch.start)
-        arc(rings, R_BAND, argb(ch.pigment, 0xB0), 3, s0 + 0.6, s0 + ch.length / 4 - 0.6)
+        arc(rings[ch.days], R_BAND, argb(ch.pigment, 0xB0), 3, s0 + 0.6, s0 + ch.length / 4 - 0.6)
     for key, start, end, _ in COMMUTES:
         s0 = overview(start)
-        arc(rings, R_BAND, '#70E9BE55', 1, s0, s0 + ((end - start) % 1440) / 4)
+        arc(rings['weekday'], R_BAND, '#70E9BE55', 1, s0, s0 + ((end - start) % 1440) / 4)
     for t in range(0, 1440, 180):
         mark = rotor(aod, f'ambientMark{t}', overview(t))
         radial_line(draw(mark, alpha=150), 181, 186, '#FFB89A55', 1.2)

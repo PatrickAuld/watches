@@ -347,6 +347,19 @@ def emblem_evening(ch):
     finish(sk, layers, f'emblem_{ch.key}')
 
 
+def emblem_awake(ch):
+    """A whole sun at its height: the weekend has no sections, only daylight."""
+    sk = Sketch(60, 60)
+    layers = [(hexrgb(ch.pigment), sk.glow(30, 30, 27) * 0.5)]
+    layers += faceted_star(sk, 30, 30, 12, 28, 14, G_LIGHT, G_DARK, rot=-90)
+    layers += faceted_star(sk, 30, 30, 12, 21, 13, hexrgb(ch.light), hexrgb(ch.deep), rot=-75)
+    layers.append(gold_layer(sk.circle(30, 30, 13.4)))
+    disc = sk.circle(30, 30, 11.4)
+    layers.append((pigment_fill(disc, ch.light, ch.pigment, ch.deep), disc))
+    layers.append(((255, 250, 232), sk.glow(26, 25.5, 3.4) * 0.8 * disc))
+    finish(sk, layers, f'emblem_{ch.key}')
+
+
 def teardrop_mask(sk, cx, top, bottom, half):
     """Flame: pointed at the top, round at the bottom."""
     pts = []
@@ -487,9 +500,10 @@ def dial():
     y0 = face.REMAIN_Y
     layers = []
     for sign in (-1, 1):
-        layers.append(gold_layer(sk.line([(C + sign * 52, y0), (C + sign * 88, y0)], 0.9)))
-        layers.append(gold_layer(sk.circle(C + sign * 92, y0, 1.6)))
-        t, rr, b, l = (C + sign * 52, y0 - 3.2), (C + sign * 52 + 4, y0), (C + sign * 52, y0 + 3.2), (C + sign * 52 - 4, y0)
+        # Clear of the widest countdown (16:45 LEFT on a weekend).
+        layers.append(gold_layer(sk.line([(C + sign * 64, y0), (C + sign * 96, y0)], 0.9)))
+        layers.append(gold_layer(sk.circle(C + sign * 100, y0, 1.6)))
+        t, rr, b, l = (C + sign * 64, y0 - 3.2), (C + sign * 64 + 4, y0), (C + sign * 64, y0 + 3.2), (C + sign * 64 - 4, y0)
         layers += [(G_LIGHT, sk.poly([t, rr, b, l]))]
     ever = np.clip(sum(m for _, m in layers), 0, 1)
     orn = Image.fromarray(np.clip(compose(((0, 0, 0), grow(ever, SS) * 0.8), *layers), 0, 255).astype(np.uint8), 'RGBA')
@@ -636,7 +650,7 @@ def lettering():
                 tracking=1.5, fill=IVORY, outline=0.9)
 
     emblems = {'sleep': emblem_sleep, 'dawn': emblem_dawn, 'work': emblem_work,
-               'hearth': emblem_hearth, 'evening': emblem_evening}
+               'hearth': emblem_hearth, 'evening': emblem_evening, 'awake': emblem_awake}
     for ch in face.CHAPTERS:
         emblems[ch.key](ch)
     emblem_to_work('to_work')

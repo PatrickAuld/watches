@@ -18,6 +18,22 @@ The schedule (edit `SCHEDULE` and `COMMUTES` in `generate_xml.py`):
 | 8:30 | kids asleep | Evening (violet, candle) |
 | 11:00 | sleep | Sleep (lapis, crescent) |
 
+Weekends (Saturday and Sunday, added 2026-10-10) have only two chapters:
+
+| Time | Event | Chapter |
+|---|---|---|
+| 6:15 | wake up | Awake (ruby, full sun) |
+| 11:00 | sleep | Sleep (lapis, crescent) |
+
+Each `SCHEDULE` row says whether it is `daily`, `weekday` or `weekend`;
+commutes are weekday-only. `[DAY_OF_WEEK]` (Sunday = 1, Saturday = 7) drives
+`WEEKEND = clamp(abs(d − 4) − 2, 0, 1)`, and every weekday-only element is
+multiplied by `1 − WEEKEND`, every weekend one by `WEEKEND`. Sleep is shared,
+so Friday and Sunday nights cross midnight without a jump. Awake runs 16:45,
+so the countdown grows an hours-tens digit, and the fleuron under the
+subtitle was pulled out to clear it. Ruby rather than saffron: a gold enamel
+disappeared into the gilt bezel.
+
 ## Reading the dial
 
 - **The band** is the day in enamel. Gold lozenges mark every boundary; the
@@ -54,7 +70,8 @@ so every runtime angle is linear in the zooms and nothing can cross. A zoom is
 a trapezoid in minutes since the chapter began: `clamp((L/2 − |u − L/2|)/10, 0, 1)`.
 The spans tile the day, so the countdown is `Σ clamp(L − u, 0, 1440)`.
 
-`test_schedule.py` evaluates the canonical XML for every minute. It checks that
+`test_schedule.py` evaluates the canonical XML for every minute of a weekday
+and of a weekend day. It checks that
 at most one chapter is zoomed, commutes are fully zoomed out, the marks never
 cross, each zoomed chapter fills ±135°, the jewel matches the warp, and the
 countdown is exact. It also checks that the XML is regenerated, that expressions
@@ -70,7 +87,9 @@ Validates against the official WFF v4 XSD. It uses three things no promoted face
    fail, all chapter titles and digits will overlap. The fallback is moving
    alpha onto each `PartImage` (wff-web 0.1.1 ignores PartImage transforms,
    which is why the preview needs Groups).
-3. Size: ~350 KB of XML with ~750 transforms, most updating each second
+3. `[DAY_OF_WEEK]` is new here too. If the watch numbers days differently
+   from wff-web (Sunday = 1), weekends will show the wrong chapters.
+4. Size: ~475 KB (was ~350 KB before weekends) of XML with ~750 transforms, most updating each second
    while interactive. Expect an effect on battery or frame rate. Dropping `[SECOND]`
    from `M` cuts the zoom updates to once a minute, at the cost of 1–14°
    steps while zooming.
@@ -79,7 +98,8 @@ Validates against the official WFF v4 XSD. It uses three things no promoted face
 
 wff-web 0.1.1 has no `MILLISECOND`, so rosettes, beads and twinkles are frozen
 in the site preview. `preview.png` (picker) and `previews/` were rendered from
-the canonical XML by wff-web 0.1.1 on 2026-10-06.
+the canonical XML by wff-web 0.1.1 on 2026-10-06; `previews/weekend.png` on
+2026-10-10.
 
 Regenerate everything with `python3 faces/book-of-hours/generate_xml.py`
 (needs numpy and Pillow; fonts are Cinzel / Cinzel Decorative, SIL OFL, in
