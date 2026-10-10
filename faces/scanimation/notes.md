@@ -21,10 +21,10 @@ sideways under the mask to show the time.
   and two crests chase round the dial with the ticks under them reaching in
   like an equaliser. It never stops, even during the hour change. Hour indices
   outside the ring are amber. Ambient: still grey ticks.
-- **Minute**: a white analog hand, also a Scanimation. Over every minute it
-  changes from minute m's position into m+1's through the barrier: whole on
-  the minute, two interleaved ghost hands at :30 seconds. Sixty faint
-  markings are printed around the ring.
+- **Minute**: a white rubber-hose hand, also a Scanimation. It sweeps
+  smoothly and dances on the beat: its root and tip stay put while its body
+  bows side to side and S-wiggles. Barrier rungs run across it. Ambient:
+  straight and still.
 
 ## Mechanism
 
@@ -64,13 +64,17 @@ over ten minutes, so the numeral visibly changes into the next.
   at least 6 px wide (one barrier period) so ticks near 12 and 6, parallel
   to the slits, still show in every frame. Minute ticks print at 60 %,
   five-minute ticks solid.
-- The minute hand uses the same two-frame scheme. Sixty windows
-  (`scan_minute_m`) hold the hand at m and m+1, with hand m in column parity
-  m % 2. They are cropped to the hand's bounding box, so sixty decoded bitmaps
-  stay small. The white minute sheet slides continuously, offset
-  `3 * (minute + seconds / 60) mod 6`, so the change takes the whole minute.
-  Two black backings, rotated to m and m+1, cut the numeral's stripes under
-  the hand. A solid cap sits on top.
+- **Hand windows** (`scan_hand_p`): twelve frames drawn pointing at twelve,
+  chained frame p -> p+1 in alternating 3 px *rows*, under a white rung sheet
+  (`scan_sheet_hand`) that slides along the hand 3 px a frame on the dance
+  clock. Bend = bow * sin(2 pi t) * sin(pi s) + wiggle * sin(4 pi t) *
+  sin(2 pi s), s = distance / tip, so root and tip never move and frame 0 is
+  straight. Sheet, windows and one black backing (the union of every frame,
+  grown 3 px) sit in a single group rotated to (minute + seconds / 60) * 6, so
+  twelve small images serve every angle, and the rungs always cross the hand
+  squarely. This replaced the sixty per-minute two-frame windows (hand m
+  ghosting into m + 1 over the minute), which could not dance without 720
+  images. Ambient: `scan_hand_still`, the straight hand with its rungs.
 
 ## History
 
@@ -110,6 +114,8 @@ over ten minutes, so the numeral visibly changes into the next.
    things as well. They are sort of dull for what the watch is now"). The
    faint grey printed ticks became a dancing Scanimation ring, and the hour
    indices became amber.
+9. **The hand dances too** (Patrick: "minute hand?"). Rubber-hose hand on the
+   beat, in its own rotated frame, with smooth sweep (see Hand windows).
 
 Ambient: a Variant alpha directly on the hour windows would override the
 per-window switch, so Variants sit on two wrapper groups instead: live

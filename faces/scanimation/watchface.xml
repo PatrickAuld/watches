@@ -2545,855 +2545,186 @@
         </Group>
       </Group>
     </Group>
-    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_backing_0">
-      <Transform target="angle" value="[MINUTE] * 6" />
-      <PartImage x="0" y="0" width="450" height="450">
+    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_hand">
+      <Transform target="angle" value="(([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 6)" />
+      <PartImage x="199" y="25" width="52" height="236" name="minute_hand_backing">
         <Image resource="scan_hand_backing" />
       </PartImage>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" pivotX="0.5" pivotY="0.5" name="minute_backing_1">
-      <Transform target="angle" value="([MINUTE] + 1) * 6" />
-      <PartImage x="0" y="0" width="450" height="450">
-        <Image resource="scan_hand_backing" />
-      </PartImage>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_0">
-      <Transform target="alpha" value="[MINUTE] == 0 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_0">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_0">
-        <PartImage x="216" y="33" width="32" height="219">
-          <Image resource="scan_minute_0" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_1">
-      <Transform target="alpha" value="[MINUTE] == 1 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_1">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_1">
-        <PartImage x="213" y="33" width="55" height="219">
-          <Image resource="scan_minute_1" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_2">
-      <Transform target="alpha" value="[MINUTE] == 2 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_2">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_2">
-        <PartImage x="210" y="36" width="75" height="216">
-          <Image resource="scan_minute_2" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_3">
-      <Transform target="alpha" value="[MINUTE] == 3 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_3">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_3">
-        <PartImage x="207" y="41" width="99" height="211">
-          <Image resource="scan_minute_3" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_4">
-      <Transform target="alpha" value="[MINUTE] == 4 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_4">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_4">
-        <PartImage x="205" y="49" width="116" height="203">
-          <Image resource="scan_minute_4" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_5">
-      <Transform target="alpha" value="[MINUTE] == 5 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_5">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_5">
-        <PartImage x="203" y="57" width="138" height="195">
-          <Image resource="scan_minute_5" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_6">
-      <Transform target="alpha" value="[MINUTE] == 6 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_6">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_6">
-        <PartImage x="203" y="68" width="153" height="183">
-          <Image resource="scan_minute_6" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_7">
-      <Transform target="alpha" value="[MINUTE] == 7 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_7">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_7">
-        <PartImage x="201" y="80" width="169" height="169">
-          <Image resource="scan_minute_7" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_8">
-      <Transform target="alpha" value="[MINUTE] == 8 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_8">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_8">
-        <PartImage x="199" y="94" width="182" height="153">
-          <Image resource="scan_minute_8" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_9">
-      <Transform target="alpha" value="[MINUTE] == 9 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_9">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_9">
-        <PartImage x="199" y="109" width="191" height="136">
-          <Image resource="scan_minute_9" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_10">
-      <Transform target="alpha" value="[MINUTE] == 10 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_10">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_10">
-        <PartImage x="198" y="126" width="201" height="118">
-          <Image resource="scan_minute_10" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_11">
-      <Transform target="alpha" value="[MINUTE] == 11 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_11">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_11">
-        <PartImage x="198" y="144" width="210" height="99">
-          <Image resource="scan_minute_11" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_12">
-      <Transform target="alpha" value="[MINUTE] == 12 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_12">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_12">
-        <PartImage x="198" y="162" width="213" height="79">
-          <Image resource="scan_minute_12" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_13">
-      <Transform target="alpha" value="[MINUTE] == 13 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_13">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_13">
-        <PartImage x="198" y="182" width="216" height="55">
-          <Image resource="scan_minute_13" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_14">
-      <Transform target="alpha" value="[MINUTE] == 14 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_14">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_14">
-        <PartImage x="199" y="202" width="218" height="33">
-          <Image resource="scan_minute_14" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_15">
-      <Transform target="alpha" value="[MINUTE] == 15 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_15">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_15">
-        <PartImage x="199" y="215" width="218" height="33">
-          <Image resource="scan_minute_15" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_16">
-      <Transform target="alpha" value="[MINUTE] == 16 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_16">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_16">
-        <PartImage x="198" y="213" width="216" height="55">
-          <Image resource="scan_minute_16" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_17">
-      <Transform target="alpha" value="[MINUTE] == 17 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_17">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_17">
-        <PartImage x="198" y="209" width="213" height="79">
-          <Image resource="scan_minute_17" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_18">
-      <Transform target="alpha" value="[MINUTE] == 18 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_18">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_18">
-        <PartImage x="198" y="207" width="210" height="99">
-          <Image resource="scan_minute_18" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_19">
-      <Transform target="alpha" value="[MINUTE] == 19 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_19">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_19">
-        <PartImage x="198" y="206" width="201" height="118">
-          <Image resource="scan_minute_19" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_20">
-      <Transform target="alpha" value="[MINUTE] == 20 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_20">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_20">
-        <PartImage x="199" y="205" width="191" height="136">
-          <Image resource="scan_minute_20" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_21">
-      <Transform target="alpha" value="[MINUTE] == 21 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_21">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_21">
-        <PartImage x="199" y="203" width="182" height="153">
-          <Image resource="scan_minute_21" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_22">
-      <Transform target="alpha" value="[MINUTE] == 22 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_22">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_22">
-        <PartImage x="201" y="201" width="169" height="169">
-          <Image resource="scan_minute_22" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_23">
-      <Transform target="alpha" value="[MINUTE] == 23 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_23">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_23">
-        <PartImage x="203" y="199" width="153" height="183">
-          <Image resource="scan_minute_23" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_24">
-      <Transform target="alpha" value="[MINUTE] == 24 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_24">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_24">
-        <PartImage x="203" y="198" width="138" height="195">
-          <Image resource="scan_minute_24" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_25">
-      <Transform target="alpha" value="[MINUTE] == 25 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_25">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_25">
-        <PartImage x="205" y="198" width="116" height="203">
-          <Image resource="scan_minute_25" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_26">
-      <Transform target="alpha" value="[MINUTE] == 26 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_26">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_26">
-        <PartImage x="207" y="198" width="99" height="211">
-          <Image resource="scan_minute_26" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_27">
-      <Transform target="alpha" value="[MINUTE] == 27 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_27">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_27">
-        <PartImage x="210" y="198" width="75" height="216">
-          <Image resource="scan_minute_27" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_28">
-      <Transform target="alpha" value="[MINUTE] == 28 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_28">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_28">
-        <PartImage x="213" y="198" width="55" height="219">
-          <Image resource="scan_minute_28" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_29">
-      <Transform target="alpha" value="[MINUTE] == 29 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_29">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_29">
-        <PartImage x="216" y="198" width="32" height="219">
-          <Image resource="scan_minute_29" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_30">
-      <Transform target="alpha" value="[MINUTE] == 30 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_30">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_30">
-        <PartImage x="204" y="198" width="32" height="219">
-          <Image resource="scan_minute_30" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_31">
-      <Transform target="alpha" value="[MINUTE] == 31 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_31">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_31">
-        <PartImage x="183" y="198" width="55" height="219">
-          <Image resource="scan_minute_31" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_32">
-      <Transform target="alpha" value="[MINUTE] == 32 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_32">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_32">
-        <PartImage x="162" y="198" width="79" height="215">
-          <Image resource="scan_minute_32" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_33">
-      <Transform target="alpha" value="[MINUTE] == 33 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_33">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_33">
-        <PartImage x="147" y="198" width="94" height="211">
-          <Image resource="scan_minute_33" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_34">
-      <Transform target="alpha" value="[MINUTE] == 34 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_34">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_34">
-        <PartImage x="126" y="199" width="117" height="203">
-          <Image resource="scan_minute_34" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_35">
-      <Transform target="alpha" value="[MINUTE] == 35 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_35">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_35">
-        <PartImage x="111" y="199" width="135" height="193">
-          <Image resource="scan_minute_35" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_36">
-      <Transform target="alpha" value="[MINUTE] == 36 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_36">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_36">
-        <PartImage x="96" y="200" width="152" height="182">
-          <Image resource="scan_minute_36" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_37">
-      <Transform target="alpha" value="[MINUTE] == 37 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_37">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_37">
-        <PartImage x="81" y="200" width="169" height="170">
-          <Image resource="scan_minute_37" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_38">
-      <Transform target="alpha" value="[MINUTE] == 38 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_38">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_38">
-        <PartImage x="68" y="202" width="182" height="154">
-          <Image resource="scan_minute_38" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_39">
-      <Transform target="alpha" value="[MINUTE] == 39 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_39">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_39">
-        <PartImage x="57" y="203" width="195" height="137">
-          <Image resource="scan_minute_39" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_40">
-      <Transform target="alpha" value="[MINUTE] == 40 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_40">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_40">
-        <PartImage x="48" y="205" width="204" height="118">
-          <Image resource="scan_minute_40" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_41">
-      <Transform target="alpha" value="[MINUTE] == 41 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_41">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_41">
-        <PartImage x="41" y="208" width="211" height="98">
-          <Image resource="scan_minute_41" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_42">
-      <Transform target="alpha" value="[MINUTE] == 42 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_42">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_42">
-        <PartImage x="36" y="210" width="216" height="77">
-          <Image resource="scan_minute_42" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_43">
-      <Transform target="alpha" value="[MINUTE] == 43 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_43">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_43">
-        <PartImage x="33" y="212" width="219" height="56">
-          <Image resource="scan_minute_43" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_44">
-      <Transform target="alpha" value="[MINUTE] == 44 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_44">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_44">
-        <PartImage x="33" y="214" width="219" height="34">
-          <Image resource="scan_minute_44" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_45">
-      <Transform target="alpha" value="[MINUTE] == 45 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_45">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_45">
-        <PartImage x="33" y="202" width="219" height="34">
-          <Image resource="scan_minute_45" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_46">
-      <Transform target="alpha" value="[MINUTE] == 46 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_46">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_46">
-        <PartImage x="33" y="182" width="219" height="56">
-          <Image resource="scan_minute_46" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_47">
-      <Transform target="alpha" value="[MINUTE] == 47 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_47">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_47">
-        <PartImage x="36" y="163" width="216" height="77">
-          <Image resource="scan_minute_47" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_48">
-      <Transform target="alpha" value="[MINUTE] == 48 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_48">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_48">
-        <PartImage x="41" y="144" width="211" height="98">
-          <Image resource="scan_minute_48" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_49">
-      <Transform target="alpha" value="[MINUTE] == 49 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_49">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_49">
-        <PartImage x="48" y="127" width="204" height="118">
-          <Image resource="scan_minute_49" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_50">
-      <Transform target="alpha" value="[MINUTE] == 50 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_50">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_50">
-        <PartImage x="57" y="110" width="195" height="137">
-          <Image resource="scan_minute_50" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_51">
-      <Transform target="alpha" value="[MINUTE] == 51 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_51">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_51">
-        <PartImage x="68" y="94" width="182" height="154">
-          <Image resource="scan_minute_51" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_52">
-      <Transform target="alpha" value="[MINUTE] == 52 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_52">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_52">
-        <PartImage x="81" y="80" width="169" height="170">
-          <Image resource="scan_minute_52" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_53">
-      <Transform target="alpha" value="[MINUTE] == 53 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_53">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_53">
-        <PartImage x="96" y="68" width="152" height="182">
-          <Image resource="scan_minute_53" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_54">
-      <Transform target="alpha" value="[MINUTE] == 54 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_54">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_54">
-        <PartImage x="111" y="58" width="135" height="193">
-          <Image resource="scan_minute_54" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_55">
-      <Transform target="alpha" value="[MINUTE] == 55 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_55">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_55">
-        <PartImage x="126" y="48" width="117" height="203">
-          <Image resource="scan_minute_55" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_56">
-      <Transform target="alpha" value="[MINUTE] == 56 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_56">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_56">
-        <PartImage x="147" y="41" width="94" height="211">
-          <Image resource="scan_minute_56" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_57">
-      <Transform target="alpha" value="[MINUTE] == 57 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_57">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_57">
-        <PartImage x="162" y="37" width="79" height="215">
-          <Image resource="scan_minute_57" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_58">
-      <Transform target="alpha" value="[MINUTE] == 58 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_58">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_58">
-        <PartImage x="183" y="33" width="55" height="219">
-          <Image resource="scan_minute_58" />
-        </PartImage>
-      </Group>
-    </Group>
-    <Group x="0" y="0" width="450" height="450" name="minute_ink_59">
-      <Transform target="alpha" value="[MINUTE] == 59 ? 255 : 0" />
-      <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="sheet_minute_rules_59">
-        <Transform target="x" value="(-6 + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 3) % 6)" />
-        <PartImage x="0" y="0" width="456" height="450">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="minute_window_59">
-        <PartImage x="204" y="33" width="32" height="219">
-          <Image resource="scan_minute_59" />
+      <Group x="0" y="0" width="450" height="450" name="hand_live">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+        <Group x="0" y="0" width="450" height="450" name="hand_0">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 0 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_0_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_0_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_0" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_1">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 1 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_1_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_1_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_1" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_2">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 2 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_2_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_2_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_2" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_3">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 3 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_3_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_3_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_3" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_4">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 4 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_4_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_4_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_4" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_5">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 5 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_5_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_5_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_5" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_6">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 6 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_6_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_6_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_6" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_7">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 7 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_7_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_7_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_7" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_8">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 8 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_8_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_8_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_8" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_9">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 9 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_9_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_9_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_9" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_10">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 10 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_10_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_10_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_10" />
+            </PartImage>
+          </Group>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="hand_11">
+          <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 11 ? 255 : 0" />
+          <Group x="199" y="19" width="52" height="242" renderMode="SOURCE" name="hand_11_rungs">
+            <Transform target="y" value="(19 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+            <PartImage x="0" y="0" width="52" height="242">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="hand_11_window">
+            <PartImage x="199" y="25" width="52" height="236">
+              <Image resource="scan_hand_11" />
+            </PartImage>
+          </Group>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" alpha="0" name="hand_ambient">
+        <Variant mode="AMBIENT" target="alpha" value="255" />
+        <PartImage x="199" y="25" width="52" height="236">
+          <Image resource="scan_hand_still" />
         </PartImage>
       </Group>
     </Group>

@@ -58,15 +58,18 @@ The minute ring dances too
     outside the ring are printed in the numerals' amber. Ambient shows still,
     grey ticks instead.
 
-Minutes: an analog hand, also a Scanimation
-    Sixty minute windows, built the same way as the hours: window m
-    interleaves the hand at minute m and at minute m+1 in the same 3 px
-    columns. A white minute sheet of vertical rules slides 3 px every minute,
-    continuously, so over each minute the hand changes from m into m+1. It is
-    half and half at :30 seconds and reads like a sweeping hand, ghosted the
-    way a Scanimation in-between frame is. A black backing under both frames
-    separates it from the numeral, and a solid cap sits on top. Minute windows
-    are cropped to the hand's bounding box to keep decoded bitmaps small.
+Minutes: a rubber-hose hand, also a Scanimation
+    The minute hand dances on the same beat. Its frames are drawn pointing at
+    twelve, in the hand's own frame, with the barrier rules running across
+    it like rungs: HAND_FRAMES chained windows (frame p and p + 1 in
+    alternating 3 px rows) under a white sheet that slides along the hand
+    3 px a frame, on the dance clock. The hand's root and tip stay put while
+    its body flexes, a bow that swings side to side once a loop plus an
+    S-wiggle on each beat. The whole hand (sheet, windows and a black backing
+    that covers every frame) is one group rotated to the minute, sweeping
+    smoothly, so twelve small images serve every angle and the rungs always
+    cross the hand squarely. A solid cap sits on top. Ambient shows the hand
+    at rest.
 """
 from pathlib import Path
 import math
@@ -103,6 +106,11 @@ FEET = 112                  # px below centre: the numerals' baseline
 
 HAND = (-26, 192, 15.0, 6.0)   # minute hand: tail r, tip r, base width, tip width
 HAND_BACKING = 3.0             # px of black around the hand
+HAND_FRAMES = 12               # the hand's loop, on the dance clock
+HAND_BOW = 11.0                # px: the hand bows side to side once a loop...
+HAND_WIGGLE = 5.0              # px: ...and S-wiggles on each beat; root and tip stay put
+HAND_HALF = 26                 # px: half-width of the hand's local box
+HAND_BOX = (int(C) - HAND_HALF, int(C) - 200, 2 * HAND_HALF, 236)   # local x, y, w, h
 CAP = (10.0, 3.5)              # centre cap radius, hole radius
 MINUTE_PERIOD = 6              # px: same two-column barrier as the hours
 MINUTE_COLUMN = MINUTE_PERIOD / 2
@@ -142,8 +150,9 @@ TICK_FRAME = f"(floor({TICKS}) % {TICK_FRAMES})"
 TICK_X = f"({-MINUTE_PERIOD} + ({TICKS} * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})"
 HOUR_X = f"({-HOUR_PERIOD} + (({WINDOW} + {CHANGE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
 DANCE_X = f"({-HOUR_PERIOD} + (({WINDOW} + {DANCE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
-MINUTE_X = (f"({-MINUTE_PERIOD} + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60)"
-            f" * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})")
+HAND_Y = f"({HAND_BOX[1] - MINUTE_PERIOD} + ({TICKS} * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})"
+HAND_FRAME = f"(floor({TICKS}) % {HAND_FRAMES})"
+HAND_ANGLE = "(([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60) * 6)"
 
 
 def grid(width, height, x0=0.0):
@@ -294,28 +303,54 @@ def hand_shape(x, y, angle, grow=0.0):
     return (along >= tail - grow) & (along <= tip + grow) & (np.abs(across) <= half + grow)
 
 
-def minute_windows():
-    """Window m: the hand at m and at m+1 in alternating columns, cropped.
+def box_grid(box, pad_top=0):
+    """Supersampled coordinates for a screen box (x, y, w, h), optionally padded above."""
+    x0, y0, w, h = box
+    xs = (np.arange(w * SS) + 0.5) / SS + x0 - C
+    ys = (np.arange((h + pad_top) * SS) + 0.5) / SS + y0 - pad_top - C
+    return np.meshgrid(xs, ys)
 
-    Returns (alpha, (x, y, w, h)) per minute.
-    """
-    x, y = grid(SIZE, SIZE)
-    column = np.floor((x % MINUTE_PERIOD) / MINUTE_COLUMN).astype(int)
-    hands = [hand_shape(x, y, m * 6) for m in range(60)]
-    windows = []
-    for m in range(60):
-        n = (m + 1) % 60
-        alpha = downsample(((column == m % 2) & hands[m]) | ((column == n % 2) & hands[n]))
-        ys, xs = np.nonzero(alpha > 0)
-        x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
-        windows.append((alpha[y0:y1, x0:x1], (int(x0), int(y0), int(x1 - x0), int(y1 - y0))))
-    return windows
+
+def hand_bend(along, t):
+    """Sideways offset of the hand's body at distance `along` from the centre, frame t."""
+    s = np.clip(along / HAND[1], 0, 1)
+    return (HAND_BOW * math.sin(2 * math.pi * t) * np.sin(math.pi * s)
+            + HAND_WIGGLE * math.sin(4 * math.pi * t) * np.sin(2 * math.pi * s))
+
+
+def hand_frame(x, y, t, grow=0.0):
+    """The hand pointing at twelve in frame t of its loop (frame 0 is straight)."""
+    return hand_shape(x - hand_bend(-y, t), y, 0, grow)
+
+
+def hand_windows():
+    """Hand window p: frame p and frame p + 1 in alternating rows, in the hand's box."""
+    x, y = box_grid(HAND_BOX)
+    row = np.floor((y % MINUTE_PERIOD) / MINUTE_COLUMN).astype(int)
+    frames = [hand_frame(x, y, p / HAND_FRAMES) for p in range(HAND_FRAMES)]
+    return [downsample(np.where(row == p % 2, frames[p], frames[(p + 1) % HAND_FRAMES]))
+            for p in range(HAND_FRAMES)]
+
+
+def hand_still():
+    """The hand at rest as the sheet shows it at rest: rungs over row parity 0."""
+    x, y = box_grid(HAND_BOX)
+    return downsample(hand_frame(x, y, 0) & band(y, MINUTE_COLUMN / 2, MINUTE_RULE, MINUTE_PERIOD))
+
+
+def hand_sheet():
+    """Rungs across the hand, one period taller than its box."""
+    _, y = box_grid(HAND_BOX, MINUTE_PERIOD)
+    return downsample(band(y, MINUTE_COLUMN / 2, MINUTE_RULE, MINUTE_PERIOD))
 
 
 def hand_backing():
-    """Black backing for one hand frame at twelve; rotated per frame on the watch."""
-    x, y = grid(SIZE, SIZE)
-    return downsample(hand_shape(x, y, 0, HAND_BACKING) | (np.hypot(x, y) <= CAP[0] + HAND_BACKING))
+    """Black under every frame of the hand and the cap, in the hand's box."""
+    x, y = box_grid(HAND_BOX)
+    black = np.hypot(x, y) <= CAP[0] + HAND_BACKING
+    for p in range(HAND_FRAMES):
+        black |= hand_frame(x, y, p / HAND_FRAMES, HAND_BACKING)
+    return downsample(black)
 
 
 def hand_cap():
@@ -412,11 +447,19 @@ def hour_state(seconds):
     return ((window + change + dance) * HOUR_COLUMN) % HOUR_PERIOD, int(window), frame
 
 
-def minute_state(seconds):
-    """Minute sheet offset in px and window index (mirrors MINUTE_X)."""
-    minute, into = divmod(seconds % 3600, 60)
-    minute = int(minute)
-    return ((minute + into / 60) * MINUTE_COLUMN) % MINUTE_PERIOD, int(minute)
+def hand_state(seconds):
+    """Hand sheet offset in px, frame, and angle (mirrors HAND_Y, HAND_FRAME, HAND_ANGLE)."""
+    into = (seconds - WINDOW_LAG) % 3600
+    frames = into * DANCE_RATE
+    return ((frames * MINUTE_COLUMN) % MINUTE_PERIOD, math.floor(frames) % HAND_FRAMES,
+            (seconds % 3600) / 10)
+
+
+def in_box(alpha, box):
+    x0, y0, w, h = box
+    out = np.zeros((SIZE, SIZE))
+    out[y0:y0 + h, x0:x0 + w] = alpha
+    return out
 
 
 def rotate(alpha, angle):
@@ -444,8 +487,8 @@ def tick_state(seconds):
 
 def simulate(seconds, layers, ambient=False):
     """Composite the face at a time given as seconds past 12:00."""
-    (windows, hsheet, plate, mprint, mwindows, msheet, backing, cap, dances,
-     hprint, twindows) = layers
+    (windows, hsheet, plate, mprint, hwindows, hsheet_hand, hstill, msheet, backing, cap,
+     dances, hprint, twindows) = layers
     offset, window, frame = hour_state(seconds)
     if frame is None or ambient:
         hwin = windows[window]
@@ -453,11 +496,18 @@ def simulate(seconds, layers, ambient=False):
         dalpha, (dx, dy, dw, dh) = dances[window][frame]
         hwin = np.zeros((SIZE, SIZE))
         hwin[dy:dy + dh, dx:dx + dw] = dalpha
-    moffset, minute = minute_state(seconds)
-    alpha, (x0, y0, w, h) = mwindows[minute]
-    mwin = np.zeros((SIZE, SIZE))
-    mwin[y0:y0 + h, x0:x0 + w] = alpha
-    black = np.maximum(rotate(backing, minute * 6), rotate(backing, minute * 6 + 6))
+    hoffset, hframe, angle = hand_state(seconds)
+    if ambient:
+        hand = hstill
+    else:
+        whole = math.floor(hoffset)
+        frac = hoffset - whole
+        rows = HAND_BOX[3]
+        view = ((1 - frac) * hsheet_hand[MINUTE_PERIOD - whole:MINUTE_PERIOD - whole + rows]
+                + frac * hsheet_hand[MINUTE_PERIOD - whole - 1:MINUTE_PERIOD - whole - 1 + rows])
+        hand = view * hwindows[hframe]
+    hand = rotate(in_box(hand, HAND_BOX), angle)
+    black = rotate(in_box(backing, HAND_BOX), angle)
     out = np.zeros((SIZE, SIZE, 3))
     out += plate[..., None] * hex_rgb(PLATE_PRINT)
     out += hprint[..., None] * hex_rgb(HOUR_INK)
@@ -471,7 +521,7 @@ def simulate(seconds, layers, ambient=False):
         out += (slide(msheet, toffset, MINUTE_PERIOD) * twin)[..., None] * hex_rgb(MINUTE_INK)
     out += (slide(hsheet, offset, HOUR_PERIOD) * hwin)[..., None] * hex_rgb(HOUR_INK)
     out *= (1 - black)[..., None]
-    out += (slide(msheet, moffset, MINUTE_PERIOD) * mwin)[..., None] * hex_rgb(MINUTE_INK)
+    out += hand[..., None] * hex_rgb(MINUTE_INK)
     out = out * (1 - cap[..., None]) + cap[..., None] * hex_rgb(MINUTE_INK)
     y, x = np.mgrid[:SIZE, :SIZE]
     out[np.hypot(x + 0.5 - C, y + 0.5 - C) > C] = 0
@@ -527,29 +577,39 @@ def hour_layers(dance_boxes):
     </Group>"""
 
 
-def backing(n, minute):
-    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" pivotX="0.5" pivotY="0.5" name="minute_backing_{n}">
-      <Transform target="angle" value="{minute} * 6" />
-      <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
+def hand_layers():
+    """The minute hand: backing, live windows and ambient still, rotated together."""
+    x, y, w, h = HAND_BOX
+    live = []
+    for p in range(HAND_FRAMES):
+        live.append(f"""        <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="hand_{p}">
+          <Transform target="alpha" value="{attr(HAND_FRAME)} == {p} ? 255 : 0" />
+          <Group x="{x}" y="{y - MINUTE_PERIOD}" width="{w}" height="{h + MINUTE_PERIOD}" renderMode="SOURCE" name="hand_{p}_rungs">
+            <Transform target="y" value="{attr(HAND_Y)}" />
+            <PartImage x="0" y="0" width="{w}" height="{h + MINUTE_PERIOD}">
+              <Image resource="scan_sheet_hand" />
+            </PartImage>
+          </Group>
+          <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="hand_{p}_window">
+            <PartImage x="{x}" y="{y}" width="{w}" height="{h}">
+              <Image resource="scan_hand_{p}" />
+            </PartImage>
+          </Group>
+        </Group>""")
+    nl = chr(10)
+    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" pivotX="0.5" pivotY="0.5" name="minute_hand">
+      <Transform target="angle" value="{attr(HAND_ANGLE)}" />
+      <PartImage x="{x}" y="{y}" width="{w}" height="{h}" name="minute_hand_backing">
         <Image resource="scan_hand_backing" />
       </PartImage>
-    </Group>"""
-
-
-def minute_ink(m, box):
-    """Minute window m: the minute sheet masked by the hand at m and m+1."""
-    x, y, w, h = box
-    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_ink_{m}">
-      <Transform target="alpha" value="[MINUTE] == {m} ? 255 : 0" />
-      <Group x="{-MINUTE_PERIOD}" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}" renderMode="SOURCE" name="sheet_minute_rules_{m}">
-        <Transform target="x" value="{MINUTE_X}" />
-        <PartImage x="0" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}">
-          <Image resource="scan_sheet_minute" />
-        </PartImage>
+      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="hand_live">
+        <Variant mode="AMBIENT" target="alpha" value="0" />
+{nl.join(live)}
       </Group>
-      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="minute_window_{m}">
+      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" alpha="0" name="hand_ambient">
+        <Variant mode="AMBIENT" target="alpha" value="255" />
         <PartImage x="{x}" y="{y}" width="{w}" height="{h}">
-          <Image resource="scan_minute_{m}" />
+          <Image resource="scan_hand_still" />
         </PartImage>
       </Group>
     </Group>"""
@@ -586,7 +646,7 @@ def tick_layers(tick_boxes):
     </Group>"""
 
 
-def xml(minute_boxes, dance_boxes, tick_boxes):
+def xml(dance_boxes, tick_boxes):
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <!-- Generated by generate_xml.py. Edit the generator, not this file. -->
 <WatchFace width="{SIZE}" height="{SIZE}">
@@ -601,9 +661,7 @@ def xml(minute_boxes, dance_boxes, tick_boxes):
     </PartImage>
 {tick_layers(tick_boxes)}
 {hour_layers(dance_boxes)}
-{backing(0, "[MINUTE]")}
-{backing(1, "([MINUTE] + 1)")}
-{chr(10).join(minute_ink(m, box) for m, box in enumerate(minute_boxes))}
+{hand_layers()}
     <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_cap">
       <Image resource="scan_hand_cap" />
     </PartImage>
@@ -631,12 +689,15 @@ def main():
     windows = hour_windows()
     hsheet = hour_sheet()
     plate, mprint = plate_print(), minute_print()
-    mwindows, msheet = minute_windows(), minute_sheet()
+    msheet = minute_sheet()
+    hwindows, hsheet_hand, hstill = hand_windows(), hand_sheet(), hand_still()
     back, cap = hand_backing(), hand_cap()
     for k, window in enumerate(windows):
         save_alpha(window, f"scan_window_{k}")
-    for m, (alpha, _) in enumerate(mwindows):
-        save_alpha(alpha, f"scan_minute_{m}")
+    for p, alpha in enumerate(hwindows):
+        save_alpha(alpha, f"scan_hand_{p}")
+    save_alpha(hsheet_hand, "scan_sheet_hand", MINUTE_INK)
+    save_alpha(hstill, "scan_hand_still", MINUTE_INK)
     save_alpha(msheet, "scan_sheet_minute", MINUTE_INK)
     save_alpha(back, "scan_hand_backing", "#FF000000")
     save_alpha(cap, "scan_hand_cap", MINUTE_INK)
@@ -651,12 +712,11 @@ def main():
     for k, row in enumerate(dances):
         for p, (alpha, _) in enumerate(row):
             save_alpha(alpha, f"scan_dance_{k}_{p}")
-    (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows],
-                                            [[box for _, box in row] for row in dances],
+    (HERE / "watchface.xml").write_text(xml([[box for _, box in row] for row in dances],
                                             [box for _, box in twindows]))
 
-    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap, dances,
-              hprint, twindows)
+    layers = (windows, hsheet, plate, mprint, hwindows, hsheet_hand, hstill, msheet, back, cap,
+              dances, hprint, twindows)
     previews = HERE / "previews"
     previews.mkdir(exist_ok=True)
     for old in previews.glob("*.png"):
