@@ -25,7 +25,8 @@ description: >
   A Scanimation toy. Big amber hour numerals are seen through a black barrier
   of slits, each window interleaving the current hour with the next. Over ten
   minutes centred just before the hour (half and half at :59:30), the striped
-  sheet slides across and the numeral changes into the next. The white minute
+  sheet slides across and the numeral changes into the next. Between changes, live, the numeral dances: it sways, crouches
+  and jumps through more Scanimation windows. The white minute
   hand is a Scanimation too: over each minute it changes from one minute's
   position into the next through the same barrier.
 
@@ -45,4 +46,6 @@ implementationNotes: >
   separate SOURCE/MASK groups switched by group alpha. The minute hand works
   the same way: sixty cropped windows of hands m and m+1 under a sheet that
   slides continuously through each minute, with rotated black backings and a
-  static cap.
+  static cap. Live, four dance windows per hour (rest + one move each,
+  cropped) chain through the rest frame under the same hour sheet, which
+  slides 3 px per 0.75 s eased step for the first 50 minutes of each window.

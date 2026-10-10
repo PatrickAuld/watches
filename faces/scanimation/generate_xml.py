@@ -26,6 +26,18 @@ Hours: two frames per window
     covers, so the switch is invisible. The window clock is therefore the
     time shifted back 4.5 minutes; offset = 3 * (window + change) mod 6.
 
+Hours dance between changes
+    Live, the numeral never sits still. Each hour has DANCE_MOVES more
+    two-frame windows: dance window (k, j) interleaves numeral k at rest and
+    numeral k in move j (sway left, sway right, crouch, jump), rest in parity
+    k % 2 and the move in the other parity. The hour sheet keeps sliding 3 px
+    per DANCE_STEP: rest, move 0, rest, move 1, rest ... A rest -> move -> rest
+    round trip is 6 px, so it stays in one window, and every switch happens
+    with the sheet over the rest frame, where all windows of hour k agree.
+    Each step holds, then eases across, so poses read crisply. The dance stops
+    at rest for the ten-minute hour change, which then runs as before. In
+    ambient the dance windows are hidden and the plain hour chain shows.
+
 Minutes: an analog hand, also a Scanimation
     Sixty minute windows, built the same way as the hours: window m
     interleaves the hand at minute m and at minute m+1 in the same 3 px
@@ -58,6 +70,19 @@ CHANGE_SECONDS = 600        # the hour change lasts ten minutes...
 HALFWAY_BEFORE_HOUR = 30    # ...and is half done this many seconds before the hour
 WINDOW_LAG = CHANGE_SECONDS // 2 - HALFWAY_BEFORE_HOUR   # 270 s: window k runs to k+1:04:30
 
+DANCE_STEP = 0.75           # s per rest -> move or move -> rest step
+DANCE_EASE = 0.6            # fraction of each step spent sliding; the rest holds the pose
+DANCE_SECONDS = 3600 - CHANGE_SECONDS   # the dance fills each window up to its change
+# Moves: (angle deg clockwise, scale x, scale y, dy px, anchor y px from centre).
+DANCE_MOVES = [
+    (-8.0, 1.0, 1.0, 0.0, 0.0),     # sway left (about the centre, so nothing leaves the window)
+    (8.0, 1.0, 1.0, 0.0, 0.0),      # sway right
+    (0.0, 1.04, 0.86, 0.0, 112.0),  # crouch, feet planted
+    (0.0, 0.94, 1.03, -10.0, 0.0),  # jump
+]
+DANCE_CYCLE = 2 * len(DANCE_MOVES)  # steps per loop
+assert (DANCE_SECONDS / DANCE_STEP) % DANCE_CYCLE == 0, "the dance must end at rest"
+
 HAND = (-26, 192, 15.0, 6.0)   # minute hand: tail r, tip r, base width, tip width
 HAND_BACKING = 3.0             # px of black around the hand
 CAP = (10.0, 3.5)              # centre cap radius, hole radius
@@ -82,7 +107,18 @@ WINDOW_CLOCK = (f"((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + {4320
                 f" % 43200)")
 WINDOW = f"floor({WINDOW_CLOCK} / 3600)"
 CHANGE = f"clamp(({WINDOW_CLOCK} % 3600 - {3600 - CHANGE_SECONDS}) / {CHANGE_SECONDS}, 0, 1)"
+# Seconds into the current window (its dance, then its change), with milliseconds.
+INTO = (f"(([MINUTE] * 60 + [SECOND] + {3600 - WINDOW_LAG % 3600}) % 3600"
+        f" + [MILLISECOND] / 1000)")
+DANCE_S = f"(clamp({INTO}, 0, {DANCE_SECONDS}) / {DANCE_STEP:g})"   # steps danced so far
+DANCE_N = f"floor({DANCE_S})"
+DANCE_F = (f"clamp(({DANCE_S} - {DANCE_N} - {(1 - DANCE_EASE) / 2:g}) / {DANCE_EASE:g},"
+           f" 0, 1)")
+DANCE = f"({DANCE_N} + {DANCE_F} * {DANCE_F} * (3 - 2 * {DANCE_F}))"   # smoothstep within a step
+DANCE_MOVE = f"(floor({DANCE_N} / 2) % {len(DANCE_MOVES)})"
+DANCING = f"{INTO} < {DANCE_SECONDS}"
 HOUR_X = f"({-HOUR_PERIOD} + (({WINDOW} + {CHANGE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
+DANCE_X = f"({-HOUR_PERIOD} + (({WINDOW} + {DANCE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
 MINUTE_X = (f"({-MINUTE_PERIOD} + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60)"
             f" * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})")
 
@@ -130,8 +166,29 @@ def numeral_layers():
         left, _, right, _ = draw.textbbox((0, 0), label, font=font)
         draw.text((big / 2 - (left + right) / 2, big / 2 - (top + bottom) / 2),
                   label, font=font, fill=255)
-        layers.append(np.asarray(img) > 127)
+        layers.append(img)
     return layers
+
+
+def pose(img, move):
+    """A numeral image posed by a dance move, as supersampled coverage."""
+    angle, sx, sy, dy, anchor = move
+    big = SIZE * SS
+    c = big / 2
+    ay = c + anchor * SS
+    a = math.radians(angle)
+    # Forward map about (c, ay): scale, rotate clockwise, then shift by dy.
+    # Image.transform wants the inverse: output (u, v) -> input (x, y).
+    ca, sa = math.cos(a), math.sin(a)
+    def inverse(u, v):
+        u, v = u - c, v - ay - dy * SS
+        x, y = ca * u + sa * v, -sa * u + ca * v
+        return x / sx + c, y / sy + ay
+    x0, y0 = inverse(0, 0)
+    (xu, yu), (xv, yv) = inverse(1, 0), inverse(0, 1)
+    coeffs = (xu - x0, xv - x0, x0, yu - y0, yv - y0, y0)
+    out = img.transform(img.size, Image.AFFINE, coeffs, resample=Image.BICUBIC)
+    return np.asarray(out) > 127
 
 
 def hour_windows():
@@ -139,13 +196,39 @@ def hour_windows():
     x, y = grid(SIZE, SIZE)
     column = np.floor((x % HOUR_PERIOD) / HOUR_COLUMN).astype(int)   # 0 or 1
     inside = np.hypot(x, y) < RING_IN - 6
-    numerals = numeral_layers()
+    numerals = [np.asarray(img) > 127 for img in numeral_layers()]
     windows = []
     for k in range(12):
         nxt = (k + 1) % 12
         window = ((column == k % 2) & numerals[k]) | ((column == nxt % 2) & numerals[nxt])
         windows.append(downsample(window & inside))
     return windows
+
+
+def dance_windows():
+    """Dance window (k, j): numeral k at rest and in move j, cropped.
+
+    Returns [[(alpha, box) per move] per hour].
+    """
+    x, y = grid(SIZE, SIZE)
+    column = np.floor((x % HOUR_PERIOD) / HOUR_COLUMN).astype(int)
+    inside = np.hypot(x, y) < RING_IN - 6
+    out = []
+    for k, img in enumerate(numeral_layers()):
+        rest = np.asarray(img) > 127
+        row = []
+        for move in DANCE_MOVES:
+            moved = pose(img, move)
+            window = ((column == k % 2) & rest) | ((column != k % 2) & moved)
+            row.append(crop(downsample(window & inside)))
+        out.append(row)
+    return out
+
+
+def crop(alpha):
+    ys, xs = np.nonzero(alpha > 0)
+    x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
+    return alpha[y0:y1, x0:x1], (int(x0), int(y0), int(x1 - x0), int(y1 - y0))
 
 
 def hand_shape(x, y, angle, grow=0.0):
@@ -239,16 +322,22 @@ def save_alpha(alpha, name, color="#FFFFFFFF"):
 
 
 def hour_state(seconds):
-    """Hour sheet offset in px and window index (mirrors HOUR_X and WINDOW)."""
+    """Hour sheet offset in px, window index and dance move or None (mirrors the XML)."""
     clock = (seconds - WINDOW_LAG) % 43200
     window, into = divmod(clock, 3600)
-    change = min(max((into - (3600 - CHANGE_SECONDS)) / CHANGE_SECONDS, 0), 1)
-    return ((window + change) * HOUR_COLUMN) % HOUR_PERIOD, int(window)
+    change = min(max((into - DANCE_SECONDS) / CHANGE_SECONDS, 0), 1)
+    steps = min(max(into, 0), DANCE_SECONDS) / DANCE_STEP
+    n = math.floor(steps)
+    f = min(max((steps - n - (1 - DANCE_EASE) / 2) / DANCE_EASE, 0), 1)
+    dance = n + f * f * (3 - 2 * f)
+    move = (n // 2) % len(DANCE_MOVES) if into < DANCE_SECONDS else None
+    return ((window + change + dance) * HOUR_COLUMN) % HOUR_PERIOD, int(window), move
 
 
 def minute_state(seconds):
     """Minute sheet offset in px and window index (mirrors MINUTE_X)."""
     minute, into = divmod(seconds % 3600, 60)
+    minute = int(minute)
     return ((minute + into / 60) * MINUTE_COLUMN) % MINUTE_PERIOD, int(minute)
 
 
@@ -270,8 +359,14 @@ def slide(sheet, shift, margin):
 
 def simulate(seconds, layers):
     """Composite the face at a time given as seconds past 12:00."""
-    windows, hsheet, plate, mprint, mwindows, msheet, backing, cap = layers
-    offset, window = hour_state(seconds)
+    windows, hsheet, plate, mprint, mwindows, msheet, backing, cap, dances = layers
+    offset, window, move = hour_state(seconds)
+    if move is None:
+        hwin = windows[window]
+    else:
+        dalpha, (dx, dy, dw, dh) = dances[window][move]
+        hwin = np.zeros((SIZE, SIZE))
+        hwin[dy:dy + dh, dx:dx + dw] = dalpha
     moffset, minute = minute_state(seconds)
     alpha, (x0, y0, w, h) = mwindows[minute]
     mwin = np.zeros((SIZE, SIZE))
@@ -280,7 +375,7 @@ def simulate(seconds, layers):
     out = np.zeros((SIZE, SIZE, 3))
     out += plate[..., None] * hex_rgb(PLATE_PRINT)
     out += mprint[..., None] * hex_rgb(MINUTE_PRINT)
-    out += (slide(hsheet, offset, HOUR_PERIOD) * windows[window])[..., None] * hex_rgb(HOUR_INK)
+    out += (slide(hsheet, offset, HOUR_PERIOD) * hwin)[..., None] * hex_rgb(HOUR_INK)
     out *= (1 - black)[..., None]
     out += (slide(msheet, moffset, MINUTE_PERIOD) * mwin)[..., None] * hex_rgb(MINUTE_INK)
     out = out * (1 - cap[..., None]) + cap[..., None] * hex_rgb(MINUTE_INK)
@@ -289,25 +384,52 @@ def simulate(seconds, layers):
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8), "RGB")
 
 
-def hour_ink(k):
-    """Hour window k: the hour sheet masked by numerals k and k+1, shown only in window k.
+def attr(expr):
+    return expr.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def hour_ink(name, shown, x_expr, resource, box=(0, 0, SIZE, SIZE)):
+    """One hour window: the hour sheet masked by a two-frame window image.
 
     Each window is its own SOURCE/MASK group (switched by group alpha): several
     images inside one MASK group would intersect, not alternate.
     """
-    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="hour_ink_{k}">
-      <Transform target="alpha" value="{WINDOW} == {k} ? 255 : 0" />
-      <Group x="{-HOUR_PERIOD}" y="0" width="{SIZE + HOUR_PERIOD}" height="{SIZE}" renderMode="SOURCE" name="sheet_hour_rules_{k}">
-        <Transform target="x" value="{HOUR_X}" />
-        <PartImage x="0" y="0" width="{SIZE + HOUR_PERIOD}" height="{SIZE}">
-          <Image resource="scan_sheet_hour" />
-        </PartImage>
-      </Group>
-      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="hour_window_{k}">
-        <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}">
-          <Image resource="scan_window_{k}" />
-        </PartImage>
-      </Group>
+    x, y, w, h = box
+    return f"""      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="{name}">
+        <Transform target="alpha" value="{attr(shown)} ? 255 : 0" />
+        <Group x="{-HOUR_PERIOD}" y="0" width="{SIZE + HOUR_PERIOD}" height="{SIZE}" renderMode="SOURCE" name="{name}_rules">
+          <Transform target="x" value="{attr(x_expr)}" />
+          <PartImage x="0" y="0" width="{SIZE + HOUR_PERIOD}" height="{SIZE}">
+            <Image resource="scan_sheet_hour" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="{name}_window">
+          <PartImage x="{x}" y="{y}" width="{w}" height="{h}">
+            <Image resource="{resource}" />
+          </PartImage>
+        </Group>
+      </Group>"""
+
+
+def hour_layers(dance_boxes):
+    """Live: dance windows, then the change window. Ambient: the plain hour chain."""
+    live, still = [], []
+    for k in range(12):
+        for j, box in enumerate(dance_boxes[k]):
+            live.append(hour_ink(f"hour_dance_{k}_{j}",
+                                 f"{WINDOW} == {k} && {DANCING} && {DANCE_MOVE} == {j}",
+                                 DANCE_X, f"scan_dance_{k}_{j}", box))
+        live.append(hour_ink(f"hour_change_{k}", f"{WINDOW} == {k} && !({DANCING})",
+                             HOUR_X, f"scan_window_{k}"))
+        still.append(hour_ink(f"hour_still_{k}", f"{WINDOW} == {k}", HOUR_X, f"scan_window_{k}"))
+    nl = chr(10)
+    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="hours_live">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+{nl.join(live)}
+    </Group>
+    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" alpha="0" name="hours_ambient">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+{nl.join(still)}
     </Group>"""
 
 
@@ -339,7 +461,7 @@ def minute_ink(m, box):
     </Group>"""
 
 
-def xml(minute_boxes):
+def xml(minute_boxes, dance_boxes):
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <!-- Generated by generate_xml.py. Edit the generator, not this file. -->
 <WatchFace width="{SIZE}" height="{SIZE}">
@@ -352,7 +474,7 @@ def xml(minute_boxes):
     <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_markings_print">
       <Image resource="scan_minute_print" />
     </PartImage>
-{chr(10).join(hour_ink(k) for k in range(12))}
+{hour_layers(dance_boxes)}
 {backing(0, "[MINUTE]")}
 {backing(1, "([MINUTE] + 1)")}
 {chr(10).join(minute_ink(m, box) for m, box in enumerate(minute_boxes))}
@@ -395,9 +517,14 @@ def main():
     save_alpha(hsheet, "scan_sheet_hour", HOUR_INK)
     save_alpha(plate, "scan_plate", PLATE_PRINT)
     save_alpha(mprint, "scan_minute_print", MINUTE_PRINT)
-    (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows]))
+    dances = dance_windows()
+    for k, row in enumerate(dances):
+        for j, (alpha, _) in enumerate(row):
+            save_alpha(alpha, f"scan_dance_{k}_{j}")
+    (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows],
+                                            [[box for _, box in row] for row in dances]))
 
-    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap)
+    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap, dances)
     previews = HERE / "previews"
     previews.mkdir(exist_ok=True)
     for old in previews.glob("*.png"):
@@ -405,6 +532,9 @@ def main():
     for label, seconds in PREVIEW_TIMES.items():
         simulate(seconds, layers).save(previews / f"{label}.png", optimize=True)
     simulate(PREVIEW_TIMES["10-10"], layers).save(HERE / "preview.png", optimize=True)
+    for j in range(len(DANCE_MOVES)):     # each dance move, held (live only)
+        held = PREVIEW_TIMES["10-10"] + (2 * j + 1.05) * DANCE_STEP
+        simulate(held, layers).save(previews / f"10-10-dance-{j}.png", optimize=True)
 
 
 if __name__ == "__main__":
