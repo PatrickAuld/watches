@@ -25,7 +25,8 @@ description: >
   A floating chord joins an inner hour bead to an outer minute ring.
   Choose a floating line or raised wall shadow, following the Sun above
   Alameda, California. A softly concave rim recesses the ivory dial, which
-  fades through twilight to quiet blue at night.
+  warms to gold at sunrise and muted rose at sunset, then fades to quiet
+  blue at night.
 
 designNotes: >
   No case, metallic bevels, conventional hands, center hub, or complications.
@@ -36,7 +37,8 @@ implementationNotes: >
   into the fixed Alameda east/north/up frame. An editable Shadow geometry
   setting selects Floating line or Raised wall. Solar rim shading creates
   a recessed dial. Shadows fade at the horizon
-  and vanish at night; grazing lengths are capped. North is dial-up, not
+  and vanish at night; lengths vary continuously with solar elevation up to
+  32 design units. No gyro or accelerometer input is used. North is dial-up, not
   compass-aligned. Black ambient mode preserves only time and cardinal ticks.
 
 location:
