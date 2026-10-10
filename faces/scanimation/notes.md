@@ -16,6 +16,11 @@ sideways under the mask to show the time.
   Two-digit hours dance in step like a chorus line. A smooth two-second loop
   of twelve frames. It comes back to rest for the hour change. Ambient shows
   it still.
+- **Ring**: the sixty minute ticks dance with the numeral. They are bold
+  white wedges striped by the barrier. On every beat they all kick inward,
+  and two crests chase round the dial with the ticks under them reaching in
+  like an equaliser. It never stops, even during the hour change. Hour indices
+  outside the ring are amber. Ambient: still grey ticks.
 - **Minute**: a white analog hand, also a Scanimation. Over every minute it
   changes from minute m's position into m+1's through the barrier: whole on
   the minute, two interleaved ghost hands at :30 seconds. Sixty faint
@@ -51,6 +56,14 @@ over ten minutes, so the numeral visibly changes into the next.
   begins. Live/ambient are two wrapper groups with AMBIENT Variants; the
   ambient one holds the plain hour chain. Mirroring the pair was tried and
   dropped: leaning together, the 1 of 12 ran into the 2.
+- **Ring windows** (`scan_ticks_p`): twelve frames chained frame p ->
+  p+1 under the white minute sheet, on the dance's clock (six frames a
+  second, the same INTO origin), so the kicks land on the numeral's squash.
+  The ring's clock is not clamped, so it keeps going through the change; 21600
+  frames an hour is a whole number of loops, so it wraps cleanly. Ticks are
+  at least 6 px wide (one barrier period) so ticks near 12 and 6, parallel
+  to the slits, still show in every frame. Minute ticks print at 60 %,
+  five-minute ticks solid.
 - The minute hand uses the same two-frame scheme. Sixty windows
   (`scan_minute_m`) hold the hand at m and m+1, with hand m in column parity
   m % 2. They are cropped to the hand's bounding box, so sixty decoded bitmaps
@@ -93,6 +106,10 @@ over ten minutes, so the numeral visibly changes into the next.
    jump) through a rest frame. Patrick: "That looks cheap." Rigid tilts with
    a snap back to rest read as clip art. Now a twelve-frame loop of
    bending, squashing, rubber-hose motion with a continuous slide.
+8. **The ring joins in** (Patrick: "make the edge ticks better to match
+   things as well. They are sort of dull for what the watch is now"). The
+   faint grey printed ticks became a dancing Scanimation ring, and the hour
+   indices became amber.
 
 Ambient: a Variant alpha directly on the hour windows would override the
 per-window switch, so Variants sit on two wrapper groups instead: live

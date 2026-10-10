@@ -7,9 +7,186 @@
     <PartImage x="0" y="0" width="450" height="450" name="mask_plate_print">
       <Image resource="scan_plate" />
     </PartImage>
-    <PartImage x="0" y="0" width="450" height="450" name="minute_markings_print">
-      <Image resource="scan_minute_print" />
+    <PartImage x="0" y="0" width="450" height="450" name="hour_index_print">
+      <Image resource="scan_hour_print" />
     </PartImage>
+    <Group x="0" y="0" width="450" height="450" name="ticks_live">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+      <Group x="0" y="0" width="450" height="450" name="ticks_0">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 0 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_0_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_0_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_0" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_1">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 1 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_1_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_1_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_1" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_2">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 2 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_2_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_2_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_2" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_3">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 3 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_3_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_3_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_3" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_4">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 4 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_4_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_4_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_4" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_5">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 5 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_5_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_5_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_5" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_6">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 6 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_6_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_6_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_6" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_7">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 7 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_7_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_7_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_7" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_8">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 8 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_8_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_8_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_8" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_9">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 9 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_9_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_9_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_9" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_10">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 10 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_10_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_10_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_10" />
+          </PartImage>
+        </Group>
+      </Group>
+      <Group x="0" y="0" width="450" height="450" name="ticks_11">
+        <Transform target="alpha" value="(floor(((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6)) % 12) == 11 ? 255 : 0" />
+        <Group x="-6" y="0" width="456" height="450" renderMode="SOURCE" name="ticks_11_rules">
+          <Transform target="x" value="(-6 + (((([MINUTE] * 60 + [SECOND] + 3330) % 3600 + [MILLISECOND] / 1000) * 6) * 3) % 6)" />
+          <PartImage x="0" y="0" width="456" height="450">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" renderMode="MASK" name="ticks_11_window">
+          <PartImage x="24" y="24" width="402" height="402">
+            <Image resource="scan_ticks_11" />
+          </PartImage>
+        </Group>
+      </Group>
+    </Group>
+    <Group x="0" y="0" width="450" height="450" alpha="0" name="ticks_ambient">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <PartImage x="0" y="0" width="450" height="450" name="minute_markings_print">
+        <Image resource="scan_minute_print" />
+      </PartImage>
+    </Group>
     <Group x="0" y="0" width="450" height="450" name="hours_live">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <Group x="0" y="0" width="450" height="450" name="hour_dance_0_0">

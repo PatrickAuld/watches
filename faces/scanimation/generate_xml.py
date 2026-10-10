@@ -46,6 +46,18 @@ Hours dance between changes
     hour change begins. In ambient the dance windows are hidden and the
     plain hour chain shows.
 
+The minute ring dances too
+    The sixty minute ticks are bold wedges (every tick at least one barrier
+    period wide, so even the ones parallel to the slits show in every frame)
+    seen through the white minute sheet. TICK_FRAMES frames chain exactly like
+    the dance, on the same clock, so they move together: on every beat, when
+    the numeral squashes, all the ticks kick inward, and two crests chase
+    each other round the dial, the ticks under them reaching in like an
+    equaliser. The ring never stops, not even during the hour change. Five-
+    minute ticks are printed solid, the others at TICK_DIM. The hour indices
+    outside the ring are printed in the numerals' amber. Ambient shows still,
+    grey ticks instead.
+
 Minutes: an analog hand, also a Scanimation
     Sixty minute windows, built the same way as the hours: window m
     interleaves the hand at minute m and at minute m+1 in the same 3 px
@@ -97,8 +109,14 @@ MINUTE_COLUMN = MINUTE_PERIOD / 2
 MINUTE_RULE = 2.5              # px
 
 RING_IN, RING_OUT = 180, 201                 # minute ring (safe inset 24 -> r <= 201)
-TICK = (RING_IN + 3, RING_OUT - 1, 1.6)      # printed minute marking: r0, r1, width
-TICK_FIVE = (RING_IN, RING_OUT, 3.0)         # printed five-minute marking
+TICK_MINUTE = (RING_OUT - 10, RING_OUT, 6.0, 7.5)       # minute tick: r0, r1, inner width, outer width
+TICK_FIVE = (RING_OUT - 19, RING_OUT, 7.0, 10.0) # five-minute tick
+TICK_DIM = 0.6               # minute ticks print at this strength, five-minute ticks at 1
+TICK_FRAMES = 12             # the ring's loop, on the dance clock
+TICK_KICK = 5.0              # px: every tick reaches inward on each beat...
+TICK_CREST = 10.0            # px: ...and further under the two travelling crests
+TICK_CREST_WIDTH = 6         # crest sharpness (power of a raised cosine)
+HOUR_INDEX_STRENGTH = 0.8    # amber hour indices outside the ring
 
 NUMERAL_HEIGHT = 224        # cap height of the hour numerals
 HOUR_LABELS = ["12"] + [str(h) for h in range(1, 12)]
@@ -106,7 +124,7 @@ HOUR_LABELS = ["12"] + [str(h) for h in range(1, 12)]
 HOUR_INK = "#FFFFC46B"
 MINUTE_INK = "#FFE9F3FF"
 PLATE_PRINT = "#FF2A2A2A"
-MINUTE_PRINT = "#FF4A4A4A"
+MINUTE_PRINT = "#FF4A4A4A"   # ambient ticks
 
 # Seconds past 12:00, shifted back so each window's change ends WINDOW_LAG after the hour.
 WINDOW_CLOCK = (f"((([HOUR_0_23] % 12) * 3600 + [MINUTE] * 60 + [SECOND] + {43200 - WINDOW_LAG})"
@@ -119,6 +137,9 @@ INTO = (f"(([MINUTE] * 60 + [SECOND] + {3600 - WINDOW_LAG % 3600}) % 3600"
 DANCE = f"(clamp({INTO}, 0, {DANCE_SECONDS}) * {DANCE_RATE})"   # frames danced
 DANCE_FRAME = f"(floor({DANCE}) % {DANCE_FRAMES})"
 DANCING = f"{INTO} < {DANCE_SECONDS}"
+TICKS = f"({INTO} * {DANCE_RATE})"           # ring frames, in step with the dance
+TICK_FRAME = f"(floor({TICKS}) % {TICK_FRAMES})"
+TICK_X = f"({-MINUTE_PERIOD} + ({TICKS} * {MINUTE_COLUMN:g}) % {MINUTE_PERIOD})"
 HOUR_X = f"({-HOUR_PERIOD} + (({WINDOW} + {CHANGE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
 DANCE_X = f"({-HOUR_PERIOD} + (({WINDOW} + {DANCE}) * {HOUR_COLUMN:g}) % {HOUR_PERIOD})"
 MINUTE_X = (f"({-MINUTE_PERIOD} + (([MINUTE] + ([SECOND] + [MILLISECOND] / 1000) / 60)"
@@ -143,11 +164,13 @@ def downsample(mask):
     return mask.reshape(h // SS, SS, w // SS, SS).mean(axis=(1, 3))
 
 
-def radial_bar(x, y, angle, r0, r1, width):
-    """A radial marking at `angle` degrees clockwise from twelve."""
+def radial_bar(x, y, angle, r0, r1, width, outer_width=None):
+    """A radial marking at `angle` degrees clockwise from twelve, optionally tapered."""
     a = math.radians(angle)
     along = x * math.sin(a) - y * math.cos(a)
     across = x * math.cos(a) + y * math.sin(a)
+    if outer_width is not None:
+        width = width + (outer_width - width) * np.clip((along - r0) / (r1 - r0), 0, 1)
     return (along >= r0) & (along <= r1) & (np.abs(across) <= width / 2)
 
 
@@ -312,26 +335,55 @@ def hour_sheet():
     return downsample(band(x, HOUR_COLUMN / 2, HOUR_RULE, HOUR_PERIOD))
 
 
+def tick_marks(t=None):
+    """The sixty ticks as supersampled strength; t is the ring's loop phase (None: at rest)."""
+    x, y = grid(SIZE, SIZE)
+    marks = np.zeros_like(x, dtype=np.float32)
+    beat = 0 if t is None else (1 - math.cos(4 * math.pi * t)) / 2   # the dance's beat
+    for m in range(60):
+        r0, r1, w0, w1 = TICK_FIVE if m % 5 == 0 else TICK_MINUTE
+        if t is not None:
+            theta = math.radians(m * 6)
+            crest = ((1 + math.cos(2 * (theta - math.pi * t))) / 2) ** TICK_CREST_WIDTH
+            r0 -= TICK_KICK * beat + TICK_CREST * crest
+        strength = 1.0 if m % 5 == 0 else TICK_DIM
+        marks = np.maximum(marks, strength * radial_bar(x, y, m * 6, r0, r1, w0, w1))
+    return marks
+
+
 def minute_print():
-    """Sixty faint minute markings printed on the plate."""
+    """The ticks at rest, printed grey for ambient."""
+    return downsample(tick_marks())
+
+
+def tick_windows():
+    """Ring window p: the ticks in frame p and frame p + 1 in alternating columns, cropped."""
+    x, _ = grid(SIZE, SIZE)
+    column = np.floor((x % MINUTE_PERIOD) / MINUTE_COLUMN).astype(int)
+    frames = [tick_marks(p / TICK_FRAMES) for p in range(TICK_FRAMES)]
+    out = []
+    for p in range(TICK_FRAMES):
+        nxt = frames[(p + 1) % TICK_FRAMES]
+        out.append(crop(downsample(np.where(column == p % 2, frames[p], nxt))))
+    return out
+
+
+def hour_index_print():
+    """Amber hour indices outside the ring, longer at 12, 3, 6 and 9."""
     x, y = grid(SIZE, SIZE)
     marks = np.zeros_like(x, dtype=bool)
-    for m in range(60):
-        marks |= radial_bar(x, y, m * 6, *(TICK_FIVE if m % 5 == 0 else TICK))
-    return downsample(marks)
+    for i in range(12):
+        if i % 3 == 0:
+            marks |= radial_bar(x, y, i * 30, RING_OUT + 5, RING_OUT + 18, 4.0, 6.0)
+        else:
+            marks |= radial_bar(x, y, i * 30, RING_OUT + 7, RING_OUT + 15, 2.5, 3.5)
+    return downsample(marks) * HOUR_INDEX_STRENGTH
 
 
 def plate_print():
-    """Dim marks printed on the black mask: hour indices and the window rim."""
+    """Dim window rim printed on the black mask."""
     img = Image.new("L", (SIZE * SS, SIZE * SS), 0)
     draw = ImageDraw.Draw(img)
-    for i in range(12):
-        a = math.radians(i * 30)
-        r0, r1 = (RING_OUT + 5, RING_OUT + 17) if i % 3 == 0 else (RING_OUT + 8, RING_OUT + 15)
-        w = 3.2 if i % 3 == 0 else 2.0
-        p0 = (C + r0 * math.sin(a), C - r0 * math.cos(a))
-        p1 = (C + r1 * math.sin(a), C - r1 * math.cos(a))
-        draw.line([(p0[0] * SS, p0[1] * SS), (p1[0] * SS, p1[1] * SS)], fill=255, width=int(w * SS))
     rr = RING_IN - 4
     draw.ellipse([(C - rr) * SS, (C - rr) * SS, (C + rr) * SS, (C + rr) * SS],
                  outline=255, width=int(0.75 * SS))
@@ -383,11 +435,19 @@ def slide(sheet, shift, margin):
     return (1 - frac) * a + frac * b
 
 
-def simulate(seconds, layers):
+def tick_state(seconds):
+    """Ring sheet offset in px and ring frame (mirrors TICK_X and TICK_FRAME)."""
+    into = (seconds - WINDOW_LAG) % 3600
+    ticks = into * DANCE_RATE
+    return (ticks * MINUTE_COLUMN) % MINUTE_PERIOD, math.floor(ticks) % TICK_FRAMES
+
+
+def simulate(seconds, layers, ambient=False):
     """Composite the face at a time given as seconds past 12:00."""
-    windows, hsheet, plate, mprint, mwindows, msheet, backing, cap, dances = layers
+    (windows, hsheet, plate, mprint, mwindows, msheet, backing, cap, dances,
+     hprint, twindows) = layers
     offset, window, frame = hour_state(seconds)
-    if frame is None:
+    if frame is None or ambient:
         hwin = windows[window]
     else:
         dalpha, (dx, dy, dw, dh) = dances[window][frame]
@@ -400,7 +460,15 @@ def simulate(seconds, layers):
     black = np.maximum(rotate(backing, minute * 6), rotate(backing, minute * 6 + 6))
     out = np.zeros((SIZE, SIZE, 3))
     out += plate[..., None] * hex_rgb(PLATE_PRINT)
-    out += mprint[..., None] * hex_rgb(MINUTE_PRINT)
+    out += hprint[..., None] * hex_rgb(HOUR_INK)
+    if ambient:
+        out += mprint[..., None] * hex_rgb(MINUTE_PRINT)
+    else:
+        toffset, tframe = tick_state(seconds)
+        talpha, (tx, ty, tw, th) = twindows[tframe]
+        twin = np.zeros((SIZE, SIZE))
+        twin[ty:ty + th, tx:tx + tw] = talpha
+        out += (slide(msheet, toffset, MINUTE_PERIOD) * twin)[..., None] * hex_rgb(MINUTE_INK)
     out += (slide(hsheet, offset, HOUR_PERIOD) * hwin)[..., None] * hex_rgb(HOUR_INK)
     out *= (1 - black)[..., None]
     out += (slide(msheet, moffset, MINUTE_PERIOD) * mwin)[..., None] * hex_rgb(MINUTE_INK)
@@ -487,7 +555,38 @@ def minute_ink(m, box):
     </Group>"""
 
 
-def xml(minute_boxes, dance_boxes):
+def tick_layers(tick_boxes):
+    """Live: the dancing ring windows. Ambient: the ticks printed still."""
+    live = []
+    for p, (x, y, w, h) in enumerate(tick_boxes):
+        live.append(f"""      <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="ticks_{p}">
+        <Transform target="alpha" value="{attr(TICK_FRAME)} == {p} ? 255 : 0" />
+        <Group x="{-MINUTE_PERIOD}" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}" renderMode="SOURCE" name="ticks_{p}_rules">
+          <Transform target="x" value="{attr(TICK_X)}" />
+          <PartImage x="0" y="0" width="{SIZE + MINUTE_PERIOD}" height="{SIZE}">
+            <Image resource="scan_sheet_minute" />
+          </PartImage>
+        </Group>
+        <Group x="0" y="0" width="{SIZE}" height="{SIZE}" renderMode="MASK" name="ticks_{p}_window">
+          <PartImage x="{x}" y="{y}" width="{w}" height="{h}">
+            <Image resource="scan_ticks_{p}" />
+          </PartImage>
+        </Group>
+      </Group>""")
+    nl = chr(10)
+    return f"""    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" name="ticks_live">
+      <Variant mode="AMBIENT" target="alpha" value="0" />
+{nl.join(live)}
+    </Group>
+    <Group x="0" y="0" width="{SIZE}" height="{SIZE}" alpha="0" name="ticks_ambient">
+      <Variant mode="AMBIENT" target="alpha" value="255" />
+      <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_markings_print">
+        <Image resource="scan_minute_print" />
+      </PartImage>
+    </Group>"""
+
+
+def xml(minute_boxes, dance_boxes, tick_boxes):
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <!-- Generated by generate_xml.py. Edit the generator, not this file. -->
 <WatchFace width="{SIZE}" height="{SIZE}">
@@ -497,9 +596,10 @@ def xml(minute_boxes, dance_boxes):
     <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="mask_plate_print">
       <Image resource="scan_plate" />
     </PartImage>
-    <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="minute_markings_print">
-      <Image resource="scan_minute_print" />
+    <PartImage x="0" y="0" width="{SIZE}" height="{SIZE}" name="hour_index_print">
+      <Image resource="scan_hour_print" />
     </PartImage>
+{tick_layers(tick_boxes)}
 {hour_layers(dance_boxes)}
 {backing(0, "[MINUTE]")}
 {backing(1, "([MINUTE] + 1)")}
@@ -543,14 +643,20 @@ def main():
     save_alpha(hsheet, "scan_sheet_hour", HOUR_INK)
     save_alpha(plate, "scan_plate", PLATE_PRINT)
     save_alpha(mprint, "scan_minute_print", MINUTE_PRINT)
+    hprint, twindows = hour_index_print(), tick_windows()
+    save_alpha(hprint, "scan_hour_print", HOUR_INK)
+    for p, (alpha, _) in enumerate(twindows):
+        save_alpha(alpha, f"scan_ticks_{p}")
     dances = dance_windows()
     for k, row in enumerate(dances):
         for p, (alpha, _) in enumerate(row):
             save_alpha(alpha, f"scan_dance_{k}_{p}")
     (HERE / "watchface.xml").write_text(xml([box for _, box in mwindows],
-                                            [[box for _, box in row] for row in dances]))
+                                            [[box for _, box in row] for row in dances],
+                                            [box for _, box in twindows]))
 
-    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap, dances)
+    layers = (windows, hsheet, plate, mprint, mwindows, msheet, back, cap, dances,
+              hprint, twindows)
     previews = HERE / "previews"
     previews.mkdir(exist_ok=True)
     for old in previews.glob("*.png"):
@@ -558,6 +664,8 @@ def main():
     for label, seconds in PREVIEW_TIMES.items():
         simulate(seconds, layers).save(previews / f"{label}.png", optimize=True)
     simulate(PREVIEW_TIMES["10-10"], layers).save(HERE / "preview.png", optimize=True)
+    simulate(PREVIEW_TIMES["10-10"], layers, ambient=True).save(previews / "10-10-ambient.png",
+                                                                optimize=True)
     for p in (3, 6, 9):                   # a few dance frames (live only)
         held = PREVIEW_TIMES["10-10"] + (p + 0.01) / DANCE_RATE
         simulate(held, layers).save(previews / f"10-10-dance-{p}.png", optimize=True)
