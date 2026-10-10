@@ -17,7 +17,8 @@ This is a new face; the original remains available for comparison.
 - The chord joins the centers of both markers. Unequal radii keep it visible at
   12:00 and other hand overlaps, without division by chord length or angle jumps.
 - The tiny copper dot orbiting outside the ticks indicates the solar bearing.
-- Ivory becomes blue through twilight; the shadow disappears below the horizon.
+- The dial warms to gold at sunrise and muted rose at sunset, fading to ivory
+  by day and blue by night; the shadow disappears below the horizon.
 - Ambient mode shows the same time geometry on black, with four orientation ticks.
 - **Shadow geometry** in the watch face editor selects **Floating line** or
   **Raised wall** (default). The web preview exposes the same choices.
@@ -43,14 +44,17 @@ is rotated by local sidereal angle and latitude to get east, north, and up witho
 an `atan2` function or quadrant discontinuities. The sidereal expression uses
 280.46061837 + 360.98564736629 × days, plus the east-positive longitude.
 
-For an imagined wall sixteen design units above the surface, the screen shadow
-translation is `(-16 × east / up, +16 × north / up)`. Elevation changes length;
-azimuth changes direction. The denominator is clamped to 0.49 (shadows of at most
-~33 units) so a shadow cast from the outer minute ring stays inside the round screen. Opacity fades between 0° and ~4° solar
-elevation. There is no moonlight or fictional nighttime Sun shadow. The solid
-shadow fills the parallelogram between the chord and its projected edge, with
-a crisp far boundary. It stays attached to the wall instead of floating apart.
-No terrain, weather, atmospheric refraction, or live location is modeled.
+For an imagined wall sixteen design units above the surface, the physical
+shadow length is `L = 16 / tan(elevation)`, directed away from the solar bearing.
+The dial maps that length smoothly to `32 × L / (32 + L)` design units. This
+keeps the shadow inside the round screen while retaining length changes at every
+daylight elevation, including winter mornings and evenings. Unlike the former
+hard denominator clamp, it has no low-sun plateau. Both shadow options and the
+solid wall's far edge use the same projection, updated from the current UTC
+minute. Opacity fades between 0° and ~4° solar elevation; shadows vanish at night.
+The solid shadow stays attached to the chord and fills the parallelogram to its
+projected edge. No terrain, weather, atmospheric refraction, live location, or
+wrist orientation is modeled. The rim retains its separate solar projection.
 
 Patrick's follow-up asked for more depth and a solid shadow as though the chord
 were a wall. The wall height is doubled from the first version. WFF has no polygon
@@ -85,10 +89,10 @@ CI must pass official APK validation before publication. Preview the canonical
 XML through the existing WFF Web site; package with
 `./gradlew :watchface:assembleDebug -PfaceSlug=sundial-ii`.
 
-The WFF v4 XSD passes. Six regression tests cover canonical regeneration,
+The WFF v4 XSD passes. Eleven regression tests cover canonical regeneration,
 every minute of a full day, endpoint/marker alignment, shadow bounds, nighttime
 visibility, and independent NOAA solar comparisons across seasons, leap day,
-year rollover, and both DST changes. Solid-shadow corner checks cover another
+year rollover, and both DST changes. Solid-shadow layer checks cover another
 618 positions across equinox, summer, and winter. Rim translation is also checked
 against the independent solar calculation. CI builds, signs, and validates this
 face alongside the other promoted faces, then includes it in the installation catalog.
@@ -104,23 +108,29 @@ These are actual renderer output, not design mockups:
 ![Night, 21:45](previews/night.png)
 ![Ambient, 10:10](previews/ambient.png)
 
-## Wrist-tilt shadow
+## Sunrise and sunset color
 
-While the screen is interactive, tilting the wrist swings the cast shadow; the
-hour and minute markers, the chord, the sun dot and the scale stay fixed.
-`Gyro` offsets driven by `[ACCELEROMETER_ANGLE_X]` and `[ACCELEROMETER_ANGLE_Y]`
-(0.3 units per degree, clamped at ±40°, up to ~12 units per axis) move the far
-edge of the shadow. With **Raised wall**, each of the thirteen shadow layers takes
-its fraction of that offset, so the near edge stays attached to the chord and the
-parallelogram shears; with **Floating line**, the whole line shadow shifts.
-Ambient mode has no Gyro. At extreme tilt with the longest shadows, the far edge
-can slip under the rim.
+A warm gold (`#e9c3a0`) tint accompanies sunrise; muted rose (`#c29baf`)
+accompanies sunset. The same Alameda solar vector drives both, with east-positive
+Sun positions selecting dawn and west-positive positions selecting dusk. Each
+color fades in from civil twilight (about −6° elevation), peaks at the horizon,
+and fades out by about +10°. The underlying ivory-to-blue daylight transition
+remains visible through the tint. Separate PartDraw alpha transforms preserve
+Pixel Watch compatibility; all horizon coloring is disabled in ambient mode.
+Tests compare the active tint to independent NOAA coordinates across all seasons.
 
-This is a visual effect only. Watch Face Format exposes tilt but no compass
-heading, so the Sun's direction still assumes north is dial-up. Gyro does not run
-in WFF Web, so judge it on the watch; `TILT_SIGN_X`/`TILT_SIGN_Y` in
-`generate_xml.py` flip an axis if the shadow moves the wrong way.
+## Solar-only shadow
 
+Gyro elements and accelerometer expressions have been removed from both shadow
+options and every wall layer. Wrist movement does not affect the dial or shadows.
+Shadow direction and distance depend only on Alameda's Sun at the current UTC
+instant. North remains dial-up.
+
+Regression tests check the absence of motion sensors, continuously decreasing
+shadow length across 0–90° elevation, and minute-by-minute shortening toward
+solar noon and lengthening afterward across all seasons. Existing tests also
+cover independent NOAA solar comparisons, wall fill continuity, night visibility,
+dial bounds, canonical regeneration, and the watch's expression-length limit.
 The face validates against the official WFF v4 XSD from github.com/google/watchface.
 
 ## Picker thumbnail

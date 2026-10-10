@@ -62,9 +62,15 @@ def line(parent, points, color, thickness):
 HOUR_RADIUS = 110
 MINUTE_RADIUS = 186
 SUN_RADIUS = 214
-# Grazing shadows are capped at 16 / SHADOW_MIN_UP units so a shadow cast from
-# the minute end (MINUTE_RADIUS + 6 for the ring) stays on the 225-unit screen.
-SHADOW_MIN_UP = 0.49
+SHADOW_HEIGHT = 16
+SHADOW_MAX_LENGTH = 32
+
+
+def shadow_projection(east, north, up):
+    horizontal = f'clamp(cos(asin(clamp({up}, -1, 1))), 0.000001, 1)'
+    denominator = f'(clamp({up}, 0, 1) + {SHADOW_HEIGHT / SHADOW_MAX_LENGTH:g} * {horizontal})'
+    return (f'(-{SHADOW_HEIGHT} * {east} / {denominator})',
+            f'({SHADOW_HEIGHT} * {north} / {denominator})')
 
 
 def time_points():
@@ -82,41 +88,15 @@ def wall_shadow(parent, points, dx, dy, fade):
     # The solid shadow is the chord swept along the shadow vector. Overlapping
     # opaque copies at evenly spaced offsets fill that parallelogram using only
     # Line transforms, which keeps every expression short enough for the watch.
-    # Each copy also takes its fraction of the wrist-tilt offset, so the near
-    # edge stays on the chord while the far edge swings. Spacing is at most
-    # (16 / SHADOW_MIN_UP + tilt) / WALL_LAYERS units, below the stroke width.
     group = element(parent, 'Group', x=0, y=0, width=450, height=450, name='wallShadow')
     ambient(group)
     for i in range(WALL_LAYERS + 1):
         t = f'{i / WALL_LAYERS:.12g}'
         part = draw(group)
         transform(part, 'alpha', fade)
-        if i:
-            gyro(part, i / WALL_LAYERS)
         offsets = (dx, dy, dx, dy)
         line(part, tuple(p if i == 0 else f'{p} + {t} * {o}' for p, o in zip(points, offsets)),
              '#81918b', WALL_THICKNESS)
-
-
-# Wrist tilt swings the shadow while the hour and minute markers stay fixed.
-# Gain is screen units per degree of tilt; the clamp caps the swing at about 12
-# units per axis. Flip a sign if the shadow moves the wrong way on the device.
-TILT_GAIN = 0.3
-TILT_LIMIT = 40
-TILT_SIGN_X = 1
-TILT_SIGN_Y = 1
-
-
-def tilt(fraction=1):
-    def axis(source, sign):
-        gain = f'{sign * TILT_GAIN * fraction:.12g}'
-        return f'{gain} * clamp([{source}], -{TILT_LIMIT}, {TILT_LIMIT})'
-    return axis('ACCELEROMETER_ANGLE_X', TILT_SIGN_X), axis('ACCELEROMETER_ANGLE_Y', TILT_SIGN_Y)
-
-
-def gyro(parent, fraction=1):
-    x, y = tilt(fraction)
-    element(parent, 'Gyro', x=x, y=y)
 
 
 def time_geometry(parent, color, core, points):
@@ -196,6 +176,15 @@ def recessed_rim(parent, east, north, up):
     rim_rings(part, '#00fff9ec #00fff9ec #08fff9ec #48fff9ec', '0 0.88 0.96 1')
 
 
+def horizon_colors(parent, east, up):
+    warmth = f'(clamp(({up} + 0.105) / 0.105, 0, 1) * clamp((0.174 - {up}) / 0.174, 0, 1))'
+    for name, color, condition in (('sunriseColor', '#e9c3a0', f'{east} >= 0'),
+                                   ('sunsetColor', '#c29baf', f'{east} < 0')):
+        part = draw(parent, name=name)
+        transform(part, 'alpha', f'180 * {warmth} * ({condition} ? 1 : 0)')
+        ellipse(part, 0, 0, 450, fill=color)
+
+
 def build():
     root = ET.Element('WatchFace', width='450', height='450', clipShape='CIRCLE')
     element(root, 'Metadata', key='CLOCK_TYPE', value='ANALOG')
@@ -214,6 +203,7 @@ def build():
     day = draw(active)
     transform(day, 'alpha', f'255 * {daylight}')
     ellipse(day, 0, 0, 450, fill='#f2efe5')
+    horizon_colors(active, east, up)
     recessed_rim(active, east, north, up)
     night_scale = element(active, 'Group', x=0, y=0, width=450, height=450, name='nightScale')
     transform(night_scale, 'alpha', f'{up} >= 0 ? 0 : 255')
@@ -224,15 +214,12 @@ def build():
 
     points = time_points()
     fade = f'clamp({up} / 0.07, 0, 1)'
-    # A sixteen-unit wall. Cap grazing shadows at ~33 units.
-    dx = f'(-16 * {east} / clamp({up}, {SHADOW_MIN_UP}, 1))'
-    dy = f'(16 * {north} / clamp({up}, {SHADOW_MIN_UP}, 1))'
+    dx, dy = shadow_projection(east, north, up)
     shadow_points = tuple(f'{p} + {dx if i % 2 == 0 else dy}' for i, p in enumerate(points))
     # Scene-level selection, as in Radial Moire; fades live on PartDraw alpha.
     selection = element(scene, 'ListConfiguration', id='shadow_style')
     filament = element(selection, 'ListOption', id='0')
     filament_group = element(filament, 'Group', x=0, y=0, width=450, height=450, name='lineShadow')
-    gyro(filament_group)
     ambient(filament_group)
     for width, alpha in ((12, 8), (7, 16), (3, 42)):
         part = draw(filament_group)
@@ -244,7 +231,6 @@ def build():
     top = element(scene, 'Group', x=0, y=0, width=450, height=450, name='solarTop')
     ambient(top)
     shadow = element(top, 'Group', x=0, y=0, width=450, height=450, name='castShadow')
-    gyro(shadow)
     edge = draw(shadow)
     transform(edge, 'alpha', f'180 * {fade}')
     line(edge, shadow_points, '#536c68', 0.8)

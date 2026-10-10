@@ -58,6 +58,37 @@ def noaa_reference(instant):
 
 
 class SundialGeometry(unittest.TestCase):
+    def test_horizon_colors_follow_solar_elevation_and_rising_or_setting_sun(self):
+        sunrise = ROOT.find(".//PartDraw[@name='sunriseColor']")
+        sunset = ROOT.find(".//PartDraw[@name='sunsetColor']")
+        self.assertEqual(sunrise.find('Ellipse/Fill').get('color'), '#e9c3a0')
+        self.assertEqual(sunset.find('Ellipse/Fill').get('color'), '#c29baf')
+        for date in ('2026-03-20', '2026-06-21', '2026-10-10', '2026-12-21'):
+            start = datetime.fromisoformat(date).replace(tzinfo=PACIFIC)
+            saw_dawn = saw_dusk = False
+            for minute in range(0, 24 * 60, 5):
+                instant = start + timedelta(minutes=minute)
+                rise = transforms(sunrise, instant)['alpha']
+                setting = transforms(sunset, instant)['alpha']
+                east, _, up = noaa_reference(instant)
+                self.assertGreaterEqual(min(rise, setting), 0)
+                self.assertLessEqual(max(rise, setting), 180)
+                self.assertEqual(rise * setting, 0)
+                if -0.08 < up < 0.13:
+                    if east > 0:
+                        self.assertGreater(rise, 0)
+                        self.assertEqual(setting, 0)
+                        saw_dawn = True
+                    else:
+                        self.assertGreater(setting, 0)
+                        self.assertEqual(rise, 0)
+                        saw_dusk = True
+                elif up < -0.14 or up > 0.20:
+                    self.assertEqual(rise + setting, 0)
+            self.assertTrue(saw_dawn and saw_dusk)
+        solar_dial = ROOT.find(".//Group[@name='solarDial']")
+        self.assertEqual(solar_dial.find("Variant[@mode='AMBIENT']").get('value'), '0')
+
     def test_rim_shadow_tracks_sun(self):
         crown = ROOT.find(".//Group[@name='crownShadow']")
         for date in ('2026-06-21', '2026-12-21'):
@@ -110,7 +141,7 @@ class SundialGeometry(unittest.TestCase):
                 instant = datetime.fromisoformat(date).replace(hour=hour, tzinfo=PACIFIC)
                 c, s = transforms(chord, instant), transforms(shadow, instant)
                 east, north, up = noaa_reference(instant)
-                denominator = max(0.49, up)
+                denominator = max(0, up) + 0.5 * math.hypot(east, north)
                 with self.subTest(instant=instant):
                     self.assertAlmostEqual(s['startX']-c['startX'], -16*east/denominator, delta=1.5)
                     self.assertAlmostEqual(s['startY']-c['startY'], 16*north/denominator, delta=1.5)
@@ -145,39 +176,52 @@ class SundialGeometry(unittest.TestCase):
             for prefix in ('start', 'end'):
                 self.assertLess(math.hypot(s[prefix+'X']-225, s[prefix+'Y']-225)+6, 225)
 
-    def test_tilt_swings_shadow_while_markers_stay_fixed(self):
-        def offset(element, ax, ay):
-            g = element.find('Gyro')
-            if g is None:
-                return (0, 0)
-            values = {'ACCELEROMETER_ANGLE_X': ax, 'ACCELEROMETER_ANGLE_Y': ay}
-            def ev(expr):
-                for k, v in values.items():
-                    expr = expr.replace(f'[{k}]', str(v))
-                return eval(expr, {'__builtins__': {}}, {'clamp': lambda x, lo, hi: max(lo, min(hi, x))})
-            return ev(g.get('x')), ev(g.get('y'))
-        layers = ROOT.findall(".//Group[@name='wallShadow']/PartDraw")
-        thickness = float(layers[0].find('Line/Stroke').get('thickness'))
-        edge = ROOT.find(".//Group[@name='castShadow']")
-        line_shadow = ROOT.find(".//Group[@name='lineShadow']")
-        for ax, ay in ((0, 0), (25, -10), (90, 90), (-90, -90)):
-            far = offset(edge, ax, ay)
-            self.assertLessEqual(math.hypot(*far), 17)
-            self.assertEqual(offset(line_shadow, ax, ay), far)
-            # Near edge stays on the chord; far edge moves with the edge line.
-            self.assertEqual(offset(layers[0], ax, ay), (0, 0))
-            self.assertEqual(offset(layers[-1], ax, ay), far)
-            for n, layer in enumerate(layers):
-                t = n / (len(layers) - 1)
-                x, y = offset(layer, ax, ay)
-                self.assertAlmostEqual(x, t * far[0], places=9)
-                self.assertAlmostEqual(y, t * far[1], places=9)
-            # Worst-case spacing: longest shadow plus full tilt, still overlapping.
-            longest = 16 / 0.49 + math.hypot(*far)
-            self.assertLess(longest / (len(layers) - 1), thickness)
-        # Hour and minute markers, the sun dot and ambient geometry never move.
-        for name in ('dayChord', 'nightChord', 'solarTop', 'ambientChord'):
-            self.assertIsNone(ROOT.find(f".//Group[@name='{name}']/Gyro"), name)
+    def test_no_motion_sensor_dependencies(self):
+        self.assertEqual(ROOT.findall('.//Gyro'), [])
+        xml = ET.tostring(ROOT, encoding='unicode')
+        self.assertNotIn('ACCELEROMETER', xml)
+        self.assertNotIn('GYRO', xml)
+
+    def test_shadow_length_decreases_continuously_with_solar_elevation(self):
+        from generate_xml import shadow_projection
+        instant = datetime(2026, 10, 10, tzinfo=PACIFIC)
+        previous = math.inf
+        for degrees in (0, 1, 4, 8, 15, 20, 25, 30, 45, 60, 75, 89, 90):
+            elevation = math.radians(degrees)
+            east, north, up = math.cos(elevation), 0, math.sin(elevation)
+            dx, dy = shadow_projection(str(east), str(north), str(up))
+            length = math.hypot(evaluate(dx, instant), evaluate(dy, instant))
+            with self.subTest(elevation=degrees):
+                self.assertTrue(math.isfinite(length))
+                self.assertLessEqual(length, 32)
+                self.assertLess(length, previous)
+            previous = length
+        self.assertLess(previous, 0.000001)
+
+    def test_actual_shadow_shortens_toward_solar_noon_and_lengthens_after(self):
+        chord = ROOT.find(".//Group[@name='dayChord']/PartDraw/Line")
+        shadow = ROOT.find(".//Group[@name='castShadow']/PartDraw/Line")
+        for date in ('2026-03-20', '2026-06-21', '2026-10-10', '2026-12-21'):
+            samples = []
+            start = datetime.fromisoformat(date).replace(tzinfo=PACIFIC)
+            for minute in range(24 * 60):
+                instant = start + timedelta(minutes=minute)
+                c, s = transforms(chord, instant), transforms(shadow, instant)
+                up = noaa_reference(instant)[2]
+                if up > 0.07:
+                    length = math.hypot(s['startX'] - c['startX'], s['startY'] - c['startY'])
+                    self.assertLessEqual(length, 32)
+                    for prefix in ('start', 'end'):
+                        self.assertLess(math.hypot(s[prefix+'X']-225, s[prefix+'Y']-225)+6, 225)
+                    samples.append((instant, length))
+            noon = min(range(len(samples)), key=lambda i: samples[i][1])
+            self.assertGreater(noon, 0)
+            self.assertLess(noon, len(samples) - 1)
+            for i, (_, length) in enumerate(samples):
+                if 0 < i <= noon:
+                    self.assertLess(length, samples[i-1][1])
+                elif i > noon:
+                    self.assertGreater(length, samples[i-1][1])
 
     def test_regeneration_matches_canonical_xml(self):
         from generate_xml import build
