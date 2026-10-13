@@ -28,6 +28,13 @@ petals and sweeps quickly past the circle. Spread, twist, stagger and scale
 drift on other unequal loops, so their combinations keep recombining. All
 periods divide 1440 minutes: midnight is seamless and each minute of the day
 has its own face. Two soft colour fields drift behind the pattern.
+
+Radial mode
+-----------
+Several times a day a front runs out from the centre: six curved trunks grow
+and fork, level by level, into mirrored curling branches (a self-similar tree
+of nested groups), while the rings dissolve ahead of the front. Then the front
+runs back in and the rings return.
 """
 from pathlib import Path
 import math
@@ -145,6 +152,36 @@ WINDOW_R = BAND_R - BAND_W / 2
 assert SCALE_RANGE[0] >= 1.0, 'disc boxes must never shrink inside the dial'
 assert 0 <= STAGGER_RANGE[0] and STAGGER_RANGE[1] <= 180 / SIDES
 
+# --- radial mode -------------------------------------------------------------
+# The second pattern family: SIDES curved trunks leave the centre, and every
+# segment forks into a mirrored pair of smaller, curling segments, BRANCH_DEPTH
+# levels deep. Each child group is its parent's frame moved to the tip, turned
+# by the parent's curl plus or minus the fork angle and scaled by RATIO, so the
+# figure is self-similar and the strokes taper as they go out.
+#
+# MODE (0 rings .. 1 radial) is a front that runs outward from the centre: the
+# branches grow along their own length one level after another while the rings
+# dissolve ahead of them, then the front runs back in. Part-way states (radial
+# core, rings outside) are held briefly on the way.
+MODE_PERIOD = 240                                # min; six episodes a day
+_V = lfo(MODE_PERIOD, 3.6)
+MODE = f'clamp(0.5+1.15*{_V},0,1)'
+# Curl: the signed angle (radians) each segment turns. It swings from a gentle
+# leftward hook through straight lines to tight rightward scrolls on a 72-minute
+# loop. Its magnitude and sign are written separately so no clamp is needed.
+_CURL = f'(0.42+1.18*{lfo(72, 0.9)})'
+CURL_MAG = f'(abs{_CURL}+{EPS})'
+CURL_SIGN = f'({_CURL}>=0?1:-1)'
+CURL_RANGE = (round(math.degrees(0.42 - 1.18)), round(math.degrees(0.42 + 1.18)))
+FORK, FORK_RANGE = drift(34, (12, 80, 1.4))                       # deg each child leaves its parent
+BRANCH_DEPTH = 4
+RATIO = 0.7
+TRUNK = 80.0       # disc units
+TRUNK_W = 15.0
+REACH = sum(TRUNK * RATIO ** d for d in range(BRANCH_DEPTH))
+assert FORK_RANGE[0] > 0 and CURL_RANGE[0] < 0 < CURL_RANGE[1]
+FORK = FORK.replace(' ', '')
+
 
 # --- XML helpers -----------------------------------------------------------
 
@@ -220,13 +257,68 @@ def side(parent, k, color, **part_attrs):
 
 
 def pattern(parent, color, **part_attrs):
+    rings = group(parent, 'rings')
+    transform(rings, 'alpha', f'({MODE}<1?255:0)')
     for k in range(1, N_RINGS + 1):
-        ring = group(parent, f'ring_{k}', pivotX=0.5, pivotY=0.5)
+        ring = group(rings, f'ring_{k}', pivotX=0.5, pivotY=0.5)
         turn = f'{k} * {TWIST}' + (f' + {STAGGER}' if k % 2 else '')
         transform(ring, 'angle', compact(turn))
+        # The radial front dissolves rings from the centre outward. It runs
+        # as MODE squared so it keeps pace with the branches near the centre
+        # yet still clears every ring by MODE = 1.
+        transform(ring, 'alpha', f'255*(1-clamp(({MODE}*{MODE}*{N_RINGS * P0:g}-{(k - 1) * P0:g})/{P0:g},0,1))')
         for i in range(SIDES):
             sector = group(ring, f'r{k}s{i}', pivotX=0.5, pivotY=0.5, angle=f'{360 * i / SIDES:g}')
             side(sector, k, color, **part_attrs)
+    radial(parent, color, **part_attrs)
+
+
+def branch(parent, d, tag, color, **part_attrs):
+    """Segment at depth d drawn from the box centre heading up, plus its forks.
+
+    A segment of length L that turns by T (signed radians) is an arc of radius
+    L/|T| centred beside its base; its tip sits at (s*L*(1-cos|T|)/|T|,
+    -L*sin|T|/|T|) and heads T further round. T < 0 is drawn by mirroring the
+    arc about the base (scaleX -1). The segment grows along its length as the
+    radial front passes it.
+    """
+    mag, sign = CURL_MAG, CURL_SIGN
+    start = sum(TRUNK * RATIO ** j for j in range(d))
+    grow = f'clamp(({MODE}*{REACH:.3f}-{start:.3f})/{TRUNK * RATIO ** d:.3f},0,1)'
+
+    mirror = group(parent, f'{tag}m', pivotX=0.5, pivotY=0.5)
+    transform(mirror, 'scaleX', sign)
+    transform(mirror, 'alpha', f'({grow}>0?255:0)')
+    part = draw(mirror, **part_attrs)
+    arc = element(part, 'Arc', centerX=round(C + TRUNK / EPS, 1), centerY=C,
+                  width=round(2 * TRUNK / EPS, 1), height=round(2 * TRUNK / EPS, 1),
+                  startAngle=270, endAngle=270)
+    transform(arc, 'centerX', f'{C:g}+{TRUNK:g}/{mag}')
+    transform(arc, 'width', f'{2 * TRUNK:g}/{mag}')
+    transform(arc, 'height', f'{2 * TRUNK:g}/{mag}')
+    transform(arc, 'endAngle', f'270+57.2958*{mag}*{grow}')
+    element(arc, 'Stroke', color=color, thickness=f'{TRUNK_W:g}', cap='ROUND')
+
+    if d + 1 < BRANCH_DEPTH:
+        # One frame at the tip, heading on round the curl; the mirrored pair
+        # of children fork either side of it.
+        tip = group(parent, f'{tag}t', pivotX=0.5, pivotY=0.5)
+        transform(tip, 'x', f'{sign}*{TRUNK:g}*(1-cos({mag}))/{mag}')
+        transform(tip, 'y', f'0-{TRUNK:g}*sin({mag})/{mag}')
+        transform(tip, 'angle', f'{sign}*57.2958*{mag}')
+        for side_tag, s in (('r', 1), ('l', -1)):
+            child = group(tip, tag + side_tag, pivotX=0.5, pivotY=0.5,
+                          scaleX=f'{s * RATIO:g}', scaleY=f'{RATIO:g}')
+            transform(child, 'angle', f'{"" if s > 0 else "0-"}{FORK}')
+            branch(child, d + 1, tag + side_tag, color, **part_attrs)
+
+
+def radial(parent, color, **part_attrs):
+    root = group(parent, 'radial')
+    transform(root, 'alpha', f'({MODE}>0?255:0)')
+    for i in range(SIDES):
+        arm = group(root, f'arm{i}', pivotX=0.5, pivotY=0.5, angle=f'{360 * i / SIDES:g}')
+        branch(arm, 0, f'a{i}', color, **part_attrs)
 
 
 def disc(parent, name, angle, color, **part_attrs):
@@ -368,4 +460,5 @@ if __name__ == '__main__':
     glow_asset()
     strings()
     print(f'watchface.xml {len(xml) // 1024} KiB; scale {SCALE_RANGE}, bend {BEND_RANGE}, '
-          f'spread {SPREAD_RANGE}, twist {TWIST_RANGE}, stagger {STAGGER_RANGE}')
+          f'spread {SPREAD_RANGE}, twist {TWIST_RANGE}, stagger {STAGGER_RANGE}, '
+          f'curl {CURL_RANGE}, fork {FORK_RANGE}, reach {REACH:.0f}')

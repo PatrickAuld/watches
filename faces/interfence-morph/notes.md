@@ -137,6 +137,52 @@ field B, lower disc and upper disc. The beads are drawn three times
 over in the upper colour, so the see-through palettes still get near-solid
 beads.
 
+## Radial mode (2026-10-13)
+
+Feedback: the face looks great on the morphing rings, but should change more
+dramatically than reshaping concentric polygons. It should also turn into a
+pattern that starts at the centre: curved, fractal lines emitted outward.
+
+Both discs now carry a second pattern family on top of the rings. Six curved
+trunks leave the centre, and every segment forks into a mirrored pair of
+smaller segments, four levels deep (6 × 15 = 90 arcs per disc). Each child is
+its parent's frame moved to the parent's tip, turned on by the parent's curl,
+then turned ± the fork angle and scaled by 0.7. The figure is therefore
+self-similar, and the strokes taper from 15 px at the trunk to about 5 px at
+the twigs. Mirrored pairs keep it 6-fold and mirror-symmetric at every fork, so
+the discs still come into register every 10 s.
+
+| parameter | range | loop (min) |
+|---|---|---|
+| curl (each segment's turn) | −44° to 92°, through straight | 72 |
+| fork (each child off its parent) | 22–46° | 80 |
+
+The curl sweeps from left-hooking lightning through straight, branching coral
+to tight right-hand scrolls. Its magnitude and sign are written separately,
+`abs(c)+0.02` and `c>=0`, so the arcs need no clamp and stay finite when
+straight. A segment of length L turning by T is an arc of radius L/|T| beside
+its base, and its tip sits at (L(1−cos T)/T, −L sin T/T). Negative curl
+mirrors the arc about its base (scaleX −1).
+
+**Mode.** A front runs outward from the centre and back on a 240-minute loop
+(six episodes a day): `MODE = clamp(0.5 + 1.15·sin(…), 0, 1)`. The face holds
+about 85 minutes on rings and 85 minutes on branches. It spends about 35
+minutes on each crossing, so a few minutes later the front has visibly moved.
+During a crossing, each level of branches grows along its own length after the
+level before it finishes. The rings ahead of it dissolve from the centre
+outward, at a radius of MODE² × 299, which keeps pace with the branches near
+the centre and still clears every ring by MODE = 1. The part-way states (a
+branching core inside the outer rings) are some of the best moments.
+`previews/radial.png` runs 09:30–10:58: rings, the crossing, then three
+branch states.
+
+The rings and the radial root each switch off entirely (alpha 0) when their
+mode isn't showing, so only one family is drawn outside crossings. Hidden
+segments are alpha 0 too, so no stray round caps sit at unreached tips.
+
+Cost: the XML grew from about 510 KB to 925 KB (336 arcs per face, 180 of
+them radial). Pairs of forks share one tip frame to keep it there.
+
 ## Ambient and markers (2026-10-08)
 
 Feedback: ambient should be the stationary current pattern, and the hour and
@@ -159,8 +205,10 @@ minute markers needed to be more visible in both modes.
 Run `python3 faces/interfence-morph/generate_xml.py` to write
 `watchface.xml`, `strings.xml` and `assets/glow.png`. `preview.png` and
 `previews/` are wff-web renders of the canonical XML. The thumbnail is
-10:10:35, about 26° out of 6-fold register. `previews/themes.png` shows all
-eight palettes at assorted times.
+10:10:35, in radial mode with near-straight branches, about 26° out of
+6-fold register. `previews/themes.png` shows all eight palettes at assorted
+times in both modes. `previews/morph.png` shows the ring morph and
+`previews/radial.png` the radial crossing.
 
 ## Device checks still needed
 
@@ -170,9 +218,13 @@ eight palettes at assorted times.
 - Confirm that the ambient disc holds still (it relies on ambient updates
   landing at second 0) and that its lit-pixel load is acceptable.
 - Confirm that the scaled groups keep their stroke widths.
-- Check that 156 expression-driven arcs hold the frame rate while the seconds
-  wheel turns, and that the XML loads promptly. At about 500 KB it is larger
-  than the other promoted faces.
+- Check that the expression-driven arcs hold the frame rate while the seconds
+  wheel turns, and that the XML loads promptly. There are 336 arcs, though no
+  more than about 156 rings or 180 branches are drawn outside a crossing. At
+  about 925 KB the XML is the largest of the promoted faces. If it's too heavy,
+  drop the fourth branch level first (BRANCH_DEPTH = 3, 42 arcs per disc).
+- Confirm that the nested child groups (move, turn, then negative scaleX)
+  place the forks as they do in wff-web.
 
 The default palette became Black on White on 2026-10-08, after Patrick's
 review; it is option 0, so the picker thumbnail shows it.
