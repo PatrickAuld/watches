@@ -4,14 +4,9 @@
   <Metadata key="PREVIEW_TIME" value="10:10:35" />
   <UserConfigurations>
     <ColorConfiguration id="imorph_palette" displayName="imorph_palette" defaultValue="0">
-      <ColorOption id="0" displayName="theme_black_white" colors="#FFFFFFFF #FFFFFFFF #FFFFFFFF #FF000000 #FF000000" />
-      <ColorOption id="1" displayName="theme_thursday" colors="#FF0B0A1F #FF3B1C70 #FF0D4A63 #94FF3D86 #942ED8F0" />
-      <ColorOption id="2" displayName="theme_white_black" colors="#FF000000 #FF000000 #FF000000 #FFFFFFFF #FFFFFFFF" />
-      <ColorOption id="3" displayName="theme_apollo" colors="#FF0B1C46 #FF1E3F82 #FF2C1F63 #FFFFE6B8 #FFFFE6B8" />
-      <ColorOption id="4" displayName="theme_neroli" colors="#FFF0A030 #FFF8C45C #FFE2742A #FF4A0B16 #FF4A0B16" />
-      <ColorOption id="5" displayName="theme_discreet" colors="#FF0F5B52 #FF1F7C6B #FF0B435A #FFF3EAD3 #FFF3EAD3" />
-      <ColorOption id="6" displayName="theme_lux" colors="#FF160622 #FF3E0C4C #FF0E2150 #80FF4FB0 #80FF4FB0" />
-      <ColorOption id="7" displayName="theme_airports" colors="#FFEDE6DA #FFE2D2BC #FFD2DDE6 #FF1F3A6B #FF1F3A6B" />
+      <ColorOption id="0" displayName="theme_black_white" colors="#FFFFFFFF #FFFFFFFF #FFFFFFFF #FF000000 #00000000" />
+      <ColorOption id="1" displayName="theme_neroli" colors="#FFF0A030 #FFF8C45C #FFE2742A #FF4A0B16 #00000000" />
+      <ColorOption id="2" displayName="theme_drift" colors="#0014104A #00FFC9A0 #00FFC9A0 #00FFC9A0 #FFFFFFFF" />
     </ColorConfiguration>
   </UserConfigurations>
   <Scene backgroundColor="#000000">
@@ -38,6 +33,62 @@
           <Image resource="glow" />
         </PartImage>
       </Group>
+      <Group x="0" y="0" width="450" height="450" name="ground_shift">
+        <Group x="0" y="0" width="450" height="450" name="ground_shift_src" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_0">
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#14104A" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_1">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#0C4A4E" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_2">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#4A0B1E" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_3">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#0B2346" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_4">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#2E0F45" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ground_shift_5">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="0.0" y="0.0" width="450" height="450">
+                <Fill color="#12361F" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+        </Group>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+          <Ellipse x="0.0" y="0.0" width="450" height="450">
+            <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="discs">
       <Group x="0" y="0" width="450" height="450" name="minute_wheel_layer" renderMode="SOURCE">
@@ -48,6 +99,63 @@
               <Fill color="[CONFIGURATION.imorph_palette.3]" />
             </Ellipse>
           </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_src" renderMode="SOURCE">
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_0">
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFC9A0" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_1">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#E6F59A" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_2">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFB547" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_3">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFA8B6" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_4">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#9FF2D4" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="minute_wheel_shift_5">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#F5E6C4" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+          </Group>
+          <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+            <Ellipse x="0.0" y="0.0" width="450" height="450">
+              <Fill color="[CONFIGURATION.imorph_palette.4]" />
+            </Ellipse>
+          </PartDraw>
+          <Variant mode="AMBIENT" target="alpha" value="0" />
         </Group>
         <Group x="0" y="0" width="450" height="450" name="minute_wheel_shape" renderMode="MASK">
           <Group x="0" y="0" width="450" height="450" name="minute_wheel" pivotX="0.5" pivotY="0.5" renderMode="SOURCE">
@@ -2939,9 +3047,66 @@
           <Variant mode="AMBIENT" target="alpha" value="0" />
           <PartDraw x="0" y="0" width="450" height="450">
             <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+              <Fill color="[CONFIGURATION.imorph_palette.3]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+        <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_src" renderMode="SOURCE">
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_0">
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFC9A0" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_1">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#E6F59A" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_2">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFB547" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_3">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#FFA8B6" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_4">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#9FF2D4" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="seconds_wheel_shift_5">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="25.0" y="25.0" width="400.0" height="400.0">
+                  <Fill color="#F5E6C4" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+          </Group>
+          <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+            <Ellipse x="0.0" y="0.0" width="450" height="450">
               <Fill color="[CONFIGURATION.imorph_palette.4]" />
             </Ellipse>
           </PartDraw>
+          <Variant mode="AMBIENT" target="alpha" value="0" />
         </Group>
         <Group x="0" y="0" width="450" height="450" name="seconds_wheel_ambient" renderMode="SOURCE" alpha="0">
           <Variant mode="AMBIENT" target="alpha" value="255" />
@@ -5852,82 +6017,494 @@
           <Stroke color="#FF000000" thickness="100" />
         </Ellipse>
       </PartDraw>
-      <PartDraw x="0" y="0" width="450" height="450" alpha="70">
-        <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
-          <Stroke color="[CONFIGURATION.imorph_palette.4]" thickness="1.2" />
-        </Ellipse>
-      </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="rim" alpha="70">
+        <PartDraw x="0" y="0" width="450" height="450">
+          <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+            <Stroke color="[CONFIGURATION.imorph_palette.3]" thickness="1.2" />
+          </Ellipse>
+        </PartDraw>
+        <Group x="0" y="0" width="450" height="450" name="rim_shift">
+          <Group x="0" y="0" width="450" height="450" name="rim_shift_src" renderMode="SOURCE">
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_0">
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#FFC9A0" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_1">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#E6F59A" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_2">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#FFB547" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_3">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#FFA8B6" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_4">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#9FF2D4" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+            <Group x="0" y="0" width="450" height="450" name="rim_shift_5">
+              <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+              <PartDraw x="0" y="0" width="450" height="450">
+                <Ellipse x="26.0" y="26.0" width="398.0" height="398.0">
+                  <Stroke color="#F5E6C4" thickness="1.2" />
+                </Ellipse>
+              </PartDraw>
+            </Group>
+          </Group>
+          <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+            <Ellipse x="0.0" y="0.0" width="450" height="450">
+              <Fill color="[CONFIGURATION.imorph_palette.4]" />
+            </Ellipse>
+          </PartDraw>
+        </Group>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="ticks" alpha="120">
       <Variant mode="AMBIENT" target="alpha" value="90" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
         <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
       </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="ticks_shift">
+        <Group x="0" y="0" width="450" height="450" name="ticks_shift_src" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_0">
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_1">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_2">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFB547" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_3">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_4">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="ticks_shift_5">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.7" y="10.7" width="4.6" height="4.6">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="329.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="406.997" y="117.4" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="434.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="406.997" y="329.4" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="329.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="222.7" y="434.7" width="4.6" height="4.6">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="117.4" y="406.997" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="39.803" y="329.4" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="10.7" y="222.7" width="4.6" height="4.6">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="39.803" y="117.4" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+              <Ellipse x="117.4" y="39.803" width="3.2" height="3.2">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+        </Group>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+          <Ellipse x="0.0" y="0.0" width="450" height="450">
+            <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="second_bead" pivotX="0.5" pivotY="0.5">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <Transform target="angle" value="([SECOND] * 6 + [MILLISECOND] * 0.006)" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="222.0" y="10.0" width="6" height="6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="222.0" y="10.0" width="6" height="6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="222.0" y="10.0" width="6" height="6">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
       </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="second_bead_shift">
+        <Group x="0" y="0" width="450" height="450" name="second_bead_shift_src" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_0">
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_1">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_2">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#FFB547" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_3">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_4">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="second_bead_shift_5">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="222.0" y="10.0" width="6" height="6">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+        </Group>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+          <Ellipse x="0.0" y="0.0" width="450" height="450">
+            <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_bead" pivotX="0.5" pivotY="0.5">
       <Variant mode="AMBIENT" target="alpha" value="0" />
       <Transform target="angle" value="(([HOUR_0_23] % 12) * 30 + [MINUTE] * 0.5)" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="213.5" y="1.5" width="23" height="23">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="213.5" y="1.5" width="23" height="23">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="213.5" y="1.5" width="23" height="23">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
       </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="hour_bead_shift">
+        <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_src" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_0">
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_1">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_2">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#FFB547" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_3">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_4">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="hour_bead_shift_5">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="213.5" y="1.5" width="23" height="23">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+        </Group>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+          <Ellipse x="0.0" y="0.0" width="450" height="450">
+            <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="hour_bead_ambient" pivotX="0.5" pivotY="0.5" alpha="0">
       <Variant mode="AMBIENT" target="alpha" value="255" />
@@ -5943,15 +6520,65 @@
       <Transform target="angle" value="([MINUTE] * 6 + [SECOND] * 0.1 + [MILLISECOND] * 0.0001)" />
       <PartDraw x="0" y="0" width="450" height="450">
         <Ellipse x="218.0" y="6.0" width="14" height="14">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="218.0" y="6.0" width="14" height="14">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
-        </Ellipse>
-        <Ellipse x="218.0" y="6.0" width="14" height="14">
-          <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          <Fill color="[CONFIGURATION.imorph_palette.3]" />
         </Ellipse>
       </PartDraw>
+      <Group x="0" y="0" width="450" height="450" name="minute_bead_shift">
+        <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_src" renderMode="SOURCE">
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_0">
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#FFC9A0" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_1">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-0.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;2?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#E6F59A" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_2">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-1.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;3?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#FFB547" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_3">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-2.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;4?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#FFA8B6" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_4">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-3.55)/0.45,0,1)*(((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)&lt;5?1:0)" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#9FF2D4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+          <Group x="0" y="0" width="450" height="450" name="minute_bead_shift_5">
+            <Transform target="alpha" value="255*clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-4.55)/0.45,0,1)*(1-clamp((((([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120-floor(([HOUR_0_23]*60+[MINUTE]+[SECOND]/60)/120))*6)-5.55)/0.45,0,1))" />
+            <PartDraw x="0" y="0" width="450" height="450">
+              <Ellipse x="218.0" y="6.0" width="14" height="14">
+                <Fill color="#F5E6C4" />
+              </Ellipse>
+            </PartDraw>
+          </Group>
+        </Group>
+        <PartDraw x="0" y="0" width="450" height="450" renderMode="MASK">
+          <Ellipse x="0.0" y="0.0" width="450" height="450">
+            <Fill color="[CONFIGURATION.imorph_palette.4]" />
+          </Ellipse>
+        </PartDraw>
+      </Group>
     </Group>
     <Group x="0" y="0" width="450" height="450" name="minute_bead_ambient" pivotX="0.5" pivotY="0.5" alpha="0">
       <Variant mode="AMBIENT" target="alpha" value="255" />

@@ -32,15 +32,16 @@ description: >
   Several times a day a front runs out from the centre: six curved trunks
   grow and fork into mirrored, curling fractal branches while the rings
   dissolve ahead of them, then the branches draw back in.
-  Eight palettes, black patterns on white by default: mostly both discs in
-  one bold colour on a contrasting ground, one see-through film
-  whose crossings deepen, and one two-colour palette with transparent discs.
+  Three palettes, both discs always one bold colour on a contrasting ground:
+  Black on White (default), Neroli (oxblood on saffron), and Drift, where the
+  ground and the discs shift together through six Eno-like colour pairs,
+  cross-fading every 20 minutes.
   Time is read from beads on the rim.
 
 designNotes: >
   Hour bead (large) and minute bead ride a dark rim track; a small seconds
   bead rides the seconds wheel. Each wheel is a colour fill masked by its
-  pattern, so discs are opaque or see-through per palette and ambient shows
+  pattern, and ambient shows
   the seconds disc alone, still, in dim grey. Two soft colour fields drift
   behind the pattern. No numerals or hands.
 
@@ -54,7 +55,10 @@ implementationNotes: >
   along its length and fades rings by radius. Concave sides are mirrored by a scaleY sign
   group. Ring groups carry twist and stagger. Disc rotation uses
   SECOND/MILLISECOND and MINUTE/SECOND. Palette is a ColorConfiguration of
-  eight five-colour palettes; disc-colour alpha sets transparency. Ambient
+  three five-colour palettes (ground, two fields, disc, shift gate). Drift's
+  colours come from gated overlays: masked groups whose SOURCE is a stack of
+  six keyframe colours cross-fading on a 120-minute cycle and whose MASK is
+  the gate colour, opaque only in Drift. Ambient
   shows only the seconds wheel's pattern in dim grey on black; ambient renders
   at second 0, so it sits at 0 deg and never turns. Hour and minute beads are
   solid white.

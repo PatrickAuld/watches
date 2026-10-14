@@ -30,8 +30,7 @@ wheel layer's `renderMode="SOURCE"` is a disc of the palette colour (dim grey
 in ambient), and its `renderMode="MASK"` is the rotating pattern drawn in
 opaque white. The pattern is flattened in a masked group of its own, so
 overlapping round caps where polygon sides meet can't double. Both wheel
-layers sit inside an outer masked group clipped to the pattern window. The
-disc colour's alpha makes dual and film discs see-through once per disc. All
+layers sit inside an outer masked group clipped to the pattern window. All
 masks are opaque white, so masking by alpha or by luminance gives the same
 result. No blend modes are used:
 
@@ -104,38 +103,55 @@ concentric circles that shift.
 Feedback (2026-10-08): add white-on-black and black-on-white, and don't put
 the see-through overlap on every palette. A second round of feedback: the
 face is much more interesting when both patterns are the same colour over a
-different background. So the face keeps one two-colour palette with
-transparency, and every other palette uses one disc colour. One of those, Lux,
-keeps the transparency.
+different background.
 
-| palette | kind | ground | discs | crossing |
-|---|---|---|---|---|
-| Black on White (default) | same | white | black | merges |
-| Thursday Afternoon | dual, 58% | indigo | rose below, cyan above | cyan over rose: periwinkle |
-| White on Black | same | black | white | merges |
-| Apollo | same | night navy | moon cream | merges |
-| Neroli | same | saffron | oxblood | merges |
-| Discreet Music | same | sea teal | bone | merges |
-| Lux | film, 50% | plum | hot pink | deepens to full pink |
-| Airports | same | paper | ink blue | merges |
+Feedback (2026-10-14): keep Black on White and Neroli, and add a palette whose
+colours change too. The background and patterns morph as well, and the two
+patterns stay the same colour as they change. The other six palettes
+(Thursday Afternoon, White on Black, Apollo, Discreet Music, Lux and Airports)
+were removed, along with the see-through dual and film kinds.
 
-The kinds:
+| palette | ground | discs |
+|---|---|---|
+| Black on White (default) | white | black |
+| Neroli | saffron, with drifting fields | oxblood |
+| Drift | shifting, deep | shifting, luminous |
 
-- **Same:** the crossings merge into one bold figure against the ground, the
-  Humism look.
-- **Film:** each disc alone lets the ground through, like tinted film, and the
-  alpha stacks where they cross.
-- **Dual:** the cyan disc shows the rose through it at every crossing.
+Drift steps through six (ground, disc) pairs on a 120-minute cycle, 20
+minutes each. Each step spends 9 minutes cross-fading (`SHIFT_FADE` 0.45) and
+11 minutes holding:
 
-`generate_xml.py` asserts each palette's kind and that the disc colour stands
-well clear of the ground. transparency is the disc colours' alpha. Both discs share one alpha, and the
-ground and fields stay opaque. The mono palettes set both colour fields to
-the ground, so the drifting light disappears. Beads, rim dots and the window
-line use the upper disc colour, so they read on light grounds. Each
-ColorOption has five colours (the validator's maximum): ground, field A,
-field B, lower disc and upper disc. The beads are drawn three times
-over in the upper colour, so the see-through palettes still get near-solid
-beads.
+| ground | discs |
+|---|---|
+| indigo #14104A | peach #FFC9A0 |
+| sea teal #0C4A4E | pale lime #E6F59A |
+| oxblood #4A0B1E | saffron #FFB547 |
+| night navy #0B2346 | coral pink #FFA8B6 |
+| aubergine #2E0F45 | mint #9FF2D4 |
+| forest #12361F | cream #F5E6C4 |
+
+Grounds stay deep and discs stay luminous, so a linear cross-fade never
+loses contrast. `generate_xml.py` asserts a luminance gap of at least 140
+for each pair. The 120-minute colour cycle, the 96-minute curvature loop and
+the 240-minute radial loop don't line up, so the same colours keep returning
+on different shapes.
+
+How it works: WFF colours can't be expressions, so each coloured element
+(ground, both wheels' colour fills, beads, rim line, rim dots) gets a gated
+overlay on top. That is a masked group whose SOURCE is a stack of the six
+keyframe colours, each layer an alpha expression that fades in over the one
+below it and drops out once the next layer covers it; the top layer fades out
+to reveal the bottom layer and close the cycle. Its MASK is a full-dial disc
+in palette slot 4, the gate: `#FFFFFFFF` in Drift and `#00000000` in the
+static palettes. Drift also sets its own ground and disc slots to alpha 0, so
+the static layers vanish and the rim track shows the shifting ground. Their
+RGB is only for the picker swatch. The drifting colour fields lie under the
+ground overlay, so Drift's ground is flat. Both discs read the same keyframe
+colour at every moment.
+
+Each ColorOption has five colours (the validator's maximum): ground, field A,
+field B, disc and gate. Beads, rim dots and the window line use the disc
+colour.
 
 ## Radial mode (2026-10-13)
 
@@ -206,15 +222,18 @@ Run `python3 faces/interfence-morph/generate_xml.py` to write
 `watchface.xml`, `strings.xml` and `assets/glow.png`. `preview.png` and
 `previews/` are wff-web renders of the canonical XML. The thumbnail is
 10:10:35, in radial mode with near-straight branches, about 26° out of
-6-fold register. `previews/themes.png` shows all eight palettes at assorted
-times in both modes. `previews/morph.png` shows the ring morph and
+6-fold register. `previews/themes.png` shows Black on White, Neroli, and
+Drift at six moments in its cycle (including a mid-fade at 08:14). `previews/morph.png` shows the ring morph and
 `previews/radial.png` the radial crossing.
 
 ## Device checks still needed
 
 - Confirm that the nested masked layers render (each pattern mask inside a
-  wheel layer inside the window layer), and that Thursday Afternoon and Lux
-  show see-through discs.
+  wheel layer inside the window layer).
+- Confirm that Drift's gated overlays show on the watch and stay hidden in
+  the static palettes: a palette-coloured MASK fill (slot 4), with masks
+  nested inside the wheel layers' SOURCE. Also check that alpha-0 palette
+  colours are accepted.
 - Confirm that the ambient disc holds still (it relies on ambient updates
   landing at second 0) and that its lit-pixel load is acceptable.
 - Confirm that the scaled groups keep their stroke widths.

@@ -8,10 +8,10 @@ The mechanism (after the Humism dials)
 --------------------------------------
 Two discs carry the same pattern. The lower disc is the minute wheel: it turns
 once an hour and carries the minute bead. The upper disc is the seconds wheel
-(6 deg/s). Each disc is flattened in its own masked layer whose alpha comes
-from the palette, so a palette can make both discs one bold opaque colour or
-see-through films whose crossings deepen. With 6-fold discs the two come into
-register every 10 s.
+(6 deg/s). Each disc is flattened in its own masked layer, and both discs are
+always one bold colour, so their crossings merge into a single figure. The
+Drift palette shifts that colour and the ground together through the day.
+With 6-fold discs the two come into register every 10 s.
 
 The pattern
 -----------
@@ -49,33 +49,41 @@ C = SIZE / 2
 TAU = 2 * math.pi
 
 CONFIG = 'imorph_palette'
-BG, GLOW_A, GLOW_B, LOWER, UPPER = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
-# Palettes: ground, colour field A, colour field B, lower disc, upper disc.
+BG, GLOW_A, GLOW_B, DISC, GATE = (f'[CONFIGURATION.{CONFIG}.{i}]' for i in range(5))
+# Palettes: ground, colour field A, colour field B, disc colour, shift gate.
 #
-# Each disc is flattened in its own masked layer, and the mask's alpha is
-# colour field B's alpha channel, so a palette sets how see-through each
-# whole disc is. Flattening first means the transparency applies once per
-# disc: the round caps where polygon sides meet never double up into knots.
-# No blend modes are used (the validator rejects blendMode on Group, and
-# per-PartDraw blending would double at the caps). Three kinds:
-#   dual   two disc colours, both see-through, so the upper disc shows the
-#          lower through it at every crossing (the one two-colour palette)
-#   same   both discs one opaque colour; crossings merge into a single bold
-#          figure against a contrasting ground (the Humism look)
-#   film   both discs one see-through colour, like two sheets of tinted
-#          film: each alone lets the ground through, and where they cross
-#          the alpha stacks and the colour deepens
-# Beads and rim marks use the upper disc colour, so they read on any ground.
+# Both discs are always one opaque colour, so where they cross they merge into
+# a single bold figure against the ground (the Humism look). Beads and rim
+# marks use the disc colour, so they read on any ground.
+#
+# The shift gate turns on the colour-shifting palette. Wherever a colour
+# appears (ground, discs, beads, marks) a shifting overlay sits on top of it:
+# a masked group whose SOURCE is a stack of SHIFT colours cross-fading over
+# the day and whose MASK is a disc in the gate colour. Static palettes set the
+# gate to transparent, so the overlay vanishes; the shifting palette sets it
+# to opaque white and its own ground and disc colours to transparent (their
+# RGB only feeds the picker swatch), so the overlays alone show. Masks are
+# opaque white or fully transparent, so alpha and luminance masking agree.
+GATE_OFF, GATE_ON = '#00000000', '#FFFFFFFF'
 THEMES = [
-    ('theme_black_white', 'Black on White', 'same', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', '#000000']),
-    ('theme_thursday', 'Thursday Afternoon', 'dual', ['#0B0A1F', '#3B1C70', '#0D4A63', '#94FF3D86', '#942ED8F0']),
-    ('theme_white_black', 'White on Black', 'same', ['#000000', '#000000', '#000000', '#FFFFFF', '#FFFFFF']),
-    ('theme_apollo', 'Apollo', 'same', ['#0B1C46', '#1E3F82', '#2C1F63', '#FFE6B8', '#FFE6B8']),
-    ('theme_neroli', 'Neroli', 'same', ['#F0A030', '#F8C45C', '#E2742A', '#4A0B16', '#4A0B16']),
-    ('theme_discreet', 'Discreet Music', 'same', ['#0F5B52', '#1F7C6B', '#0B435A', '#F3EAD3', '#F3EAD3']),
-    ('theme_lux', 'Lux', 'film', ['#160622', '#3E0C4C', '#0E2150', '#80FF4FB0', '#80FF4FB0']),
-    ('theme_airports', 'Airports', 'same', ['#EDE6DA', '#E2D2BC', '#D2DDE6', '#1F3A6B', '#1F3A6B']),
+    ('theme_black_white', 'Black on White', ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#000000', GATE_OFF]),
+    ('theme_neroli', 'Neroli', ['#F0A030', '#F8C45C', '#E2742A', '#4A0B16', GATE_OFF]),
+    ('theme_drift', 'Drift', ['#0014104A', '#00FFC9A0', '#00FFC9A0', '#00FFC9A0', GATE_ON]),
 ]
+
+# Drift: (ground, discs) keyframes after Eno's light paintings. Grounds stay
+# deep and discs stay luminous, so every cross-fade keeps its contrast; both
+# discs always share one colour.
+SHIFT = [
+    ('#14104A', '#FFC9A0'),   # indigo, peach
+    ('#0C4A4E', '#E6F59A'),   # sea teal, pale lime
+    ('#4A0B1E', '#FFB547'),   # oxblood, saffron
+    ('#0B2346', '#FFA8B6'),   # night navy, coral pink
+    ('#2E0F45', '#9FF2D4'),   # aubergine, mint
+    ('#12361F', '#F5E6C4'),   # forest, cream
+]
+SHIFT_PERIOD = 120      # min for the whole cycle: 20 min per colour pair
+SHIFT_FADE = 0.45       # share of each step spent cross-fading (9 min)
 
 
 def _argb(c):
@@ -84,14 +92,23 @@ def _argb(c):
     return [int(c[i:i + 2], 16) for i in (0, 2, 4, 6)]
 
 
-for _key, _label, _kind, _colors in THEMES:
-    _lo, _up = _argb(_colors[3]), _argb(_colors[4])
-    assert (_lo[1:] == _up[1:]) == (_kind != 'dual'), f'{_label}: only the dual palette has two disc colours'
-    assert _lo[0] == _up[0], f'{_label}: both discs share one transparency'
-    assert (_up[0] < 255) == (_kind != 'same'), f'{_label}: dual and film discs are see-through, same are opaque'
-    assert all(_argb(c)[0] == 255 for c in _colors[:3]), f'{_label}: ground and fields are opaque'
-    _bg = _argb(_colors[0])[1:]
-    assert sum(abs(a - b) for a, b in zip(_up[1:], _bg)) > 200, f'{_label}: discs too close to ground'
+def _lum(c):
+    return sum(w * v for w, v in zip((0.2126, 0.7152, 0.0722), _argb(c)[1:]))
+
+
+for _key, _label, _colors in THEMES:
+    _gate = _colors[4].upper()
+    assert _gate in (GATE_OFF, GATE_ON), f'{_label}: the gate is fully on or off'
+    if _gate == GATE_OFF:
+        assert all(_argb(c)[0] == 255 for c in _colors[:4]), f'{_label}: static colours are opaque'
+        _bg, _disc = _argb(_colors[0])[1:], _argb(_colors[3])[1:]
+        assert sum(abs(a - b) for a, b in zip(_disc, _bg)) > 200, f'{_label}: discs too close to ground'
+    else:
+        assert _argb(_colors[0])[0] == 0 and _argb(_colors[3])[0] == 0, \
+            f'{_label}: the shifting palette hides the static ground and discs'
+for _g, _d in SHIFT:
+    assert _lum(_d) - _lum(_g) > 140, f'shift pair {_g}/{_d}: too little contrast'
+assert 1440 % SHIFT_PERIOD == 0
 
 # --- time ------------------------------------------------------------------
 
@@ -330,6 +347,45 @@ def disc(parent, name, angle, color, **part_attrs):
     return g
 
 
+# --- shifting colour ---------------------------------------------------------
+
+_N = len(SHIFT)
+_P = f'(({DAY_MIN}/{SHIFT_PERIOD}-floor({DAY_MIN}/{SHIFT_PERIOD}))*{_N})'   # 0 .. N over the cycle
+
+
+def shift_alpha(j):
+    """Alpha of keyframe layer j in a stack where each layer covers the last.
+
+    Layer 0 is always opaque at the bottom. Layer j fades in over
+    [j - FADE, j], holds, and drops out once layer j + 1 has fully covered it.
+    The top layer fades back out over [N - FADE, N], revealing layer 0, so the
+    cycle closes.
+    """
+    f = SHIFT_FADE
+    rise = f'clamp(({_P}-{j - f:g})/{f:g},0,1)'
+    if j < _N - 1:
+        return f'255*{rise}*({_P}<{j + 1}?1:0)'
+    return f'255*{rise}*(1-clamp(({_P}-{_N - f:g})/{f:g},0,1))'
+
+
+def shifted(parent, name, which, paint, role=None):
+    """Overlay of the shifting palette, shown only where the gate is on.
+
+    which: 0 paints keyframe ground colours, 1 disc colours. paint(part,
+    colour) draws the shape. The gate mask is a full-dial disc in the palette's
+    gate colour: opaque white for Drift, transparent for static palettes.
+    """
+    box = group(parent, name, **({'renderMode': role} if role else {}))
+    src = group(box, name + '_src', renderMode='SOURCE')
+    for j, pair in enumerate(SHIFT):
+        layer = group(src, f'{name}_{j}')
+        if j:
+            transform(layer, 'alpha', shift_alpha(j))
+        paint(draw(layer), pair[which])
+    dot(draw(box, renderMode='MASK'), C, C, SIZE, fill=GATE)
+    return box
+
+
 # --- scene -----------------------------------------------------------------
 
 def build():
@@ -339,7 +395,7 @@ def build():
 
     configs = element(face, 'UserConfigurations')
     palette = element(configs, 'ColorConfiguration', id=CONFIG, displayName=CONFIG, defaultValue=0)
-    for i, (key, _, _, colors) in enumerate(THEMES):
+    for i, (key, _, colors) in enumerate(THEMES):
         element(palette, 'ColorOption', id=i, displayName=key,
                 colors=' '.join('#' + ('FF' if len(c) == 7 else '') + c[1:].upper() for c in colors))
 
@@ -361,12 +417,13 @@ def build():
         transform(g, 'alpha', f'{a0} + {amp} * {lfo(per, ph)}')
         part = element(g, 'PartImage', x=0, y=0, width=SIZE, height=SIZE, tintColor=tint)
         element(part, 'Image', resource='glow')
+    shifted(ground, 'ground_shift', 0, lambda part, c: dot(part, C, C, SIZE, fill=c))
 
     # Minute wheel below, seconds wheel above.
     # Both wheels share one masked layer clipped to the pattern window.
     # Each wheel is a colour fill seen through its own pattern: the wheel
-    # layer's SOURCE is a disc of colour (the palette colour, whose alpha makes
-    # dual and film discs see-through; dim grey in ambient) and its MASK is the
+    # layer's SOURCE is a disc of colour (the palette colour, or the shifting
+    # overlay; dim grey in ambient) and its MASK is the
     # rotating pattern drawn opaque white, flattened in a masked group of its
     # own so overlapping round caps can't double. The masks are opaque white,
     # so alpha or luminance masking give the same result. In ambient only
@@ -374,12 +431,14 @@ def build():
     # when [SECOND] is 0, so that disc sits at 0 deg every update and does
     # not turn; only the slow morph changes it.
     discs = group(scene, 'discs')
-    for name, angle, color in (('minute_wheel', MINUTE_WHEEL, LOWER),
-                               ('seconds_wheel', SECONDS_WHEEL, UPPER)):
+    for name, angle, color in (('minute_wheel', MINUTE_WHEEL, DISC),
+                               ('seconds_wheel', SECONDS_WHEEL, DISC)):
         layer = group(discs, name + '_layer', renderMode='SOURCE')
         live = group(layer, name + '_colour', renderMode='SOURCE')
         ambient(live)
         dot(draw(live), C, C, 2 * WINDOW_R + 2, fill=color)
+        ambient(shifted(layer, name + '_shift', 1,
+                        lambda part, c: dot(part, C, C, 2 * WINDOW_R + 2, fill=c), role='SOURCE'))
         if name == 'seconds_wheel':     # ambient shows this disc only
             dim = group(layer, name + '_ambient', renderMode='SOURCE', alpha=0)
             element(dim, 'Variant', mode='AMBIENT', target='alpha', value=255)
@@ -399,15 +458,20 @@ def build():
     # Square previews: blank everything outside the round display.
     e = element(band, 'Ellipse', x=C - 275, y=C - 275, width=550, height=550)
     element(e, 'Stroke', color='#FF000000', thickness=100)
-    rim = draw(track, alpha=70)
-    e = element(rim, 'Ellipse', x=C - WINDOW_R, y=C - WINDOW_R, width=2 * WINDOW_R, height=2 * WINDOW_R)
-    element(e, 'Stroke', color=UPPER, thickness=1.2)
+    def rim_line(part, color):
+        e = element(part, 'Ellipse', x=C - WINDOW_R, y=C - WINDOW_R, width=2 * WINDOW_R, height=2 * WINDOW_R)
+        element(e, 'Stroke', color=color, thickness=1.2)
+    rim = group(track, 'rim', alpha=70)
+    rim_line(draw(rim), DISC)
+    shifted(rim, 'rim_shift', 1, rim_line)
 
     ticks = group(scene, 'ticks', alpha=120)
     element(ticks, 'Variant', mode='AMBIENT', target='alpha', value=90)
-    part = draw(ticks)
-    for i in range(12):
-        dot(part, *polar(BAND_R, i * 30), 4.6 if i % 3 == 0 else 3.2, fill=UPPER)
+    def tick_dots(part, color):
+        for i in range(12):
+            dot(part, *polar(BAND_R, i * 30), 4.6 if i % 3 == 0 else 3.2, fill=color)
+    tick_dots(draw(ticks), DISC)
+    shifted(ticks, 'ticks_shift', 1, tick_dots)
 
     # Beads: hour (large), minute (rides the minute wheel), second (rides the
     # seconds wheel).
@@ -415,11 +479,8 @@ def build():
         g = group(scene, name, pivotX=0.5, pivotY=0.5)
         ambient(g)
         transform(g, 'angle', angle)
-        part = draw(g)
-        # Stacked three times so see-through palettes still get a near-solid
-        # bead; opaque palettes are unchanged.
-        for _ in range(3):
-            dot(part, C, C - BAND_R, d, fill=UPPER)
+        dot(draw(g), C, C - BAND_R, d, fill=DISC)
+        shifted(g, name + '_shift', 1, lambda part, c: dot(part, C, C - BAND_R, d, fill=c))
         if ambient_angle:
             a = group(scene, name + '_ambient', pivotX=0.5, pivotY=0.5, alpha=0)
             element(a, 'Variant', mode='AMBIENT', target='alpha', value=255)
@@ -446,7 +507,7 @@ def glow_asset():
 def strings():
     root = ET.Element('resources')
     for name, text in [('watch_face_name', 'Interfence-Morph'), (CONFIG, 'Palette')] + \
-            [(key, label) for key, label, _, _ in THEMES]:
+            [(key, label) for key, label, _ in THEMES]:
         element(root, 'string', name=name).text = text
     ET.indent(root, '  ')
     (HERE / 'strings.xml').write_text(ET.tostring(root, encoding='unicode') + '\n')
